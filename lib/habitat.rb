@@ -20,7 +20,7 @@ module Habitat
   %w"mixins supervisor quarters".each do |lib_to_load|
     require lib_to_load
   end
-
+  
   def self.quart=(obj)
     @quart = obj
   end
@@ -60,7 +60,7 @@ module Habitat
 
   def log(k, msg)
     if web? and Hanami::Components.resolved('logger')
-      Hanami.logger.send(k, msg)
+      Hanami.logger.send(:info, "#{k}: #{msg}")
     else
       puts "%12s  %s" % [k.to_s, msg]
     end
@@ -69,7 +69,8 @@ module Habitat
 
 
   def web?
-   defined?(Web::Application) == "constant" 
+    # defined?(Web::Application) == "constant"
+    true
   end
   module_function :web?
 
@@ -96,6 +97,8 @@ class Hanami::View::Template
   end
 end
 
+begin
+
 if Habitat.web?
 
   class Web::Application
@@ -121,3 +124,5 @@ if Habitat.web?
 end
 
 
+rescue
+end

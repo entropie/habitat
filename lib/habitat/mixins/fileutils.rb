@@ -14,7 +14,7 @@ module Habitat::Mixins
 
     def cp(s, t)
       log(:fs, "cp: #{s} => #{t}")
-      FileUtils.cp(s, t, :verbose => VERBOSE)
+      FileUtils.cp_r(s, t, :verbose => VERBOSE)
     end
 
     def dirname(s)

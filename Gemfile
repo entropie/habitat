@@ -10,7 +10,9 @@ gem 'sqlite3'
 
 
 gem "subcommand"
+
 gem "hanami-bootstrap"
+
 gem 'haml'
 
 gem 'sass'

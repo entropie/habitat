@@ -118,15 +118,29 @@ module Habitat::Quarters
       action_from_skel("app/login")
       from_skel("apps/web/controllers/app/logout.rb")
 
-      enviroment_patch_content = "require_relative '../../../lib/habitat.rb'\nHabitat.quart = Habitat::Quarters[:#{identifier}]"
-      
+      from_skel("config/environment.rb")
+      enviroment_patch_content = "Habitat.quart = Habitat::Quarters[:#{identifier}]"
       patch_file_before("config/environment.rb", /^Hanami.configure do/, enviroment_patch_content)
+
+
+      from_skel("lib/webpack.rb")
+      from_skel("lib/webpack")
+      from_skel("webpack")
+
+      from_skel("apps/web/application.rb")
+      from_skel("apps/web/templates/app/index.html.haml")
+
       hanami_generate("action web app#index")
       from_skel("apps/web/config/routes.rb")
 
+
       from_skel("apps/web/templates/application.html.haml")
-      from_skel("apps/web/assets/stylesheets/screen.css.sass")
-      from_skel("apps/web/assets/javascripts/application.js")
+      #from_skel("apps/web/assets/stylesheets/screen.css.sass")
+      #from_skel("apps/web/assets/javascripts/application.js")
+      from_skel("apps/web/assets")
+
+      from_skel("webpack.config.js")
+      from_skel("package.json")
     end
 
     def create
