@@ -17,6 +17,11 @@ module Habitat::Mixins
       FileUtils.cp_r(s, t, :verbose => VERBOSE)
     end
 
+    def rm_rf(fod)
+      log(:fs, "rm -rf: #{fod}")
+      FileUtils.rm_rf(fod)
+    end
+
     def dirname(s)
       File.dirname(s)
     end

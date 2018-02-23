@@ -2,11 +2,11 @@ require 'bundler/setup'
 require 'hanami/setup'
 require 'hanami/model'
 require_relative '../lib/foobar'
-require_relative '../lib/webpack'
+#require_relative '../lib/webpack'
 
 require_relative '../apps/web/application'
 
-require_relative '../../../lib/habitat.rb'
+require_relative '../../../lib/habitat'
 
 Dir["#{ __dir__ }/initializers/*.rb"].each { |file| require_relative file }
 

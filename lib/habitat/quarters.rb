@@ -119,13 +119,14 @@ module Habitat::Quarters
       from_skel("apps/web/controllers/app/logout.rb")
 
       from_skel("config/environment.rb")
+
       enviroment_patch_content = "Habitat.quart = Habitat::Quarters[:#{identifier}]"
       patch_file_before("config/environment.rb", /^Hanami.configure do/, enviroment_patch_content)
 
 
-      from_skel("lib/webpack.rb")
-      from_skel("lib/webpack")
-      from_skel("webpack")
+      # from_skel("lib/webpack.rb")
+      # from_skel("lib/webpack")
+      # from_skel("webpack")
 
       from_skel("apps/web/application.rb")
       from_skel("apps/web/templates/app/index.html.haml")
@@ -135,12 +136,15 @@ module Habitat::Quarters
 
 
       from_skel("apps/web/templates/application.html.haml")
-      #from_skel("apps/web/assets/stylesheets/screen.css.sass")
-      #from_skel("apps/web/assets/javascripts/application.js")
-      from_skel("apps/web/assets")
+      from_skel("apps/web/assets/stylesheets/screen.css.sass")
+      from_skel("apps/web/assets/javascripts/application.js")
 
-      from_skel("webpack.config.js")
-      from_skel("package.json")
+
+      # rm_rf(app_root("apps/web/assets"))
+      # from_skel("apps/web/assets")
+
+      # from_skel("webpack.config.js")
+      # from_skel("package.json")
     end
 
     def create
