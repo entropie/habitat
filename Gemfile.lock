@@ -1,3 +1,10 @@
+GIT
+  remote: git://github.com/entropie/hanami-webpack.git
+  revision: 20823a0803ca3499056d4f9dd37b1605a5c0a1c8
+  specs:
+    hanami-webpack (0.0.1)
+      hanami
+
 GEM
   specs:
     addressable (2.5.2)
@@ -66,8 +73,6 @@ GEM
       hanami-helpers (~> 1.1)
       hanami-utils (~> 1.1)
       tilt (~> 2.0, >= 2.0.2)
-    hanami-bootstrap (0.5.0)
-      hanami-assets (>= 0.2, < 2)
     hanami-cli (0.1.0)
       concurrent-ruby (~> 1.0)
       hanami-utils (~> 1.1)
@@ -113,6 +118,7 @@ GEM
     nokogiri (1.8.2)
       mini_portile2 (~> 2.3.0)
     public_suffix (3.0.2)
+    puma (3.11.2)
     rack (2.0.4)
     rack-test (0.8.2)
       rack (>= 1.0, < 3)
@@ -171,11 +177,13 @@ DEPENDENCIES
   dotenv (~> 2.0)
   haml
   hanami (~> 1.1)
-  hanami-bootstrap
   hanami-model (~> 1.1)
+  hanami-webpack!
   minitest
+  puma
   rake
   sass
+  sequel
   shotgun
   sqlite3
   subcommand

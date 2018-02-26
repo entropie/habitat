@@ -6,12 +6,11 @@ gem 'rake'
 gem 'hanami',       '~> 1.1'
 gem 'hanami-model', '~> 1.1'
 
-gem 'sqlite3'
-
-
 gem "subcommand"
+gem "sqlite3"
 
-gem "hanami-bootstrap"
+
+gem 'hanami-webpack', github: 'entropie/hanami-webpack'
 
 gem 'haml'
 
@@ -19,6 +18,7 @@ gem 'sass'
 
 gem 'warden'
 gem 'bcrypt'
+gem "sequel"
 
 group :development do
   # Code reloading
@@ -26,7 +26,7 @@ group :development do
   gem 'shotgun'
 end
 
-group :test, :development do
+group :test, :development, :production do
   gem 'dotenv', '~> 2.0'
 end
 
@@ -36,5 +36,5 @@ group :test do
 end
 
 group :production do
-  # gem 'puma'
+  gem 'puma'
 end

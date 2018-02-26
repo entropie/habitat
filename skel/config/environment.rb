@@ -25,7 +25,7 @@ Hanami.configure do
     #    adapter :sql, 'postgresql://localhost/foobar_development'
     #    adapter :sql, 'mysql://localhost/foobar_development'
     #
-    adapter :sql, ENV['DATABASE_URL']
+    adapter :sql, 'sqlite://db/foobar_development.sqlite3' #ENV['DATABASE_URL']
 
     ##
     # Migrations
@@ -54,3 +54,6 @@ Hanami.configure do
     end
   end
 end
+
+
+

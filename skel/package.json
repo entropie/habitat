@@ -1,9 +1,21 @@
 {
-  "name": "foobar",
+  "name": "myApp",
   "version": "0.0.1",
+  "scripts": {
+      "dev": "webpack --mode development",
+      "build": "webpack --mode development --optimize-minimize",
+      "devserver": "./node_modules/.bin/webpack-dev-server"
+  },
   "devDependencies": {
-    "stats-webpack-plugin": "*",
-    "webpack": "*",
-    "webpack-dev-server": "*"
+      "stats-webpack-plugin": "*",
+      "webpack": "*",
+      "webpack-cli": "^2.0.9",
+      "webpack-dev-server": "*",
+      "webpack-merge": "*",
+      "webpack-manifest-plugin": "*",
+      "jquery": "*",
+      "sass-loader": "*",
+      "extract-text-webpack-plugin": "*",
+      "node-sass": "*"
   }
 }

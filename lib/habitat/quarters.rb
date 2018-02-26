@@ -109,6 +109,15 @@ module Habitat::Quarters
         system("bundle exec hanami generate #{action}")
       end
     end
+
+    def app_run(cmd)
+      log :info, "running: '#{cmd}'"
+      Dir.chdir(app_root){
+        Bundler.with_clean_env do
+          system(cmd)
+        end
+      }
+    end
     
     def habit_inhabit
       from_skel("Gemfile")
@@ -143,8 +152,14 @@ module Habitat::Quarters
       # rm_rf(app_root("apps/web/assets"))
       # from_skel("apps/web/assets")
 
-      # from_skel("webpack.config.js")
-      # from_skel("package.json")
+      from_skel("src")
+      from_skel("webpack.config.js")
+      from_skel("package.json")
+
+      app_run "bundle install --quiet"
+      app_run "npm --silent install --quiet > /dev/null 2>&1"
+      app_run "bundle exec hanami assets precompile"
+      app_run "npm --silent run build"
     end
 
     def create

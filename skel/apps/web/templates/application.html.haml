@@ -2,11 +2,10 @@
 %html
   %head
     %title Web
-    = favicon
-    = stylesheet "bootstrap", "screen"
+    = stylesheet "screen"
   %body
 
     Habitat Intercepted.
     
     = yield
-  = javascript "application"
+  %script{src: webpack_asset_path('bundle')}
