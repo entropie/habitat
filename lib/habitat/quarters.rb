@@ -90,12 +90,25 @@ module Habitat::Quarters
       }
     end
 
-    def patch_file_before(file, pattern, cnts)
+    # def patch_file_before(file, pattern, cnts)
+    #   ret = []
+    #   contents = File.readlines(app_root(file))
+    #   contents.each do |line|
+    #     if line =~ pattern
+    #       ret << cnts << "\n\n" << line
+    #     else
+    #       ret << line
+    #     end
+    #   end
+    #   overwrite(app_root(file), ret.join)
+    # end
+
+    def patch_file(file, pattern, cnts)
       ret = []
       contents = File.readlines(app_root(file))
       contents.each do |line|
         if line =~ pattern
-          ret << cnts << "\n\n" << line
+          ret << line.gsub(pattern, cnts)
         else
           ret << line
         end
@@ -129,13 +142,7 @@ module Habitat::Quarters
 
       from_skel("config/environment.rb")
 
-      enviroment_patch_content = "Habitat.quart = Habitat::Quarters[:#{identifier}]"
-      patch_file_before("config/environment.rb", /^Hanami.configure do/, enviroment_patch_content)
-
-
-      # from_skel("lib/webpack.rb")
-      # from_skel("lib/webpack")
-      # from_skel("webpack")
+      patch_file("config/environment.rb", /(%%%identifier%%%)/, identifier.to_s)
 
       from_skel("apps/web/application.rb")
       from_skel("apps/web/templates/app/index.html.haml")
@@ -147,10 +154,6 @@ module Habitat::Quarters
       from_skel("apps/web/templates/application.html.haml")
       from_skel("apps/web/assets/stylesheets/screen.css.sass")
       from_skel("apps/web/assets/javascripts/application.js")
-
-
-      # rm_rf(app_root("apps/web/assets"))
-      # from_skel("apps/web/assets")
 
       from_skel("src")
       from_skel("webpack.config.js")
