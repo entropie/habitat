@@ -11,6 +11,7 @@ gem "sqlite3"
 
 
 gem 'hanami-webpack', github: 'entropie/hanami-webpack'
+gem "bootstrap", '~> 4.0.0'
 
 gem 'haml'
 
