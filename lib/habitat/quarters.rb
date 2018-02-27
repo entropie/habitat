@@ -131,6 +131,13 @@ module Habitat::Quarters
         end
       }
     end
+
+    def run_script(script)
+      script = script.to_s
+      Bundler.with_clean_env do
+        system("ruby scripts/#{script}")
+      end
+    end
     
     def habit_inhabit
       from_skel("Gemfile")
@@ -160,9 +167,16 @@ module Habitat::Quarters
       from_skel("package.json")
 
       app_run "bundle install --quiet"
-      app_run "npm --silent install --quiet > /dev/null 2>&1"
-      app_run "bundle exec hanami assets precompile"
-      app_run "npm --silent run build"
+      # app_run "npm --silent install --quiet > /dev/null 2>&1"
+      # app_run "bundle exec hanami assets precompile"
+      # app_run "npm --silent run build"
+
+      app_run("bundle exec cap install")
+      from_skel("Capfile")
+      from_skel("config/deploy.rb")
+      from_skel(".gitignore")
+
+      run_script("git_init.rb #{identifier}")
     end
 
     def create
