@@ -21,9 +21,12 @@ gem 'warden'
 gem 'bcrypt'
 gem "sequel"
 
+
+gem "capistrano", "~> 3.6", require: false
+gem "capistrano-bundler", '~> 1.3'
+gem "capistrano-rvm"
+
 group :development do
-  # Code reloading
-  # See: http://hanamirb.org/guides/projects/code-reloading
   gem 'shotgun'
 end
 
