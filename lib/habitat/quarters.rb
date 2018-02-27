@@ -168,6 +168,7 @@ module Habitat::Quarters
       from_skel("apps/web/assets/javascripts/application.js")
 
       from_skel("src")
+      from_skel("log")
       from_skel("webpack.config.js")
       from_skel("package.json")
 
