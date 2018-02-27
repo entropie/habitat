@@ -4,6 +4,7 @@
   "scripts": {
       "dev": "webpack --mode development",
       "build": "webpack --mode development --optimize-minimize",
+      "production": "webpack --mode production --optimize-minimize",
       "devserver": "./node_modules/.bin/webpack-dev-server"
   },
   "devDependencies": {

@@ -1,17 +1,24 @@
 # config valid for current version and patch releases of Capistrano
 lock "~> 3.10.1"
 
-set :application, "foobar"
+
+identifier = File.expand_path(__FILE__).split("/")[-3]
+
+require_relative File.join(File.expand_path(__FILE__), "../../../../lib/habitat.rb")
+Q = Habitat.quart = Habitat::Quarters[identifier]
+
+set :application, Q.identifier.to_s
 
 set :repo_url, "git://github.com/entropie/habitat.git"
 
 set :habitat_url, "/home/mit/Source/habitats/#{fetch(:application)}"
+set :media_path,  "/home/mit/Data/quarters/media/#{fetch(:application)}"
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 # Default deploy_to directory is /var/www/my_app_name
-set :deploy_to, "/home/habitats/foobar"
+set :deploy_to, "/home/habitats/#{fetch(:application)}"
 
 # Default value for :format is :airbrussh.
 # set :format, :airbrussh
@@ -46,7 +53,57 @@ set    :branch, 'master'
 
 set    :bundle_gemfile, -> { release_path.join('quarters', fetch(:application), 'Gemfile') } 
 
+set    :habitat, release_path.join("quarters", fetch(:application))
+
+set    :nginx_config, "/etc/nginx/sites-enabled/habitat-#{fetch(:application)}.conf"
+set    :unicorn_init, "/etc/init.d/unicorn_#{fetch(:application)}"
+
+
+
+
+def remote_file_exists?(full_path)
+  'true' ==  capture("if [ -e #{full_path} ]; then echo 'true'; fi").strip
+end
+
+def remote_link_exists?(full_path)
+    'true' ==  capture("if test -L #{full_path}; then echo 'true'; fi").strip
+end
+
+
 namespace :habitat do
+
+  task :link_files do
+    on roles(:app) do
+      habitat_root = fetch(:habitat)
+      
+      unless remote_link_exists?(fetch(:nginx_config))
+        sudo :ln, "-s #{habitat_root.join("config/nginx.conf")} #{fetch(:nginx_config)}"
+      end
+      
+      unless remote_link_exists?(fetch(:unicorn_init))
+        sudo :ln, "-s #{habitat_root.join("config/unicorn_init.sh")} #{fetch(:unicorn_init)} "
+      end
+    end
+  end
+
+  task :link_media do
+    on roles(:app) do
+      habitat_media_path = fetch(:habitat).join("media")
+      unless remote_link_exists?(habitat_media_path)
+        execute :ln, "-s #{fetch(:media_path)} #{habitat_media_path}"
+      end
+    end
+  end
+
+  task :setup_assets do
+    on roles(:app) do
+      within fetch(:habitat) do
+        execute :npm, "install"
+        execute :npm, "run production"
+        execute :bundle, "exec hanami assets precompile"
+      end
+    end
+  end
 
   task :checkout do
     on roles(:app) do
@@ -56,12 +113,16 @@ namespace :habitat do
     end
   end
   after "habitat:checkout", "habitat:bundle"
+  after "habitat:checkout", "habitat:link_media"
 
   task :setup do
     on roles(:app) do
+      invoke "habitat:checkout"
+      invoke "habitat:link_files"
+      invoke "habitat:setup_assets"
     end
   end
-  after "habitat:setup", "habitat:checkout"
+  
 
 
   task :bundle do
@@ -76,7 +137,6 @@ namespace :habitat do
             options << "--jobs #{fetch(:bundle_jobs)}" if fetch(:bundle_jobs)
             options << "--without #{fetch(:bundle_without)}" if fetch(:bundle_without)
             options << "#{fetch(:bundle_flags)}" if fetch(:bundle_flags)
-            execute :pwd
             execute :bundle, :install, *options
           end
         end
@@ -87,23 +147,6 @@ namespace :habitat do
 
 end
 
-namespace :bundler do
-  task :install do
-    p 1
-  end
-end
-
 Rake::Task["bundler:install"].clear_actions
 
-namespace :deploy do
-
-  after 'deploy:log_revision', 'habitat:setup'
-
-  task :setup do
-    on roles(:all) do host
-      execute :pwd
-      info "Host #{host} (#{host.roles.to_a.join(', ')}):\t#{capture(:uptime)}"
-    end
-  end
-end
-  
+after 'deploy:log_revision', 'habitat:setup'

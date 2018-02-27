@@ -28,6 +28,7 @@ module Habitat::Quarters
   class Quart
 
     attr_reader :identifier, :path
+    include Habitat
     
     def self.read(path)
       new(path)
@@ -53,6 +54,10 @@ module Habitat::Quarters
 
     def app_root(*args)
       quarters_root(identifier.to_s, *args.map(&:to_s))
+    end
+
+    def media_path(*args)
+      app_root("media", *args)
     end
 
   end
@@ -174,6 +179,14 @@ module Habitat::Quarters
       app_run("bundle exec cap install")
       from_skel("Capfile")
       from_skel("config/deploy.rb")
+
+      from_skel("config/nginx.conf")
+      patch_file("config/nginx.conf", /(%%%identifier%%%)/, identifier.to_s)
+      from_skel("config/unicorn_init.sh")
+      patch_file("config/unicorn_init.sh", /(%%%identifier%%%)/, identifier.to_s)
+      from_skel("config/unicorn.rb")
+      patch_file("config/unicorn.rb", /(%%%identifier%%%)/, identifier.to_s)
+      
       from_skel(".gitignore")
 
       run_script("git_init.rb #{identifier}")
