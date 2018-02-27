@@ -21,6 +21,7 @@ gem 'warden'
 gem 'bcrypt'
 gem "sequel"
 
+gem "unicorn"
 
 gem "capistrano", "~> 3.6", require: false
 gem "capistrano-bundler", '~> 1.3'
