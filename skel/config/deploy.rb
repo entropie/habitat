@@ -1,6 +1,7 @@
 # config valid for current version and patch releases of Capistrano
 lock "~> 3.10.1"
 
+require 'capistrano/bundler'
 
 identifier = File.expand_path(__FILE__).split("/")[-3]
 
@@ -19,6 +20,7 @@ set :media_path,  "/home/mit/Data/quarters/media/#{fetch(:application)}"
 
 # Default deploy_to directory is /var/www/my_app_name
 set :deploy_to, "/home/habitats/#{fetch(:application)}"
+
 
 # Default value for :format is :airbrussh.
 # set :format, :airbrussh
@@ -59,8 +61,6 @@ set    :nginx_config, "/etc/nginx/sites-enabled/habitat-#{fetch(:application)}.c
 set    :unicorn_init, "/etc/init.d/unicorn_#{fetch(:application)}"
 
 
-
-
 def remote_file_exists?(full_path)
   'true' ==  capture("if [ -e #{full_path} ]; then echo 'true'; fi").strip
 end
@@ -72,6 +72,17 @@ end
 
 namespace :habitat do
 
+  [:start, :stop, :restart].each do |action|
+    task action do
+      on roles(:app) do
+        within fetch(:habitat) do
+          execute :bundle, "exec #{fetch(:unicorn_init)} #{action}"
+        end
+      end
+    end
+  end
+
+  
   task :link_files do
     on roles(:app) do
       habitat_root = fetch(:habitat)
@@ -122,8 +133,8 @@ namespace :habitat do
       invoke "habitat:setup_assets"
     end
   end
-  
 
+  after "habitat:setup", "habitat:restart"
 
   task :bundle do
     on fetch(:bundle_servers) do
