@@ -35,7 +35,7 @@ Hanami.configure do
   end
 
   mailer do
-    root 'lib/foobar/mailers'
+    root 'lib/%%%identifier%%%/mailers'
 
     # See http://hanamirb.org/guides/mailers/delivery
     delivery :test
