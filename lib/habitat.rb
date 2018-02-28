@@ -57,7 +57,7 @@ module Habitat
 
 
   def root(*args)
-    Source.join(*args)
+    Source.join(*args.map(&:to_s))
   end
   module_function :root
 
@@ -105,6 +105,7 @@ class Hanami::View::Template
     @_template = Tilt.new(t, nil, default_encoding: e)
   end
 end
+
 
 
 begin

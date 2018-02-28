@@ -1,1 +1,8 @@
-lala
+.container
+  .row
+    .col-5
+      = render partial: 'blog/sidebar', locals: { posts: posts, post: post }
+    .col
+      - if post
+        = render partial: 'blog/post', locals: { posts: posts, post: post }
+

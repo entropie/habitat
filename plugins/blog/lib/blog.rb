@@ -1,5 +1,6 @@
 require_relative "blog/blog"
 
+Blog.db
 
 %w"controllers views".each do |parent_dir|
   target_dir = File.join(File.dirname(File.expand_path(__FILE__)), "../", parent_dir)

@@ -1,6 +1,6 @@
 module Web::Views::Blog
   class Index
-    include Hanami::View
-    
+    include Web::View
+    #include Habitat::WebAppMethods
   end
 end

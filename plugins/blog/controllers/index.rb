@@ -5,8 +5,10 @@ module Web::Controllers::Blog
 
     include Blog::Controller
 
+    expose :posts, :post
+
     def call(params)
-      p @post
+      p @posts.size if @posts
     end
   end
 end

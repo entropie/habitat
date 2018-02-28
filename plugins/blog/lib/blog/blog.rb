@@ -3,8 +3,23 @@
 #
 # Author:  Michael 'entropie' Trommer <mictro@gmail.com>
 #
+class Contributors
+  class Anna
+  end
+  class Entropie
+  end
+  
+end
 
 module Blog
+
+  def self.db=(obj)
+    @db = obj
+  end
+
+  def self.db
+    @db ||= Posts.new
+  end
   # Plugins.set_plugin_defaults_for(self, {
   #                                   :template_path      =>    "blog/styles",
   #                                   :attachment_path    =>    "blog/attachments",
@@ -25,52 +40,28 @@ module Blog
   # end
 
   module Controller
+    include Blog
+
     def self.included(o)
       o.before :load_post
+#      o.before :load_posts
     end
 
-    def load_post
-      @post = :asd
+    private
+
+    def load_posts
+      @posts = posts(logged_in?)
+    end
+
+    def load_post(params)
+      slug = params[:slug]
+      reload! if not Blog.db or  Blog.db.empty?
+      if slug
+        @post = find_by(slug, logged_in?)
+      end
     end
   end
   
-  module PostAncestors
-    def before(logged_in)
-      gps = group.posts(logged_in)
-      all = posts(logged_in).map(&:post)
-      global_index = all.index(self)
-      if in_group?
-        if (ind = gps.index(self)) > 0
-          return gps[gps.index(self)-1]
-        else
-          return all[global_index-1]
-        end
-      else
-        if pst = all[global_index-1]
-          return pst
-        end
-      end
-    end
-
-    def after(logged_in = false)
-      gps = group.posts(logged_in)
-      all = posts(logged_in).map(&:post)
-      all_posts_size = all.size
-      global_index = all.index(self)
-
-      if in_group?
-        if (ind=gps.index(self)) < gps.size-1
-          return gps[ind+1]
-        else
-          return all[global_index+1]
-        end
-      else
-        if pst = all[global_index+1]
-          return pst
-        end
-      end
-    end
-  end
 
   def self.html_truncate(html, url, length, o = true)
     html_string = TruncateHtml::HtmlString.new(html)
@@ -116,10 +107,6 @@ module Blog
     "blog"
   end
 
-  def self.make_path(*args)
-    args.join("-")
-  end
-
   def self.[](meta)
     post = Post.new(meta.filename)
     post.metadata = meta
@@ -127,20 +114,20 @@ module Blog
   end
 
   def reload!
-    debug "reloading posts"
-    DB.replace([])
+    log :info, "reloading posts"
+    Blog.db = []
     posts
   end
 
   def posts(logged_in = false)
-    if DB.empty?
-      DB.replace(Posts.new)
+    if Blog.db.empty?
+      p 1
+      Blog.db = Posts.new
     end
-    @db = DB
     if not logged_in
-      @db = @db.select{|p| p.post.published? }
+      Blog.db = Blog.db.select{|p| p.post.published? }
     else
-      @db
+      Blog.db
     end
   end
 
@@ -356,20 +343,16 @@ module Blog
       def apply!
         ret = post.content
 
-        ec = EngineCache.new(ret)
-        ec = ec.setup(post)
-        if ec.written?
-          HTMLFilter.clear!(post)
+        #ec = EngineCache.new(ret)
+        #ec = ec.setup(post)
+        if HTMLFilter.clear!(post)
           ret = Blogs.with_markdown(ret)
-
-
-          
-          ret = FlickrFilter.new(ret).setup(post)
-          ret = FlickrGroup.new(ret).setup(post)
-          #ret = SideComments.new(ret).setup(post)
-          ret = TopicAnchors.new(ret).setup(post)
-          ret = Paragraphing.new(ret).setup(post)
-          ret = EngineCache.new(ret).setup(post).content
+          # ret = FlickrFilter.new(ret).setup(post)
+          # ret = FlickrGroup.new(ret).setup(post)
+          # #ret = SideComments.new(ret).setup(post)
+          # ret = TopicAnchors.new(ret).setup(post)
+          # ret = Paragraphing.new(ret).setup(post)
+          # ret = EngineCache.new(ret).setup(post).content
           ret
         else
           ec.content
@@ -395,13 +378,10 @@ module Blog
 
   class Post
 
-    include PostAncestors
-
-
     attr_accessor :file, :title, :content, :metadata
 
     def attachment_path(*args)
-      File.join(Queen::BEEHIVE.media_path( Blogs.config[:attachment_path] ), slug, *args)
+      Habitat.quart.media_path("attachments", slug, *args)
     end
 
     def vitrine_image_file
@@ -429,18 +409,12 @@ module Blog
     end
 
     def http_attachment_path(*args)
-      File.join(File.join(Blogs.config[:http_attachment_path], slug, *args.map(&:to_s)))
+      File.join(File.join("/attachments", slug, *args.map(&:to_s)))
     end
 
     def vitrine_image(version = "", default = "")
       ident = metadata.image.split(".").first
-      http_attachment_path(ident, version, vitrine_image_file)
-    rescue
-      if version and version != ""
-        "/img/vitrine-default-#{version}.jpg"
-      else
-        "/img/vitrine-default.jpg"
-      end
+      http_attachment_path("vitrine", vitrine_image_file)
     end
 
     def intro(link = true)
@@ -536,7 +510,7 @@ module Blog
     end
 
     def path
-      Queen::BEEHIVE.media_path(metadata.filename)
+      Habitat.quart.media_path(metadata.filename)
     end
 
     def content
@@ -576,7 +550,7 @@ module Blog
     end
 
     def url
-      Blogs.config[:blog_controller].call.r(slug)
+      File.join("/post", slug)
     end
 
     def edit_url
@@ -637,7 +611,7 @@ module Blog
 
   class Draft < Post
     def publish!
-      debug "publishing #{title}"
+      log :info, "publishing #{title}"
       metadata.publish!
       update!
     end
@@ -712,7 +686,7 @@ module Blog
       @groups
     end
 
-    def self.glob(p = Queen::BEEHIVE.media_path(base_path + "/*.yaml"))
+    def self.glob(p = Habitat.quart.media_path(base_path + "/*.yaml"))
       Dir.glob(p)
     end
 
@@ -730,13 +704,13 @@ module Blog
     def self.contents
       return to_a if to_a and not to_a.empty?
       clear!
-      debug "reading posts in ... #{Queen::BEEHIVE.media_path(base_path + "/*.yaml")}"
+      Habitat.log :info, "reading posts in ... #{Habitat.quart.media_path(base_path + "/*.yaml")}"
       glob.each do |yml|
         begin
-          debug "  loading #{File.basename(yml)}"
+          #Habitat.log :info, "  loading #{File.basename(yml)}"
           self << YAML::load_file(yml)
-        rescue ArgumentError
-          error "  failed to load #{File.basename(yml)} '#{$!}'"
+        # rescue ArgumentError
+        #   error "  failed to load #{File.basename(yml)} '#{$!}'"
         end
       end
       to_a
@@ -833,7 +807,7 @@ module Blog
     end
 
     def md_filename
-      Queen::BEEHIVE.media_path(relative_path)
+      Habitat.quart.media_path(relative_path)
     end
 
     def write
@@ -852,6 +826,7 @@ module Blog
 
 end
 
+Blogs = Blog
 =begin
 Local Variables:
   mode:ruby
