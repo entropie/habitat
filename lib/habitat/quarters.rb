@@ -5,7 +5,7 @@ module Habitat::Quarters
     extend Habitat
 
     def self.read_dir
-      log :info, "quarters reading: '#{Habitat.quarters_root}'"
+      log :debug, "quarters reading: '#{Habitat.quarters_root}'"
       (Dir["%s/*/" % quarters_root]).each do |quarter_dir|
         quarters << Quart.read(quarter_dir)
       end
@@ -31,6 +31,7 @@ module Habitat::Quarters
     include Habitat
     
     def self.read(path)
+      log :debug, "registering #{path}"
       new(path)
     end
 
@@ -58,6 +59,18 @@ module Habitat::Quarters
 
     def media_path(*args)
       app_root("media", *args)
+    end
+
+    def plugins
+      @plugins ||= begin
+                     Plugins.for(self)
+      end
+    end
+
+    def config
+      @config ||= begin
+                    Configuration.for(self)
+      end
     end
 
   end
@@ -181,16 +194,24 @@ module Habitat::Quarters
       from_skel("Capfile")
       from_skel("config/deploy.rb")
 
-      from_skel("config/nginx.conf")
-      patch_file("config/nginx.conf", /(%%%identifier%%%)/, identifier.to_s)
-      from_skel("config/unicorn_init.sh")
-      patch_file("config/unicorn_init.sh", /(%%%identifier%%%)/, identifier.to_s)
-      from_skel("config/unicorn.rb")
-      patch_file("config/unicorn.rb", /(%%%identifier%%%)/, identifier.to_s)
+
+      %w(nginx.conf unicorn_init.sh unicorn.rb).each do |cfg|
+        cfgfile = File.join("config", cfg)
+        from_skel(cfgfile)
+        patch_file(cfgfile, /(%%%identifier%%%)/, identifier.to_s)
+      end
+
+      
+      # from_skel("config/nginx.conf")
+      # patch_file("config/nginx.conf", /(%%%identifier%%%)/, identifier.to_s)
+      # from_skel("config/unicorn_init.sh")
+      # patch_file("config/unicorn_init.sh", /(%%%identifier%%%)/, identifier.to_s)
+      # from_skel("config/unicorn.rb")
+      # patch_file("config/unicorn.rb", /(%%%identifier%%%)/, identifier.to_s)
       
       from_skel(".gitignore")
 
-      run_script("git_init.rb #{identifier}")
+      #run_script("git_init.rb #{identifier}")
     end
 
     def create

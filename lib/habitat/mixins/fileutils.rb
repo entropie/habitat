@@ -33,6 +33,14 @@ module Habitat::Mixins
       end
       log :fs, "overwritten: #{file} #{r}"
     end
+
+    def write(file, cnts)
+      cnts = cnts.to_s
+      r=File.open(file, "w+") do |fp|
+        fp.puts(cnts)
+      end
+      log :fs, "write: #{file} #{r}"
+    end
   end
 end
 

@@ -38,11 +38,24 @@ quarters.each do |quart|
 
   q = quarters[quart]
   
+
+
   command(quart.identifier) do |sopts|
     sopts.description = "options for quart #{quart.identifier}"
     sopts.banner = "Usage:"
-    sopts.on("-S", "--start") do |b|
 
+    sopts.on("-p", "--plugins", "list plugins") do |b|
+      puts "Enabled:   %s" % q.plugins.to_s
+      puts "Available: %s" % q.plugins.available.to_s
+    end
+
+    sopts.on("-a", "--active plugin", "activate plugin") do |b|
+      q.plugins.available[b].activate
+
+    end
+
+    sopts.on("-d", "--deactivate plugin", "deactivate plugin") do |b|
+      q.plugins[b].deactivate
     end
   end
 end

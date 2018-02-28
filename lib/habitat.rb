@@ -17,7 +17,7 @@ module Habitat
 
   $: << Source.join("lib/habitat")
   
-  %w"mixins supervisor quarters".each do |lib_to_load|
+  %w"mixins supervisor quarters plugins configuration".each do |lib_to_load|
     require lib_to_load
   end
   
@@ -57,6 +57,9 @@ module Habitat
   end
   module_function :root
 
+  def plugin_path(*args)
+    root("plugins", *args.map(&:to_s))
+  end
 
   def log(k, msg)
     if web? and Hanami::Components.resolved('logger')
