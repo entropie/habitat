@@ -42,7 +42,7 @@ module Habitat
   end
 
   def quarters_root(*args)
-    root("quarters", args)
+    root("quarters", *args)
   end
   module_function :quarters_root
 
@@ -61,7 +61,8 @@ module Habitat
     root("plugins", *args.map(&:to_s))
   end
 
-  def log(k, msg)
+
+  def log(k, msg, &blk)
     if web? and Hanami::Components.resolved('logger')
       Hanami.logger.send(:info, "#{k}: #{msg}")
     else
@@ -99,6 +100,7 @@ class Hanami::View::Template
     @_template = Tilt.new(t, nil, default_encoding: e)
   end
 end
+
 
 begin
 

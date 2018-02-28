@@ -36,9 +36,8 @@ end
 
 quarters.each do |quart|
 
-  q = quarters[quart]
-  
-
+  q = Habitat.quart = quart
+  q.load_enviroment!
 
   command(quart.identifier) do |sopts|
     sopts.description = "options for quart #{quart.identifier}"

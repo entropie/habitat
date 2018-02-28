@@ -40,11 +40,12 @@ module Habitat
         write
       end
 
-      private
-
       def file
         @file ||= @quarter.app_root(ConfigFile)
       end
+
+
+      private
 
       def set_defaults
         @config.merge!(Defaults)
@@ -64,6 +65,7 @@ module Habitat
           set_defaults
           write
         else
+          log :info, "reading config #{file}"
           @config = YAML::load_file(file)
         end
       end

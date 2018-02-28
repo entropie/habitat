@@ -73,6 +73,15 @@ module Habitat::Quarters
       end
     end
 
+    def load_enviroment!
+      config
+      plugins
+      #Plugins.load_from_symbols(config.fetch(:plugins))
+    end
+
+    def plugin_mapping
+      @plugin_mapping ||= Plugins.to_classes(config.fetch(:plugins))
+    end
   end
 
   class DummyQuart < Quart

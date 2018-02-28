@@ -2,6 +2,24 @@ module Habitat
 
   module Plugins
 
+    def self.load_from_symbols(symlink_array)
+      log :debug, "require plugins"
+      symlink_array.each do |sa|
+        plugin_file = plugin_path(sa, "lib", "#{sa}.rb")
+        log :debug, "loading #{plugin_file}"
+        require plugin_file
+      end
+    end
+    
+    def self.to_classes(symlink_array)
+      symlink_array.inject({}){|m, sa|
+        k = sa.to_s.capitalize
+        ret = Object.const_get(k)
+        m[sa] = ret
+        m
+      }
+    end
+    
     def self.for(quarter)
       pr = PluginRepository.new(quarter)
       pr.read
@@ -19,8 +37,7 @@ module Habitat
       end
 
       def read
-        log :debug, "loading plugins from #{quarter.identifier} config"
-
+        log :debug, "loading plugins (#{PP.pp(quarter.config.fetch(:plugins), "").strip})"
         quarter.config.fetch(:plugins).each do |plugincls_from_config|
           full_path = plugin_path(plugincls_from_config)
           plugin = Plugin.new(quarter, full_path)
@@ -46,6 +63,15 @@ module Habitat
           raise "no valid plugin: #{obj}"
         end
         r.first
+      end
+
+      def name
+        self.class.to_s.split("::").last
+      end
+      
+      def push(obj)
+        log :debug, "#{self.name} << #{obj.identifier}"
+        super
       end
     end
 
