@@ -29,6 +29,10 @@ module Habitat
     @quart
   end
 
+  def self.S(path)
+    path.sub(root, "")
+  end
+
   def self.inhabit(ident)
     Quarters::Quarters.read_dir
     Habitat.quart = quarters(ident)
@@ -60,6 +64,7 @@ module Habitat
   def plugin_path(*args)
     root("plugins", *args.map(&:to_s))
   end
+  module_function :plugin_path
 
 
   def log(k, msg, &blk)

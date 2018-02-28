@@ -29,6 +29,7 @@ module Habitat::Quarters
 
     attr_reader :identifier, :path
     include Habitat
+    extend Habitat
     
     def self.read(path)
       log :debug, "registering #{path}"
@@ -74,9 +75,11 @@ module Habitat::Quarters
     end
 
     def load_enviroment!
-      config
-      plugins
-      #Plugins.load_from_symbols(config.fetch(:plugins))
+      require app_root("config/environment.rb")
+      Dir.chdir(app_root) do
+        Hanami.app
+      end
+      Plugins.load_from_symbols(config.fetch(:plugins))
     end
 
     def plugin_mapping

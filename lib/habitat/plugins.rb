@@ -3,10 +3,10 @@ module Habitat
   module Plugins
 
     def self.load_from_symbols(symlink_array)
-      log :debug, "require plugins"
+      Habitat.log :debug, "require plugins"
       symlink_array.each do |sa|
-        plugin_file = plugin_path(sa, "lib", "#{sa}.rb")
-        log :debug, "loading #{plugin_file}"
+        plugin_file = Habitat.plugin_path(sa, "lib", "#{sa}.rb")
+        Habitat.log :debug, "loading #{plugin_file}"
         require plugin_file
       end
     end
@@ -26,6 +26,7 @@ module Habitat
     end
 
     class PluginRepository < Array
+
       attr_reader :quarter
 
       def self.available(quarter)
@@ -37,9 +38,9 @@ module Habitat
       end
 
       def read
-        log :debug, "loading plugins (#{PP.pp(quarter.config.fetch(:plugins), "").strip})"
+        Habitat.log :debug, "loading plugins (#{PP.pp(quarter.config.fetch(:plugins), "").strip})"
         quarter.config.fetch(:plugins).each do |plugincls_from_config|
-          full_path = plugin_path(plugincls_from_config)
+          full_path = Habitat.plugin_path(plugincls_from_config)
           plugin = Plugin.new(quarter, full_path)
           push(plugin)
         end
@@ -70,15 +71,15 @@ module Habitat
       end
       
       def push(obj)
-        log :debug, "#{self.name} << #{obj.identifier}"
+        Habitat.log :debug, "#{self.name} << #{obj.identifier}"
         super
       end
     end
 
     class PluginRepositoryAvailable < PluginRepository
       def read
-        log :debug, "loading available plugins"
-        Dir.glob("%s/*/" % plugin_path).each do |full_path|
+        Habitat.log :debug, "loading available plugins"
+        Dir.glob("%s/*/" % Habitat.plugin_path).each do |full_path|
           plugin = Plugin.new(quarter, full_path)
           push(plugin) unless quarter.plugins.include?(plugin)
         end
