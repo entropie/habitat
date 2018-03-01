@@ -27,6 +27,9 @@ gem "capistrano", "~> 3.6", require: false
 gem "capistrano-bundler", '~> 1.3'
 gem "capistrano-rvm"
 
+gem "multi_json"
+gem "roar"
+
 group :development do
   gem 'shotgun'
 end
