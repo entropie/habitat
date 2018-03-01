@@ -5,9 +5,8 @@ Blog.db
 %w"controllers views representers".each do |parent_dir|
   target_dir = File.join(File.dirname(File.expand_path(__FILE__)), "../", parent_dir)
   Dir.glob("%s/**/*.rb" % target_dir).each do |tf|
-    Habitat.log :debug, "require #{Habitat.S(tf)}"
     begin
-      require tf
+      Habitat.require tf
     rescue
       p $!
     end

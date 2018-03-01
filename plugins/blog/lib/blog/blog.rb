@@ -35,15 +35,6 @@ module Blog
   #                                   :resize_methods     =>    [:thumbnail, :medium, :sidebar, :big, :panorama, :blurred]
   #                                 })
 
-  # module FileWriter
-  #   include FileUtils
-
-  #   def write_to(file, h = "w+", &blk)
-  #     debug "writing to #{file}"
-  #     reload!
-  #     File.open(file, h, &blk)
-  #   end
-  # end
 
   module Controller
     include Blog

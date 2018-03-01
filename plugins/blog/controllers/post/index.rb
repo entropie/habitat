@@ -8,7 +8,6 @@ module Web::Controllers::Blog
     expose :posts, :post
 
     def call(params)
-      p @posts.size if @posts
     end
   end
 end
