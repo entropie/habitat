@@ -3,6 +3,11 @@ require "bundler"
 
 Bundler.require
 
+
+require "roar"
+require "roar/decorator"
+require "roar/json"
+
 require "pp"
 
 module Habitat
