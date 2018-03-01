@@ -28,7 +28,7 @@ gem "capistrano-bundler", '~> 1.3'
 gem "capistrano-rvm"
 
 gem "multi_json"
-gem "roar"
+gem "roar", github: 'trailblazer/roar'
 
 
 group :development do
