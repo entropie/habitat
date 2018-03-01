@@ -3,11 +3,6 @@ require "bundler"
 
 Bundler.require
 
-
-require "roar"
-require "roar/decorator"
-require "roar/json"
-
 require "pp"
 
 module Habitat
@@ -71,9 +66,9 @@ module Habitat
   end
   module_function :plugin_path
 
-  def self.require(file)
+  def self._require(file)
     log(:debug, "::::require #{Habitat.S(file)}")
-    Kernel.require file
+    require file
   end
 
   def log(k, msg, &blk)

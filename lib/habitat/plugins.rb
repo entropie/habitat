@@ -6,7 +6,7 @@ module Habitat
       Habitat.log :debug, "require plugins from config"
       symbol_array.each do |sa|
         plugin_file = Habitat.plugin_path(sa, "lib", "#{sa}.rb")
-        Habitat.require plugin_file
+        Habitat._require plugin_file
       end
     end
     
@@ -22,7 +22,7 @@ module Habitat
     def self.load_application_files_for_plugins!(symbol_array)
       symbol_array.each do |plugin_symbol|
         application_file = Habitat.plugin_path(plugin_symbol, "application.rb")
-        Habitat.require application_file
+        Habitat._require application_file
       end
     end
     

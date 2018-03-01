@@ -40,8 +40,7 @@ quarters.each do |quart|
   q = Habitat.quart = quart
 
   command(quart.identifier) do |sopts|
-
-    Habitat.require q.app_root("config/environment.rb")
+    Habitat._require q.app_root("config/environment.rb")
 
     sopts.description = "options for quart #{quart.identifier}"
     sopts.banner = "Usage:"
