@@ -8,6 +8,7 @@ include Habitat
 
 Quarters::Quarters.read_dir
 
+
 global_options do |opts|
   opts.banner = "Usage: hive [options] [subcommand [options]]"
   opts.description = "The Hive."
@@ -37,9 +38,11 @@ end
 quarters.each do |quart|
 
   q = Habitat.quart = quart
-  q.load_enviroment!
 
   command(quart.identifier) do |sopts|
+
+    Habitat.require q.app_root("config/environment.rb")
+
     sopts.description = "options for quart #{quart.identifier}"
     sopts.banner = "Usage:"
 
