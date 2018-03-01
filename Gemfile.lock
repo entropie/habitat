@@ -5,13 +5,6 @@ GIT
     hanami-webpack (0.0.1)
       hanami
 
-GIT
-  remote: git://github.com/trailblazer/roar.git
-  revision: 7d3fa116021311c91539744601b168f500ac9e3b
-  specs:
-    roar (1.1.0)
-      representable (~> 3.0.0)
-
 GEM
   specs:
     addressable (2.5.2)
@@ -168,6 +161,8 @@ GEM
       declarative (< 0.1.0)
       declarative-option (< 0.2.0)
       uber (< 0.2.0)
+    roar (1.1.0)
+      representable (~> 3.0.0)
     rom (3.3.3)
       concurrent-ruby (~> 1.0)
       dry-core (~> 0.3)
@@ -236,7 +231,7 @@ DEPENDENCIES
   multi_json
   puma
   rake
-  roar!
+  roar
   sass
   sequel
   shotgun
