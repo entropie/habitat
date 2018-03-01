@@ -4,9 +4,15 @@
 # Author:  Michael 'entropie' Trommer <mictro@gmail.com>
 #
 class Contributors
-  class Anna
+  class C
+    def self.to_html
+      self.name.to_s
+    end
+    
   end
-  class Entropie
+  class Anna < C
+  end
+  class Entropie < C
   end
   
 end
@@ -44,18 +50,18 @@ module Blog
 
     def self.included(o)
       o.before :load_post
-#      o.before :load_posts
+      o.before :load_posts
     end
 
     private
 
     def load_posts
-      @posts = posts(logged_in?)
+      @posts = posts(logged_in?).map{|p| p.post }
     end
 
     def load_post(params)
       slug = params[:slug]
-      reload! if not Blog.db or  Blog.db.empty?
+      reload! if not Blog.db or Blog.db.empty?
       if slug
         @post = find_by(slug, logged_in?)
       end
@@ -121,7 +127,6 @@ module Blog
 
   def posts(logged_in = false)
     if Blog.db.empty?
-      p 1
       Blog.db = Posts.new
     end
     if not logged_in
@@ -140,6 +145,13 @@ module Blog
   rescue
     nil
   end
+
+  def find_by_pid(rpid, logged_in = false)
+    posts(logged_in).select{ |pst| pst.post.pid == rpid }.first.post
+  rescue
+    nil
+  end
+
 
   def find_by_tags(logged_in, *arg)
     posts(logged_in).select{ |pst| pst.post.tags.any?{|t| arg.include?(t) } }.map{|p| p.post }
