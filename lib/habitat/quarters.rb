@@ -75,11 +75,14 @@ module Habitat::Quarters
     end
 
     def load_enviroment!
-      require app_root("config/environment.rb")
       Dir.chdir(app_root) do
         Hanami.app
       end
       Plugins.load_from_symbols(config.fetch(:plugins))
+    end
+
+    def load_application_files_for_plugins!
+      Plugins.load_application_files_for_plugins!(config.fetch(:plugins))
     end
 
     def plugin_mapping
@@ -119,19 +122,6 @@ module Habitat::Quarters
         from_skel(c)
       }
     end
-
-    # def patch_file_before(file, pattern, cnts)
-    #   ret = []
-    #   contents = File.readlines(app_root(file))
-    #   contents.each do |line|
-    #     if line =~ pattern
-    #       ret << cnts << "\n\n" << line
-    #     else
-    #       ret << line
-    #     end
-    #   end
-    #   overwrite(app_root(file), ret.join)
-    # end
 
     def patch_file(file, pattern, cnts)
       ret = []

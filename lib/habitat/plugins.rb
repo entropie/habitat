@@ -2,22 +2,28 @@ module Habitat
 
   module Plugins
 
-    def self.load_from_symbols(symlink_array)
-      Habitat.log :debug, "require plugins"
-      symlink_array.each do |sa|
+    def self.load_from_symbols(symbol_array)
+      Habitat.log :debug, "require plugins from config"
+      symbol_array.each do |sa|
         plugin_file = Habitat.plugin_path(sa, "lib", "#{sa}.rb")
-        Habitat.log :debug, "loading #{plugin_file}"
-        require plugin_file
+        Habitat.require plugin_file
       end
     end
     
-    def self.to_classes(symlink_array)
-      symlink_array.inject({}){|m, sa|
+    def self.to_classes(symbol_array)
+      symbol_array.inject({}){|m, sa|
         k = sa.to_s.capitalize
         ret = Object.const_get(k)
         m[sa] = ret
         m
       }
+    end
+
+    def self.load_application_files_for_plugins!(symbol_array)
+      symbol_array.each do |plugin_symbol|
+        application_file = Habitat.plugin_path(plugin_symbol, "application.rb")
+        Habitat.require application_file
+      end
     end
     
     def self.for(quarter)

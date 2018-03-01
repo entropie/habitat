@@ -66,6 +66,10 @@ module Habitat
   end
   module_function :plugin_path
 
+  def self.require(file)
+    log(:debug, "::::require #{Habitat.S(file)}")
+    Kernel.require file
+  end
 
   def log(k, msg, &blk)
     if web? and Hanami::Components.resolved('logger')
@@ -77,11 +81,37 @@ module Habitat
   module_function :log
 
 
+  def self.load_application_files_for_plugins!
+    Habitat.quart.load_application_files_for_plugins!
+  end
+
   def web?
     # defined?(Web::Application) == "constant"
     true
   end
   module_function :web?
+
+  def self.mounts
+    @mounts ||= {}
+  end
+
+  def self.default_application_config
+    proc{
+      middleware.use Rack::Session::Cookie, secret: "asd"
+      middleware.use Warden::Manager do |manager|
+        # let Hanami deal with the 401s
+        #manager.intercept_401 = false
+      end
+      controller.prepare do
+        include Habitat
+        include Habitat::WebAppMethods
+      end
+      view.prepare do
+        include Habitat
+        include Habitat::WebAppMethods
+      end
+    }
+  end
 
 
   module WebAppMethods
@@ -108,32 +138,3 @@ end
 
 
 
-begin
-
-if Habitat.web?
-
-  class Web::Application
-    configure do
-      middleware.use Rack::Session::Cookie, secret: "asd"
-      middleware.use Warden::Manager do |manager|
-        # let Hanami deal with the 401s
-        manager.intercept_401 = false
-      end
-
-      controller.prepare do
-        include Habitat
-        include Habitat::WebAppMethods
-      end
-
-      view.prepare do
-        include Habitat
-        include Habitat::WebAppMethods
-      end
-    end
-  end
-
-end
-
-
-rescue
-end
