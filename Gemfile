@@ -30,6 +30,7 @@ gem "capistrano-rvm"
 gem "multi_json"
 gem "roar"
 
+
 group :development do
   gem 'shotgun'
 end
