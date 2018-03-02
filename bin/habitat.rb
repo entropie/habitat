@@ -35,6 +35,10 @@ command(:create) do |sopts|
 end
 
 
+def app_run(arg)
+  system "bundle exec hanami #{arg}"
+end
+
 quarters.each do |quart|
 
   q = Habitat.quart = quart
@@ -50,14 +54,22 @@ quarters.each do |quart|
       puts "Available: %s" % q.plugins.available.to_s
     end
 
-    sopts.on("-a", "--active plugin", "activate plugin") do |b|
+    sopts.on("-a", "--activate plugin", "activate plugin") do |b|
       q.plugins.available[b].activate
-
     end
 
     sopts.on("-d", "--deactivate plugin", "deactivate plugin") do |b|
       q.plugins[b].deactivate
     end
+
+    sopts.on("-R", "--routes", "show routes") do
+      app_run("routes")
+    end
+
+    sopts.on("-S", "--start", "start local development server") do
+      app_run("server")
+    end
+
   end
 end
 
