@@ -72,7 +72,7 @@ module Habitat
   end
 
   def log(k, msg, &blk)
-    if web? and Hanami::Components.resolved('logger')
+    if Hanami::Components.resolved('logger')
       Hanami.logger.send(:info, "#{k}: #{msg}")
     else
       puts "%12s  %s" % [k.to_s, msg]
@@ -84,12 +84,6 @@ module Habitat
   def self.load_application_files_for_plugins!
     Habitat.quart.load_application_files_for_plugins!
   end
-
-  def web?
-    # defined?(Web::Application) == "constant"
-    true
-  end
-  module_function :web?
 
   def self.mounts
     @mounts ||= {}
