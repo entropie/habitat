@@ -3,15 +3,27 @@ require 'hanami/setup'
 require 'hanami/model'
 require_relative '../lib/%%%identifier%%%'
 
-require_relative '../apps/web/application'
-
 require_relative '../../../lib/habitat'
 
 Dir["#{ __dir__ }/initializers/*.rb"].each { |file| require_relative file }
 
-Habitat.quart = Habitat::Quarters[:%%%identifier%%%]
+q = Habitat.quart = Habitat::Quarters[%%%identifier%%%]
+
+require_relative '../apps/web/application'
+
+# loads application files for active plugins
+Habitat.load_application_files_for_plugins!
+
+class Web::Application
+  configure do
+    instance_eval(&Habitat.default_application_config)
+  end
+end
 
 Hanami.configure do
+  Habitat.mounts.each_pair {|clz,mp|
+    mount clz, at: mp
+  }
   mount Web::Application, at: '/'
 
   model do
@@ -35,7 +47,7 @@ Hanami.configure do
   end
 
   mailer do
-    root 'lib/%%%identifier%%%/mailers'
+    root 'lib/fluffology/mailers'
 
     # See http://hanamirb.org/guides/mailers/delivery
     delivery :test
@@ -56,4 +68,4 @@ Hanami.configure do
 end
 
 
-
+Habitat.quart.load_enviroment!
