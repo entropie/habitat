@@ -76,7 +76,7 @@ module Habitat::Quarters
 
     def load_enviroment!
       Dir.chdir(app_root) do
-        Hanami.app
+        Hanami.boot
       end
       Plugins.load_from_symbols(config.fetch(:plugins))
     end
