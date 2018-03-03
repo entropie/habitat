@@ -102,6 +102,9 @@ module Habitat::Quarters
     end
 
     def prepare_assets_for_production
+      Dir.chdir app_root do
+        exec("./node_modules/.bin/webpack --progress --colors")
+      end
       require 'uglifier'
       ret = Uglifier.new.compile(File.read(app_root("public/build/app.js")))
       File.open(app_root("public/build/app-min.js"), "w+"){|fp| fp.puts(ret)}
