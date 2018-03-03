@@ -29,7 +29,7 @@ gem "capistrano-rvm"
 
 gem "multi_json"
 gem "roar"
-
+gem "uglifier"
 
 group :development do
   gem 'shotgun'

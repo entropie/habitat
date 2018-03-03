@@ -36,6 +36,18 @@ module Habitat::Quarters
       new(path)
     end
 
+    def env
+      ENV["HANAMI_ENV"]
+    end
+
+    def production?
+      env == "production"
+    end
+
+    def development?
+      env == "development"
+    end
+
     def initialize(path)
       @path = path
     end
@@ -87,6 +99,12 @@ module Habitat::Quarters
 
     def plugin_mapping
       @plugin_mapping ||= Plugins.to_classes(config.fetch(:plugins))
+    end
+
+    def prepare_assets_for_production
+      require 'uglifier'
+      ret = Uglifier.new.compile(File.read(app_root("public/build/app.js")))
+      File.open(app_root("public/build/app-min.js"), "w+"){|fp| fp.puts(ret)}
     end
   end
 

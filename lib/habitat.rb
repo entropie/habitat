@@ -33,6 +33,10 @@ module Habitat
     path.sub(root, "")
   end
 
+  def self.Q
+    Quarters.quart
+  end
+
   def self.inhabit(ident)
     Quarters::Quarters.read_dir
     Habitat.quart = quarters(ident)
@@ -117,6 +121,17 @@ module Habitat
     def session_user
       params.env['warden'].user
     end
+
+    def _javascript(str)
+      src = if Habitat.quart.production?
+              File.join("/build/", str + "-min")
+            else
+              File.join("/build", str)
+            end
+      src += ".js"
+      raw("<script src='#{src}'></script>")
+    end
+
 
   end
 

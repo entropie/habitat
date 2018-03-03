@@ -70,6 +70,10 @@ quarters.each do |quart|
       app_run("server")
     end
 
+    sopts.on("-U", "--uglifi", "asd") do
+      q.prepare_assets_for_production
+    end
+
   end
 end
 
