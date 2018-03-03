@@ -9,6 +9,8 @@ module Api::Representers
     property :tags
     property :pid
     property :slug
+    property :image
+    property :date
   end
 
   class FullPost < Post
