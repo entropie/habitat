@@ -14,6 +14,26 @@ module Api::Representers
   end
 
   class FullPost < Post
+
+    module PostDecorator
+      def content
+        cnt = super
+        html_file = Habitat.quart.media_path("blog/attachments/", slug, "enginecache_post.html")
+        if File.exist?(html_file)
+          a = File.open(html_file).read
+          a
+        else
+          cnt
+        end
+      end
+    end
+
+    
+    def initialize(arg)
+      super(arg.extend(PostDecorator))
+    end
+
+    
     property :content
   end
 end
