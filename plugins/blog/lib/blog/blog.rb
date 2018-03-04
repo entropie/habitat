@@ -6,7 +6,7 @@
 class Contributors
   class C
     def self.to_html
-      self.name.to_s
+      self.name.to_s.split("::").last
     end
     
   end
