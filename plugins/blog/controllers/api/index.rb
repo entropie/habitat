@@ -6,7 +6,7 @@ module Api::Controllers::Post
     expose :posts
 
     def call(params)
-      hashes = @posts.map do |pst|
+      hashes = @posts[0..8].map do |pst|
         Api::Representers::Post.new(pst).to_hash
       end
 
