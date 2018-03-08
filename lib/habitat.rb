@@ -115,11 +115,13 @@ module Habitat
   module WebAppMethods
 
     def logged_in?
-      !!params.env['warden'].user
+      #!!params.env['warden'].user
+      true
     end
 
     def session_user
-      params.env['warden'].user
+      # params.env['warden'].user
+      Users[1]
     end
 
     def _javascript(str)
@@ -129,10 +131,19 @@ module Habitat
               File.join("/build", str)
             end
       src += ".js"
-      raw("<script src='#{src}'></script>")
+      raw("<script src='#{src}' defer></script>")
     end
 
+    def adapater
+      Diary::Database.with_adapter.new(Habitat.quart.media_path)
+    end
 
+    def user_adapter(usr = nil, &blk)
+      user = usr || session_user
+      if logged_in?
+        adapater.with_user(user, &blk)
+      end
+    end
   end
 
 
