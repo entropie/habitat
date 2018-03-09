@@ -106,8 +106,13 @@ module Habitat::Quarters
         puts %x"node ./node_modules/.bin/webpack --colors"
       end
       require 'uglifier'
-      ret = Uglifier.new.compile(File.read(app_root("public/build/app.js")))
-      File.open(app_root("public/build/app-min.js"), "w+"){|fp| fp.puts(ret)}
+      target = app_root("public/build/app-min.js")
+      src    = app_root("public/build/app.js")
+      ret = Uglifier.new.compile(File.read(src))
+      File.open(target, "w+"){|fp| fp.puts(ret)}
+    rescue
+      FileUtils.cp(src, target)
+      log :warn, "*** UGLIFIER FAILED: #{$!}"
     end
   end
 
