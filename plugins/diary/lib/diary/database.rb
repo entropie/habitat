@@ -109,6 +109,10 @@ module Diary
           user_path(*Time.now.strftime("%Y/%m/").split("/"), *args)
         end
 
+        def sheet_filename(sheet)
+          current_sheet_path(sheet.id + SHEET_EXTENSION)
+        end
+
         def setup
           @setup = true
           log :debug, "setting up adapter directory #{path}"
@@ -120,19 +124,11 @@ module Diary
           @setup
         end
 
-        def with_user(user)
+        def with_user(user, &blk)
           @user, @sheets = user, nil
           ret = yield self
           @user, @sheets = nil, nil
           ret
-        end
-
-        def update_sheet(sheet, param_hash)
-          sheet = sheet.extend(SheetFileExtension)
-          if content = param_hash[:content]
-            sheet.content = content
-            store(sheet)
-          end
         end
 
         def sheet_files(user = nil)
@@ -148,7 +144,7 @@ module Diary
           end
           ret = Sheets.new(user || @user).push(*read_sheets)
           if block_given?
-            yield ret
+            ret.each(&blk)
           end
           return ret
         end
@@ -169,32 +165,32 @@ module Diary
           super(hash)
         end
 
-        def sheet_filename(sheet)
-          current_sheet_path(sheet.id + SHEET_EXTENSION)
-        end
-
         def store(sheet)
           raise "invalid sheet: #{PP.pp(sheet, '')}" unless sheet.valid?
           mkdir_p(user_path) unless ::File.exist?(user_path)
 
 
           unless sheet.file
-            file = sheet_filename(sheet)
-            sheet.file = file
-            mkdir_p(dirname(file))
+            sheet.file = sheet_filename(sheet)
+            mkdir_p(dirname(sheet.file))
           end
 
-          without_user {
-            write(sheet.file, YAML.dump(sheet))
-          }
+          write(sheet.file, YAML.dump(sheet))
           sheet
         end
+
+        def update_sheet(sheet, param_hash)
+          sheet = sheet.extend(SheetFileExtension)
+          if content = param_hash[:content]
+            sheet.content = content
+            sheet.updated_at = Time.now
+            store(sheet)
+          end
+        end
+        
       end
     end
-
-
   end
-
 end
 
 
