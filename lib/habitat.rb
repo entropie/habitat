@@ -115,13 +115,11 @@ module Habitat
   module WebAppMethods
 
     def logged_in?
-      #!!params.env['warden'].user
-      true
+      !!params.env['warden'].user
     end
 
     def session_user
-      # params.env['warden'].user
-      Users[1]
+      params.env['warden'].user
     end
 
     def _javascript(str)
@@ -140,7 +138,7 @@ module Habitat
 
     def user_adapter(usr = nil, &blk)
       user = usr || session_user
-      if logged_in?
+      if user
         adapater.with_user(user, &blk)
       end
     end

@@ -7,13 +7,13 @@ module Api
     configure do
       root __dir__
       routes do 
-        get  '/sheets/',             to: "sheets#index", as: :sheets
-        get  '/sheets/sheet/:id',           to: "sheet#index",  as: :sheets
-        post '/sheets/update',        to: "sheet#update", as: :update
-        #post '/sheet/new',           to: "sheet#create", as: :new
-        get  '/sheets/create',           to: "sheet#create", as: :create
-        #get '/post/:slug',       to: "post#post", as:  :post
-        #get '/post/pid/:pid',    to: "post#pid", as:   :pid
+        get  '/sheets/',                    to: "sheets#sheets",  as: :sheets
+        get  '/sheets/sheet/:id',           to: "sheets#sheet" ,  as: :sheets
+        post '/sheets/update',              to: "sheets#update",  as: :update
+
+        post '/sheets/create',              to: "sheets#create",  as: :create
+        get  '/sheets/create',              to: "sheets#create",  as: :create
+
       end
       default_request_format :json
       default_response_format :json

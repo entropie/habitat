@@ -1,15 +1,15 @@
 module Api::Controllers::Sheets
-  class Index
+  class Sheets
 
     include Api::Action
-    include Diary
+    include Diary::ApiControllerMethods 
 
     def call(params)
-      sheets = user_adapter do |a|
-        a.sheets
+      sheets = user_adapter(@token_user) do |a|
+        @return[:sheets] = a.sheets.map(&:to_hash)
       end
       self.status = 200
-      self.body = { sheets: sheets.map{|s| s.to_hash } }.to_json
+      self.body = @return.to_json
     end
   end
 end

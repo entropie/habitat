@@ -14,6 +14,26 @@ require_relative "snippets"
 module Diary
 
   DEFAULT_ADAPTER = :File
+
+  module ApiControllerMethods
+    def self.included(o)
+      o.instance_eval do
+        before :check_token
+      end
+    end
+    #before :check_token
+
+    private
+    def check_token(params)
+      @return = {}
+      if params[:token]
+        @token_user = Users.by_token(params[:token])
+      else
+        @return[:ok] = :nope
+      end
+    end
+  end
+
   
   class Diaries < Array
   end

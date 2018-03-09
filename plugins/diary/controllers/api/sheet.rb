@@ -1,18 +1,17 @@
-module Api::Controllers::Sheet
-  class Index
+module Api::Controllers::Sheets
+  class Sheet
     include Api::Action
+    ### include Hanami::Action::Session
+
+    include Diary::ApiControllerMethods 
 
     def call(params)
-      # sheet = user_adapter do |u|
-      #   sheet = u.create_sheet("Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore")
-      #   a =     u.store(sheet)
-      # end
-
-      sheet = user_adapter do |a|
+      sheet = user_adapter(@token_user) do |a|
         a.sheets[ params[:id] ]
       end
+      @return.merge!(sheet.to_hash) if sheet
       self.status = 200
-      self.body = sheet.to_hash.to_json
+      self.body = @return.to_json
     end
   end
 end
