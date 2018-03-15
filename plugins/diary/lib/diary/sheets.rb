@@ -41,6 +41,10 @@ module Diary
       id == pid
     end
 
+    def user
+      Users[@user_id]
+    end
+
     def populate(param_hash)
       param_hash.each do |attribute, value|
         instance_variable_set("@#{attribute}", value)
@@ -61,13 +65,18 @@ module Diary
       not missing.any?
     end
 
+    def references
+      @references ||= References.new(self)
+    end
+
     def to_hash
       {
         :content => @content,
         :created_at => @created_at,
         :updated_at => @updated_at,
         :user_id => @user_id,
-        :id => @id
+        :id => @id,
+        :references => references.references
       }
     end
 

@@ -6,6 +6,7 @@ module Api::Controllers::Sheets
     include Diary::ApiControllerMethods 
 
     def call(params)
+      #sleep 2
       sheet = user_adapter(@token_user) do |a|
         a.sheets[ params[:id] ]
       end

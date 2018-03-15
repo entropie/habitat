@@ -1,9 +1,8 @@
 require_relative "diary/diary"
-require_relative "diary/snippets"
-require_relative "diary/renderer"
-require_relative "diary/database"
-require_relative "diary/snippets"
-require_relative "diary/sheets"
+# require_relative "diary/renderer"
+# require_relative "diary/database"
+# require_relative "diary/references"
+# require_relative "diary/sheets"
 #Diary.db
 
 %w"controllers views representers".each do |parent_dir|

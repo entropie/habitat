@@ -6,9 +6,10 @@ require 'digest/sha1'
 require 'securerandom'
 require 'yaml'
 
+require_relative "renderer"
 require_relative "database"
 require_relative "sheets"
-require_relative "snippets"
+require_relative "references"
 
 
 module Diary
