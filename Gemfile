@@ -22,6 +22,8 @@ gem 'bcrypt'
 gem "sequel"
 
 gem "unicorn"
+# /home/habitats/dogary/current/quarters/dogary/log/
+# stderr_path=/home/habitats/dogary/current/quarters/dogary/log/
 
 gem "capistrano", "~> 3.6", require: false
 gem "capistrano-bundler", '~> 1.3'

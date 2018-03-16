@@ -43,14 +43,14 @@ module Diary
     end
 
     def keywords
-      html.css("i").map do |ref|
+      html.css("a").map do |ref|
         k = References.normalize_key(ref.content)
       end
     end
 
     def references
       refs = {}
-      html.css("i").each do |ref|
+      html.css("a").each do |ref|
         k = References.normalize_key(ref.content)
         refs[k] ||= []
         refs[k].push(*find_links_by_reference(k))

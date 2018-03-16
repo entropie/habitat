@@ -183,6 +183,9 @@ module Diary
           sheet = sheet.extend(SheetFileExtension)
           if content = param_hash[:content]
             sheet.content = content
+
+            sheet.title = param_hash[:title] if param_hash[:title]
+
             sheet.updated_at = Time.now
             store(sheet)
           end

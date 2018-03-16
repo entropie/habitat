@@ -7,8 +7,15 @@ module Api::Controllers::Sheets
 
     def call(params)
       user_adapter(@token_user) do |u|
-        cnts = "Hey #{@token_user.name}. Erzähl mir was du heute gemacht hast. "
-        sheet = u.create_sheet(cnts)
+        cnts = "Hey #{@token_user.name}." # Erzähl mir was du heute gemacht hast. "
+
+        adds = begin
+                 ::File.readlines(Habitat.quart.media_path("default_sheet.html")).join
+               rescue
+                 ""
+        end
+        
+        sheet = u.create_sheet(cnts + "<br/>"*3 + adds)
         u.store(sheet)
         @return = sheet.to_hash
       end

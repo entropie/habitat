@@ -21,6 +21,8 @@ module Diary
       :updated_at  => Time,
       :user_id     => Fixnum
     }
+ 
+    OptionalAttributes = [:title]
 
     def self.get_random_id
       ary = [*'a'..'z', *'A'..'Z', *0..9].shuffle(random: SecureRandom.hex(23).to_i(16))
@@ -30,6 +32,7 @@ module Diary
 
     attr_accessor :user
     attr_accessor :id
+    attr_accessor :title
 
     attr_accessor *Attributes.keys
 
@@ -55,6 +58,8 @@ module Diary
     def valid?
       missing = []
       Attributes.each do |attribute, attribute_type|
+        next if OptionalAttributes.include?(attribute)
+
         if not var = instance_variable_get("@#{attribute}")
           missing << attribute
         elsif not var.kind_of?(attribute_type)
@@ -70,7 +75,7 @@ module Diary
     end
 
     def to_hash
-      {
+      r = {
         :content => @content,
         :created_at => @created_at,
         :updated_at => @updated_at,
@@ -78,6 +83,8 @@ module Diary
         :id => @id,
         :references => references.references
       }
+      r.merge!(:title => @title) if @title
+      r
     end
 
     def to_json
