@@ -77,8 +77,8 @@ module Diary
     def to_hash
       r = {
         :content => @content,
-        :created_at => @created_at,
-        :updated_at => @updated_at,
+        :created_at => @created_at.rfc2822,
+        :updated_at => @updated_at.rfc2822,
         :user_id => @user_id,
         :id => @id,
         :references => references.references
