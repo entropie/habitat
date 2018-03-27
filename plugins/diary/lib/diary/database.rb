@@ -181,14 +181,18 @@ module Diary
 
         def update_sheet(sheet, param_hash)
           sheet = sheet.extend(SheetFileExtension)
-          if content = param_hash[:content]
-            sheet.content = content
+          needs_update = false
 
-            sheet.title = param_hash[:title] if param_hash[:title]
+          param_hash.each do |param, value|
+            needs_update = true
+            sheet.send("%s=" % [param.to_s], value)
+          end
 
+          if needs_update
             sheet.updated_at = Time.now
             store(sheet)
           end
+
         end
         
       end

@@ -33,6 +33,7 @@ module Diary
     attr_accessor :user
     attr_accessor :id
     attr_accessor :title
+    attr_accessor :preview
 
     attr_accessor *Attributes.keys
 
@@ -81,7 +82,8 @@ module Diary
         :updated_at => @updated_at.rfc2822,
         :user_id => @user_id,
         :id => @id,
-        :references => references.references
+        :references => references.references,
+        :preview => @preview || ""
       }
       r.merge!(:title => @title) if @title
       r

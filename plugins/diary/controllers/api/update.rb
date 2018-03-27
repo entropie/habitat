@@ -4,10 +4,15 @@ module Api::Controllers::Sheets
     include Diary::ApiControllerMethods 
 
     def call(params)
+      #sleep 2
+
       result = user_adapter(@token_user) do |a|
         sheet = a.sheets[ params[:id] ]
-        content = remove_styles(params[:content])
-        a.update_sheet(sheet, :content => content, :title => params[:title])
+        filtered_params = [:title, :content, :preview].inject({}) do |m, k|
+          m[k] = params[k] if params[k]
+          m
+        end
+        a.update_sheet(sheet, filtered_params)
         @return = sheet.to_hash
       end
       self.status = 200
