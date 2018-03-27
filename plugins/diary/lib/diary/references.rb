@@ -34,7 +34,7 @@ module Diary
 
     def find_links_by_reference(ref)
       reference_sheets.select { |r|
-        r.keywords.include?(ref) and r.sheet.id != @sheet.id
+        r.keywords.include?(ref) # and r.sheet.id != @sheet.id
       }.map{|r| r.sheet.id }
     end
 
