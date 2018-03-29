@@ -44,7 +44,10 @@ module Diary
 
     def keywords
       html.css("a").map do |ref|
-        k = References.normalize_key(ref.content)
+        key = ref.attr("href")
+        next if key =~ /^https?.*/
+        k = References.normalize_key(key)
+        k
       end
     end
 
