@@ -10,7 +10,7 @@ module Api
         get  '/sheets/',                    to: "sheets#sheets",  as: :sheets
         get  '/sheets/sheet/:id',           to: "sheets#sheet" ,  as: :sheets
         post '/sheets/update',              to: "sheets#update",  as: :update
-
+        post '/sheets/upload/:id',          to: "sheets#upload",  as: :upload
         post '/sheets/create',              to: "sheets#create",  as: :create
         get  '/sheets/create',              to: "sheets#create",  as: :create
 

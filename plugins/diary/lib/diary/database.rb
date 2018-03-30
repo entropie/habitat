@@ -56,6 +56,10 @@ module Diary
         raise NotImplemented, NOT_IMPLMENTED_MSG        
       end
 
+      def upload(sheet, params)
+        raise NotImplemented, NOT_IMPLMENTED_MSG        
+      end
+
       def sheet_class
         Sheet.new
       end
@@ -176,6 +180,14 @@ module Diary
 
           write(sheet.file, YAML.dump(sheet))
           sheet
+        end
+
+        def upload(sheet, params)
+          file = params[:tempfile]
+          mkdir_p(sheet.data_dir)
+          filename = Digest::SHA1.hexdigest(file.read) + ::File.extname(params[:filename])
+          cp(file.path, sheet.data_dir(filename))
+          filename
         end
 
         def update_sheet(sheet, param_hash)

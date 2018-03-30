@@ -56,6 +56,14 @@ module Diary
       self
     end
 
+    def data_dir(*args)
+      Habitat.quart.media_path("public", "di", id, *args)
+    end
+
+    def http_dir(*args)
+      File.join("/_", "di", id, *args)
+    end
+
     def valid?
       missing = []
       Attributes.each do |attribute, attribute_type|
