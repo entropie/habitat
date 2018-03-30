@@ -102,7 +102,7 @@ module Diary
 
         def user_path(*args)
           raise NoUserContext, "trying to access no existing user directory: " unless @user
-          @user.diary_path("sheets", @user.id.to_s, *args)
+          ::File.join(::File.realpath(@user.diary_path("sheets")), @user.id.to_s, *args)
         end
 
         def current_sheet_path(*args)
@@ -168,7 +168,6 @@ module Diary
         def store(sheet)
           raise "invalid sheet: #{PP.pp(sheet, '')}" unless sheet.valid?
           mkdir_p(user_path) unless ::File.exist?(user_path)
-
 
           unless sheet.file
             sheet.file = sheet_filename(sheet)
