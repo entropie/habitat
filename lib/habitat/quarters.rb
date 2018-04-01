@@ -4,9 +4,9 @@ module Habitat::Quarters
 
     extend Habitat
 
-    def self.read_dir
+    def self.read_dir(param_dir = nil)
       log :debug, "quarters reading: '#{Habitat.quarters_root}'"
-      (Dir["%s/*/" % quarters_root]).each do |quarter_dir|
+      (Dir["%s/*/" % (param_dir || quarters_root)]).each do |quarter_dir|
         quarters << Quart.read(quarter_dir)
       end
       quarters
