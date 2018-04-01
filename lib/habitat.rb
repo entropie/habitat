@@ -17,7 +17,7 @@ module Habitat
 
   $: << Source.join("lib/habitat")
   
-  %w"mixins supervisor quarters plugins configuration".each do |lib_to_load|
+  %w"mixins adapter supervisor quarters plugins configuration".each do |lib_to_load|
     require lib_to_load
   end
   
@@ -44,9 +44,21 @@ module Habitat
   
 
   def self.quarters(arg = nil)
-    (@quarters ||= Quarters::Quarters.new)
+    @quarters ||= Quarters::Quarters.new
     return @quarters[arg] if arg
     @quarters
+  end
+
+  def self.adapter(arg = nil)
+    @adapter ||= Habitat::Adapter.new
+    return @adapter[arg] if arg
+    @adapter
+  end
+
+  def self.add_adapter(symp, adapter)
+    log :info, "registering adapter: #{adapter}"
+    self.adapter[symp] = adapter
+    self.adapter
   end
 
   def quarters_root(*args)
@@ -132,14 +144,15 @@ module Habitat
       raw("<script src='#{src}' defer></script>")
     end
 
-    def adapater
-      Diary::Database.with_adapter.new(Habitat.quart.media_path)
+    def adapter(ident)
+      ident = ident.to_sym
+      Habitat.adapter(ident)
     end
 
-    def user_adapter(usr = nil, &blk)
+    def adapter_with_usercontext(adapterident, usr = nil, &blk)
       user = usr || session_user
       if user
-        adapater.with_user(user, &blk)
+        adapter(adapterident).with_user(user, &blk)
       end
     end
   end

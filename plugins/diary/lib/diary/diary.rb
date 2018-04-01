@@ -21,8 +21,11 @@ module Diary
       o.instance_eval do
         before :check_token
       end
+
+      def A(*args, &blk)
+        adapter_with_usercontext(:diary, *args, &blk)
+      end
     end
-    #before :check_token
 
     private
     def check_token(params)
@@ -51,13 +54,11 @@ module Diary
       puts " >>> #{str}"
     end
   end
+end
 
-  
+if Habitat.quart
+  Habitat.add_adapter(:diary, Diary::Database.with_adapter.new(Habitat.quart.media_path))  
 end
 
 
-class User
-  def diary_path(*args)
-    Habitat.quart.media_path("diaries", *args)
-  end
-end
+

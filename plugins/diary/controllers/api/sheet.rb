@@ -7,7 +7,7 @@ module Api::Controllers::Sheets
 
     def call(params)
       #sleep 2
-      sheet = user_adapter(@token_user) do |a|
+      sheet = A(@token_user) do |a|
         a.sheets[ params[:id] ]
       end
       @return.merge!(sheet.to_hash) if sheet

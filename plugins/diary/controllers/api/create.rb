@@ -6,7 +6,7 @@ module Api::Controllers::Sheets
     include Diary::ApiControllerMethods 
 
     def call(params)
-      user_adapter(@token_user) do |u|
+      A(@token_user) do |u|
         cnts = "Hey #{@token_user.name}." # Erzähl mir was du heute gemacht hast. "
 
         adds = begin

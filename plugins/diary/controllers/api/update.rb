@@ -6,7 +6,7 @@ module Api::Controllers::Sheets
     def call(params)
       #sleep 2
 
-      result = user_adapter(@token_user) do |a|
+      result = A(@token_user) do |a|
         sheet = a.sheets[ params[:id] ]
     
         filtered_params = [:title, :content, :preview].inject({}) do |m, k|

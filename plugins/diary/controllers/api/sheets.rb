@@ -5,7 +5,7 @@ module Api::Controllers::Sheets
     include Diary::ApiControllerMethods 
 
     def call(params)
-      sheets = user_adapter(@token_user) do |a|
+      sheets = A(@token_user) do |a|
         @return[:sheets] = a.sheets.map(&:to_hash)
       end
       self.status = 200

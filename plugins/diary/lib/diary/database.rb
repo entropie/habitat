@@ -105,12 +105,15 @@ module Diary
         end
 
         def user_path(*args)
-          raise NoUserContext, "trying to access no existing user directory: " unless @user
-          ::File.join(::File.realpath(@user.diary_path("sheets")), @user.id.to_s, *args)
+          raise NoUserContext, "trying to access user directory without valid user context: " unless @user
+          ::File.join(::File.realpath(path), "diary", @user.id.to_s, *args)
+        rescue Errno::ENOENT
+          warn "does not exist: #{path("diary")}"
+          path("diary", @user.id.to_s, *args)
         end
 
         def current_sheet_path(*args)
-          user_path(*Time.now.strftime("%Y/%m/").split("/"), *args)
+          user_path("sheets", *Time.now.strftime("%Y/%m/").split("/"), *args)
         end
 
         def sheet_filename(sheet)
@@ -121,11 +124,11 @@ module Diary
           @setup = true
           log :debug, "setting up adapter directory #{path}"
           mkdir_p(path)
-          true
+          @setup
         end
 
         def setup?
-          @setup
+          @setup and ::File.exist?(path)
         end
 
         def with_user(user, &blk)
