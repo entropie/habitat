@@ -10,6 +10,13 @@ module Habitat
     class NotAuthorized < DataBaseError; end
     class NoUserContext < NotAuthorized; end      
 
+    class EntryNotValid < DataBaseError; end      
+
+    def self.get_random_id
+      ary = [*'a'..'z', *'A'..'Z', *0..9].shuffle(random: SecureRandom.hex(23).to_i(16))
+      enum = ary.permutation(32)
+      enum.next.join
+    end
 
     def adapter
       @adapter ||= const_get(self.to_s.split("::").first).const_get(:DEFAULT_ADAPTER)
@@ -43,10 +50,6 @@ module Habitat
 
       def query(*_)
         raise NotImplemented, NOT_IMPLMENTED_MSG
-      end
-
-      def sheets
-        raise NotImplemented, NOT_IMPLMENTED_MSG        
       end
 
       def upload(sheet, params)
