@@ -24,12 +24,6 @@ module Diary
  
     OptionalAttributes = [:title]
 
-    def self.get_random_id
-      ary = [*'a'..'z', *'A'..'Z', *0..9].shuffle(random: SecureRandom.hex(23).to_i(16))
-      enum = ary.permutation(32)
-      enum.next.join
-    end
-
     attr_accessor :user
     attr_accessor :id
     attr_accessor :title
