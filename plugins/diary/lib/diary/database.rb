@@ -92,7 +92,7 @@ module Diary
         def create(content)
           now = Time.now
           hash = {
-            :id         => Sheet.get_random_id,
+            :id         => Habitat::Database.get_random_id,
             :content    => content,
             :created_at => now,
             :updated_at => now,
