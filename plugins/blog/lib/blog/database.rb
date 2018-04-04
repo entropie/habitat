@@ -91,6 +91,7 @@ module Blog
             retval.filename = post_or_draft.filename
             retval.datadir = post_or_draft.datadir
           end
+          retval.updated_at = Time.now
           write(retval.filename, YAML.dump(retval))
           post_or_draft
         end
