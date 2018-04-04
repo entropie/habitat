@@ -15,9 +15,19 @@ Habitat::Tests::Suites::PluginsTestSuite.environment(:blog) do
   end
   
   def teardown!
+    #_clr
   end
 end
 
+def _clr
+  FileUtils.rm_rf(TMP_PATH, :verbose => true)
+end
+
+PostHash = {
+  :title => "testtitle?",
+  :content => "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do",
+  :tags => ["foo", "bar"]
+}
 
 class TestDatabase < Minitest::Test
   def test_default_adapter
@@ -60,3 +70,91 @@ class TestFileAdapater < Minitest::Test
 
 end
 
+class TestEntries < Minitest::Test
+  def setup
+    _clr
+    @adapter = Habitat.adapter(:blog)
+  end
+
+  def test_adapter_repository_path
+    assert @adapter.repository_path, File.join(TMP_PATH, "blog")
+  end
+
+  def test_setup
+    assert @adapter.setup
+  end
+
+  def test_query
+    assert_raises{ @adapter.query }
+  end
+
+  def test_sheets
+    assert_raises { @adapter.sheets }
+  end
+
+  def test_entries
+    assert_equal [], @adapter.posts
+    assert_nil @adapter.posts.user
+  end
+
+end
+
+
+class TestEntriesWithUser < Minitest::Test
+
+  include UserMixin
+  
+  def setup
+    _clr
+    @user = MockUser1
+    @adapter = Habitat.adapter(:blog)
+  end
+
+  def test_entries
+    @adapter.with_user(@user) do |a|
+      assert_equal [], a.posts
+      assert_equal @user, a.posts.user
+    end
+  end
+end
+
+class TestCreatePost < Minitest::Test
+
+  include UserMixin
+  
+  def setup
+    @user = MockUser1
+    @adapter = Habitat.adapter(:blog)
+  end
+
+  def test_create_wo_user
+    assert_raises { @adapter.create("foo") }
+  end
+
+  def test_create_with_user
+    post = @adapter.with_user(@user) do |a|
+      a.create(PostHash)
+    end
+    assert_equal "testtitle", post.slug
+    assert_equal PostHash[:title], post.title
+    assert_equal PostHash[:content], post.content
+    assert_equal "/tmp/minitest/data/testtitle", post.datadir
+    assert_equal "/tmp/minitest/blog/drafts/testtitle.post.yaml", post.filename
+
+    @adapter.with_user(@user) do |a|
+      a.store(post)
+    end
+
+    @adapter.with_user(@user) {|a|
+      assert_equal 1, a.posts.size
+      assert_equal post.title, a.posts.first.title
+      #p a.posts.first.to_post(a)
+      a.to_post(a.posts.first)
+      a.to_draft(a.posts.first)
+      a.destroy(a.posts.first)
+    }
+
+    
+  end
+
+end
