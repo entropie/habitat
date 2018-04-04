@@ -34,7 +34,7 @@ module Blog
         def repository_path(*args)
           ::File.join(::File.realpath(path), "blog", *args)
         rescue Errno::ENOENT
-          warn "does not exist: #{path("diary")}"
+          warn "does not exist: #{path("blog")}"
           path("blog", *args)
         end
 
