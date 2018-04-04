@@ -34,7 +34,7 @@ module Diary
         end
 
         def user_path(*args)
-          raise NoUserContext, "trying to access user directory without valid user context: " unless @user
+          raise NoUserContext, "trying to access user directory without valid user context" unless @user
           ::File.join(::File.realpath(path), "diary", @user.id.to_s, *args)
         rescue Errno::ENOENT
           warn "does not exist: #{path("diary")}"
