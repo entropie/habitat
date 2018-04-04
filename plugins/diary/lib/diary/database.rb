@@ -4,82 +4,11 @@ module Diary
 
   module Database
 
-    class DataBaseError < StandardError; end
-    class NotImplemented < DataBaseError; end
-    class NotAuthorized < DataBaseError; end
-    class NoUserContext < NotAuthorized; end      
-
-
-    
-    def log(w, msg)
-      if Object.constants.include?(:Habitat)
-        Habitat.log(w, msg)
-      else
-        puts "DB> #{msg}"
-      end
-    end
-    module_function :log
-
-    def self.adapter
-      @adapter ||= Diary::DEFAULT_ADAPTER
-    end
-    
-    def self.adapter=(obj)
-      @adapter = obj
-    end
-
-    def self.with_adapter(adpt = adapter)
-      Adapter.const_get(adpt.to_s.capitalize.to_sym)
-    end
+    extend Habitat::Database
 
     class Adapter
 
-      include Database
-
-      NOT_IMPLMENTED_MSG = "not implemented in parent class; use corresponding subclass instead".freeze
-
-      attr_reader :user
-
-      def setup
-        raise NotImplemented, NOT_IMPLMENTED_MSG
-      end
-
-      def with_registered_user(user, &blk)
-        raise NotImplemented, NOT_IMPLMENTED_MSG
-      end
-      
-      def query(*_)
-        raise NotImplemented, NOT_IMPLMENTED_MSG
-      end
-
-      def sheets
-        raise NotImplemented, NOT_IMPLMENTED_MSG        
-      end
-
-      def upload(sheet, params)
-        raise NotImplemented, NOT_IMPLMENTED_MSG        
-      end
-
-      def sheet_class
-        Sheet.new
-      end
-
-      def create_sheet(param_hash)
-        unless (Sheet::Attributes.keys - param_hash.keys).empty?
-          raise "wrong set of keys in #{param_hash}; valid keys are: "+
-                "#{Sheets::Attributes.keys}"
-
-        end
-        sheet_class.populate(param_hash)
-      end
-
-      def without_user(&blk)
-        bkup = @user; @user = nil
-        yield self
-        @user = bkup
-      end
-      
-      class File < Adapter
+      class File < Habitat::Database::Adapter
 
         SHEET_EXTENSION = ".sheet.yaml".freeze
         
@@ -96,7 +25,7 @@ module Diary
           @user = nil
         end
 
-        def sheet_class
+        def adapter_class
           Sheet.new.extend(SheetFileExtension)
         end
 
@@ -160,7 +89,7 @@ module Diary
           YAML.load_file(sfile)
         end
 
-        def create_sheet(content)
+        def create(content)
           now = Time.now
           hash = {
             :id         => Sheet.get_random_id,

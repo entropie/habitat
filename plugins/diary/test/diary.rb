@@ -104,7 +104,7 @@ class TestSheets < Minitest::Test
 
   def test_make_sheet
     with_user do |a|
-      sheet = a.create_sheet(@text)
+      sheet = a.create(@text)
       assert sheet.valid?
       assert_equal @text, sheet.content
       @adapter.store(sheet)

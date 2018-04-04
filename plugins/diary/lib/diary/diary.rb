@@ -42,18 +42,6 @@ module Diary
   class Diaries < Array
   end
   
-  def self.db(adapter = Database.adapter)
-    @db ||= Database.with_adapter(adapter)
-  end
-
-
-  def self.log(str)
-    if Object.const_defined?(:Habitat)
-      Habitat.log(:debug, str)
-    else
-      puts " >>> #{str}"
-    end
-  end
 end
 
 if Habitat.quart

@@ -1,9 +1,4 @@
 require_relative "diary/diary"
-# require_relative "diary/renderer"
-# require_relative "diary/database"
-# require_relative "diary/references"
-# require_relative "diary/sheets"
-#Diary.db
 
 %w"controllers views representers".each do |parent_dir|
   target_dir = File.join(File.dirname(File.expand_path(__FILE__)), "../", parent_dir)
