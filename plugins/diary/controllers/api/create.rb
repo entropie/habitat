@@ -15,7 +15,7 @@ module Api::Controllers::Sheets
                  ""
         end
         
-        sheet = u.create_sheet(cnts + "<br/>"*3 + adds)
+        sheet = u.create(cnts + "<br/>"*3 + adds)
         u.store(sheet)
         @return = sheet.to_hash
       end
