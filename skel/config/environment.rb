@@ -7,7 +7,7 @@ require_relative '../../../lib/habitat'
 
 Dir["#{ __dir__ }/initializers/*.rb"].each { |file| require_relative file }
 
-q = Habitat.quart = Habitat::Quarters[%%%identifier%%%]
+q = Habitat.quart = Habitat::Quarters[:%%%identifier%%%]
 
 require_relative '../apps/web/application'
 
@@ -47,8 +47,6 @@ Hanami.configure do
   end
 
   mailer do
-    root 'lib/fluffology/mailers'
-
     # See http://hanamirb.org/guides/mailers/delivery
     delivery :test
   end
