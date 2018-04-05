@@ -1,12 +1,10 @@
 module Blog
 
-
   class Post
 
-    Attributes = {
+   Attributes = {
       :content     => String,
       :title       => String,
-      :image       => String,
       :created_at  => Time,
       :updated_at  => Time,
       :user_id     => Fixnum,
@@ -17,7 +15,7 @@ module Blog
     
     attr_reader *Attributes.keys
 
-    attr_accessor :filename, :datadir, :user_id
+    attr_accessor :filename, :datadir, :user_id, :created_at, :updated_at
  
     def initialize(adapter)
       @adapter = adapter

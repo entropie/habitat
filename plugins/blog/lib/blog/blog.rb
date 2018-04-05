@@ -503,6 +503,11 @@ module Blog
 
 end
 
+if Habitat.quart
+  Habitat.add_adapter(:blog, Blog::Database.with_adapter.new(Habitat.quart.media_path))  
+end
+
+
 # Blogs = Blog
 =begin
 Local Variables:

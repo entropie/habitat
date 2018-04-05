@@ -20,6 +20,7 @@ class Web::Application
   end
 end
 
+
 Hanami.configure do
   Habitat.mounts.each_pair {|clz,mp|
     mount clz, at: mp

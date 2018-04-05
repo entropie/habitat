@@ -151,7 +151,7 @@ class TestCreatePost < Minitest::Test
       #p a.posts.first.to_post(a)
       a.to_post(a.posts.first)
       a.to_draft(a.posts.first)
-      a.destroy(a.posts.first)
+      #a.destroy(a.posts.first)
     }
 
     

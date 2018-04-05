@@ -65,7 +65,7 @@ module Habitat
           set_defaults
           write
         else
-          Habitat.log :info, "reading config #{Habitat.S(file)}"
+          #Habitat.log :info, "reading config #{Habitat.S(file)}"
           @config = YAML::load_file(file)
         end
       end
