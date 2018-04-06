@@ -161,6 +161,8 @@ module Habitat
   include Mixins
 end
 
+# Haml::Options.defaults[:format] = :html5
+# Haml::Options.defaults[:remove_whitespace] = true
 class Hanami::View::Template
   def initialize(t, e = Encoding::UTF_8)
     @_template = Tilt.new(t, nil, default_encoding: e)

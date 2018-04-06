@@ -65,6 +65,10 @@ module Blog
           @posts = Posts.new(user || @user).push(*post_files.map{|pfile| load_file(pfile)})
         end
 
+        def by_slug(slug)
+          posts.dup.select{|p| p.slug == slug }.first
+        end
+
         def load_file(yamlfile)
           log :debug, "loading #{yamlfile}"
           YAML::load_file(yamlfile)
@@ -115,9 +119,9 @@ module Blog
 
         def with_user(user, &blk)
           @user, @posts = user, nil
-          ret = yield self
-          @user, @posts = nil, nil
-          ret
+          ret = yield self if block_given?
+          #@user, @posts = nil, nil
+          ret || self
         end
 
       end

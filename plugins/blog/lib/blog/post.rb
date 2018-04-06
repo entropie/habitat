@@ -7,7 +7,6 @@ module Blog
       :title       => String,
       :created_at  => Time,
       :updated_at  => Time,
-      :user_id     => Fixnum,
       :tags        => Array
     }
 
@@ -65,6 +64,14 @@ module Blog
       ret
     end
 
+    def url
+      slug
+    end
+
+    def draft?
+      false
+    end
+
     def valid?
       missing = []
       Attributes.each do |attribute, attribute_type|
@@ -98,6 +105,10 @@ module Blog
 
     def to_post(adapter)
       Post.new(adapter).populate(to_hash)
+    end
+
+    def draft?
+      true
     end
   end
 

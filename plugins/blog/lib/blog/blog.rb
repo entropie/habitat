@@ -11,6 +11,12 @@ require_relative "templates"
 
 module Blog
 
+  module BlogControllerMethods
+    def blog(*args, &blk)
+      adapter(:blog).with_user(session_user, &blk)
+    end
+  end
+
   DEFAULT_ADAPTER = :File
 
 
