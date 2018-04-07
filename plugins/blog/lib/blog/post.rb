@@ -77,7 +77,11 @@ module Blog
     end
 
     def datadir(*args)
-      @datadir || @adapter.datadir(slug, *args)
+      if @datadir
+        File.join(@datadir, *args)
+      else
+        @adapter.datadir(slug, *args)
+      end
     end
 
     def for_yaml

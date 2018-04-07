@@ -19,8 +19,8 @@ module Blog
     def copy_to(post)
       filename = Digest::SHA1.hexdigest(File.new(@path).read) + ::File.extname(@path)
       target = post.datadir("image", filename)
-      FileUtils.mkdir_p(post.datadir("image"))
-      FileUtils.cp(@path, File.join(post.datadir("image"), filename), :verbose => true)
+      FileUtils.mkdir_p(post.datadir("image"), :verbose => true)
+      FileUtils.cp(@path, post.datadir("image", filename), :verbose => true)
       @dirname = File.join(post.slug, "image")
       @basename = filename
       remove_instance_variable("@path")
