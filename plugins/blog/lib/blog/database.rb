@@ -97,7 +97,7 @@ module Blog
             retval.datadir = post_or_draft.datadir
           end
 
-          unless retval.image.written?
+          if retval.image and not retval.image.written?
             upload(post_or_draft, retval.image)
           end
 

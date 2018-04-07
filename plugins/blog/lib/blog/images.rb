@@ -22,6 +22,20 @@ module Blog
       @basename = filename
     end
 
-  end
-  
+    def path
+      File.join(dirname, basename)
+    end
+
+    def url
+      File.join("/attachments", dirname.gsub(Habitat.quart.media_path("data"), ""), basename)
+    end
+
+    def to_html
+      ret = ""
+
+      ret << "<img src='%s' class='post-image img-rounded' />" % [url]
+      ret
+    end
+    
+  end  
 end

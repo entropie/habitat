@@ -178,17 +178,13 @@ class TestCreatePost < Minitest::Test
     post = @adapter.with_user(@user) do |a|
       a.create(PostHash.merge(:image => File.new("/tmp/RackMultipart20180407-7546-78w5py.png") ))
     end
-    #puts YAML.dump(post.for_yaml)
 
     @adapter.with_user(@user) do |a|
       a.store(post)
     end
-    puts YAML.dump(post.for_yaml)
 
-    @adapter.with_user(@user) {|a|
-    }
+    assert post.image.path
 
-    
   end
 
 end
