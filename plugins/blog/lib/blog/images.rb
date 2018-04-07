@@ -21,7 +21,7 @@ module Blog
       target = post.datadir("image", filename)
       FileUtils.mkdir_p(post.datadir("image"))
       FileUtils.cp(@path, File.join(post.datadir("image"), filename), :verbose => true)
-      @dirname = post.datadir("image")
+      @dirname = post.datadir("image").split("/").last
       @basename = filename
       remove_instance_variable("@path")
       self
@@ -32,7 +32,7 @@ module Blog
     end
 
     def url
-      File.join("/attachments", dirname.gsub(Habitat.quart.media_path("data"), ""), basename)
+      File.join("/attachments", dirname, basename)
     end
 
     def to_html(opts = {})
