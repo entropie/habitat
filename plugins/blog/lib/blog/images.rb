@@ -21,7 +21,7 @@ module Blog
       target = post.datadir("image", filename)
       FileUtils.mkdir_p(post.datadir("image"))
       FileUtils.cp(@path, File.join(post.datadir("image"), filename), :verbose => true)
-      @dirname = post.datadir("image").split("/").last
+      @dirname = File.join(post.slug, "image")
       @basename = filename
       remove_instance_variable("@path")
       self
