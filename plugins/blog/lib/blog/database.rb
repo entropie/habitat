@@ -80,6 +80,20 @@ module Blog
           adapter_class(true).new(self).populate(param_hash)
         end
 
+        def update_or_create(param_hash)
+          raise NoUserContext, "trying to call #create without valid user context " unless @user
+
+          title = Post.make_slug(param_hash[:title])
+          post = by_slug(title)
+
+          if post
+            updated = post.update(param_hash)
+            return updated
+          else
+            create(param_hash)
+          end
+        end
+
         def store(post_or_draft)
           raise NoUserContext, "trying to call #store without valid user context " unless @user
           log :info, "blog:STORE:#{post_or_draft.title}"
@@ -95,10 +109,6 @@ module Blog
             end
             retval.filename = post_or_draft.filename
             retval.datadir = post_or_draft.datadir
-          end
-
-          if retval.image and not retval.image.written?
-            upload(post_or_draft, retval.image)
           end
 
           retval.updated_at = Time.now

@@ -2,24 +2,29 @@ module Blog
 
   class Image
 
-    attr_reader :basename, :dirname
+    attr_reader :path, :basename, :dirname
     
-    def initialize(basename)
-      @basename = basename
+    def initialize(path)
+      @path = path
     end
 
     def written?
-      return false if @basename.split("/")[1] == "tmp"
-      true
+      if basename and dirname
+        return true
+      else
+        false
+      end
     end
 
     def copy_to(post)
-      filename = Digest::SHA1.hexdigest(File.new(@basename).read) + ::File.extname(@basename)
+      filename = Digest::SHA1.hexdigest(File.new(@path).read) + ::File.extname(@path)
       target = post.datadir("image", filename)
       FileUtils.mkdir_p(post.datadir("image"))
-      FileUtils.cp(@basename, post.datadir("image", filename), :verbose => true)
+      FileUtils.cp(@path, File.join(post.datadir("image"), filename), :verbose => true)
       @dirname = post.datadir("image")
       @basename = filename
+      remove_instance_variable("@path")
+      self
     end
 
     def path
@@ -30,10 +35,13 @@ module Blog
       File.join("/attachments", dirname.gsub(Habitat.quart.media_path("data"), ""), basename)
     end
 
-    def to_html
+    def to_html(opts = {})
       ret = ""
 
-      ret << "<img src='%s' class='post-image img-rounded' />" % [url]
+      cls = "post-image "
+      cls << opts[:class] if opts[:class]
+      
+      ret << "<img src='%s' class='%s' />" % [url, cls]
       ret
     end
     

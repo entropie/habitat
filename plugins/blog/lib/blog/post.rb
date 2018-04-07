@@ -16,30 +16,32 @@ module Blog
     attr_reader :image, *Attributes.keys
 
     attr_accessor :filename, :datadir, :user_id, :created_at, :updated_at
+
+    def self.make_slug(str)
+      str.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')
+    end
  
     def initialize(adapter)
       @adapter = adapter
     end
 
     def populate(param_hash)
-
-      if img = param_hash[:image]
-        param_hash[:image] = Image.new(img.path)
-      end
-
       if param_hash[:tags]
-        param_hash[:tags] = param_hash[:tags].split(",").map{|t| t.to_s.strip }
+        if param_hash[:tags].kind_of?(String)
+          param_hash[:tags] = param_hash[:tags].split(",").map{|t| t.to_s.strip }
+        end
       end
 
       param_hash.each do |paramkey, paramval|
         instance_variable_set("@#{paramkey}", paramval)
       end
-
       self
     end
 
     def upload(obj)
-      obj.copy_to(self)
+      img = Image.new(obj.path)
+      img.copy_to(self)
+      @image = img
     end
     
     def to_hash
@@ -49,8 +51,13 @@ module Blog
       }
     end
 
+    def update(param_hash)
+      populate(param_hash)
+      self
+    end
+
     def slug
-      @slug ||= title.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')
+      @slug ||= Post.make_slug(title)
     end
 
     def id
@@ -75,7 +82,10 @@ module Blog
 
     def for_yaml
       ret = dup
-      ret.remove_instance_variable("@adapter")
+      begin
+        ret.remove_instance_variable("@adapter")
+      rescue
+      end
       ret
     end
 
@@ -103,6 +113,15 @@ module Blog
 
     def to_draft(adapter)
       Draft.new(adapter).populate(to_hash)
+    end
+
+    def tag_html
+      ret = "<div class='post-tags btn-group'>"
+      @tags.each do |t|
+        ret << "<a class='btn btn-secondary' href='/post/tags/#{t}''>#{t}</a>"
+      end
+      ret << "</div>"
+      ret
     end
 
   end

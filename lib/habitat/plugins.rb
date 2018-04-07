@@ -23,7 +23,9 @@ module Habitat
       symbol_array.each do |plugin_symbol|
         application_file = Habitat.plugin_path(plugin_symbol, "application.rb")
         Habitat._require application_file
+        Habitat._require Habitat.plugin_path(plugin_symbol, "lib", plugin_symbol, plugin_symbol)
       end
+
     end
     
     def self.for(quarter)
