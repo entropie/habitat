@@ -26,7 +26,7 @@ end
 PostHash = {
   :title => "testtitle?",
   :content => "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do",
-  :tags => ["foo", "bar"]
+  :tags => "foo, bar"
 }
 
 class TestDatabase < Minitest::Test
@@ -94,7 +94,6 @@ class TestEntries < Minitest::Test
 
   def test_entries
     assert_equal [], @adapter.posts
-    assert_nil @adapter.posts.user
   end
 
 end
@@ -152,6 +151,41 @@ class TestCreatePost < Minitest::Test
       a.to_post(a.posts.first)
       a.to_draft(a.posts.first)
       #a.destroy(a.posts.first)
+    }
+
+    
+  end
+
+end
+
+
+
+
+class TestCreatePost < Minitest::Test
+
+  include UserMixin
+  
+  def setup
+    @user = MockUser1
+    @adapter = Habitat.adapter(:blog)
+  end
+
+  def test_create_wo_user
+    assert_raises { @adapter.create("foo") }
+  end
+
+  def test_create_with_user
+    post = @adapter.with_user(@user) do |a|
+      a.create(PostHash.merge(:image => File.new("/tmp/RackMultipart20180407-7546-78w5py.png") ))
+    end
+    #puts YAML.dump(post.for_yaml)
+
+    @adapter.with_user(@user) do |a|
+      a.store(post)
+    end
+    puts YAML.dump(post.for_yaml)
+
+    @adapter.with_user(@user) {|a|
     }
 
     

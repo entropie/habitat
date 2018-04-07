@@ -5,9 +5,11 @@
 #
 
 require_relative "database"
+require_relative "images"
 require_relative "post"
 require_relative "filter"
 require_relative "templates"
+
 
 module Blog
 

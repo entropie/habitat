@@ -7,12 +7,13 @@ module Blog
       :title       => String,
       :created_at  => Time,
       :updated_at  => Time,
-      :tags        => Array
+      :tags        => Array,
+      :image       => Image
     }
 
     OptionalAttributes = [:image]
     
-    attr_reader *Attributes.keys
+    attr_reader :image, *Attributes.keys
 
     attr_accessor :filename, :datadir, :user_id, :created_at, :updated_at
  
@@ -21,12 +22,26 @@ module Blog
     end
 
     def populate(param_hash)
+
+      if img = param_hash[:image]
+        param_hash[:image] = Image.new(img.path)
+      end
+
+      if param_hash[:tags]
+        param_hash[:tags] = param_hash[:tags].split(",").map{|t| t.to_s.strip }
+      end
+
       param_hash.each do |paramkey, paramval|
         instance_variable_set("@#{paramkey}", paramval)
       end
+
       self
     end
 
+    def upload(obj)
+      obj.copy_to(self)
+    end
+    
     def to_hash
       Attributes.keys.inject({}) {|m, v|
         m[v] = instance_variable_get("@#{v}")
@@ -54,8 +69,8 @@ module Blog
       @filename || @adapter.repository_path(dirname, to_filename)
     end
 
-    def datadir
-      @datadir || @adapter.datadir(slug)
+    def datadir(*args)
+      @datadir || @adapter.datadir(slug, *args)
     end
 
     def for_yaml

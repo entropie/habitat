@@ -76,6 +76,7 @@ module Blog
 
         def create(param_hash)
           raise NoUserContext, "trying to call #create without valid user context " unless @user
+
           adapter_class(true).new(self).populate(param_hash)
         end
 
@@ -95,9 +96,18 @@ module Blog
             retval.filename = post_or_draft.filename
             retval.datadir = post_or_draft.datadir
           end
+
+          unless retval.image.written?
+            upload(post_or_draft, retval.image)
+          end
+
           retval.updated_at = Time.now
           write(retval.filename, YAML.dump(retval))
           post_or_draft
+        end
+
+        def upload(post, obj)
+          post.upload(obj)
         end
 
         def to_draft(post)
