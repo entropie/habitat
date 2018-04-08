@@ -54,24 +54,26 @@ module Blog
       end
 
       def get_css
-        css = []
-        Dir.glob(root + "/*.css").each do |cssfile|
-          css << File.readlines(cssfile).join << "\n"
+        get_files_from_glob("css") do |cssfile|
+          File.readlines(cssfile).join << "\n"          
         end
-        css.join
+      end
+
+      def get_sass
+        get_files_from_glob("sass") do |cssfile|
+          Sass::Engine.new(File.readlines(cssfile).join).render
+        end
       end
 
       def styles
-        get_css
+        get_css + get_sass 
       end
 
       def javascript
-        script = []
         root("javascript")
-        Dir.glob(root + "/*.js").each do |scriptfile|
-          script << File.readlines(scriptfile).join << "\n"
+        get_files_from_glob("js") do |scriptfile|
+          File.readlines(scriptfile).join << "\n"
         end
-        script
       end
 
       def images
@@ -82,10 +84,6 @@ module Blog
         root("#{identifier}.rb")
       end
 
-      # def template
-      #   root("#{identifier}.haml")
-      # end
-
       def compile
         @result, @javascript, @styles = nil
 
@@ -94,6 +92,17 @@ module Blog
         a = eval(File.readlines(ruby).join, binding)
         self
       end
+
+
+      def get_files_from_glob(glob, ret = [])
+        ret = []
+        Dir.glob(root + "/*." + glob).each do |globfile|
+          ret << yield(globfile)
+        end
+        ret.join
+      end
+      private :get_files_from_glob
+
     end
 
   end

@@ -2,7 +2,7 @@ module Blog
 
   class Post
 
-   Attributes = {
+    Attributes = {
       :content     => String,
       :title       => String,
       :created_at  => Time,
