@@ -6,6 +6,8 @@ module Blog
 
   module Templates
 
+    DEFAULT_TEMPLATE = :prettyok
+
     class Templates < Hash
       attr_reader :path
       def initialize(path)

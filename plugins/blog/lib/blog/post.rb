@@ -88,7 +88,7 @@ module Blog
       Dir.glob(datadir("image") + "/*.*").map {|ipath| Image.from_datadir(self, ipath) }
     end
 
-    def with_template(template)
+    def with_template(template = Blog::Templates::DEFAULT_TEMPLATE)
       Blog.templates(Blog::TEMPLATE_PATH)[template].apply(self)
     end
 
