@@ -43,11 +43,12 @@ html, body
     background-color: $bgColor
     z-index: 99
     padding-top: 70px
-    h1
+    h1.post-title
+      z-index: 1
       font-variant: small-caps
       position: absolute
       top: 40px
-      right: 60px
+      right: -60px
       color: red
       padding-top: 30px
       font-size: 128px
@@ -58,7 +59,8 @@ html, body
       -moz-animation: $animation
       animation: $animation
       letter-spacing: 4px
-    h2,h3,h4,h5
+      background-color: transparent
+    h1,h2,h3,h4,h5
       background-color: lighten($bgColor, 2)
       width: 100%
       text-align: center
