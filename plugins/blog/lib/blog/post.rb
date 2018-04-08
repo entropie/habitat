@@ -77,6 +77,10 @@ module Blog
       @filename || @adapter.repository_path(dirname, to_filename)
     end
 
+    def intro
+      @content.split("\r\n\r\n").first
+    end
+
     def datadir(*args)
       if @datadir
         File.join(@datadir, *args)
@@ -94,7 +98,8 @@ module Blog
     end
 
     def with_template(t = template)
-      Blog.templates(Blog::TEMPLATE_PATH)[t].apply(self)
+      templ = (t || template).to_sym
+      Blog.templates(Blog::TEMPLATE_PATH)[templ].apply(self)
     end
 
     def for_yaml

@@ -1,6 +1,6 @@
 module Blog
 
-  def self.templates(path = nil)
+  def self.templates(path = Blog::TEMPLATE_PATH)
     Templates::Templates.read(path)
   end
 
@@ -30,6 +30,11 @@ module Blog
     class Template
       attr_reader :path, :target, :result, :styles, :javascript
 
+      OPTIONS = {
+        :sass => {},
+        :haml => {:footnotes => true, :foo => :bar}
+      }
+
       def initialize(path)
         @path = path
       end
@@ -48,7 +53,11 @@ module Blog
       end
 
       def content
-        target.content
+        @content ||=
+          begin
+            renderer = Redcarpet::Render::HTML.new(OPTIONS[:haml])
+            Redcarpet::Markdown.new(renderer).render(target.content)
+          end
       end
 
       def root(*args)
@@ -63,7 +72,7 @@ module Blog
 
       def get_sass
         get_files_from_glob("sass") do |cssfile|
-          Sass::Engine.new(File.readlines(cssfile).join).render
+          Sass::Engine.new(File.readlines(cssfile).join, OPTIONS[:sass]).render
         end
       end
 

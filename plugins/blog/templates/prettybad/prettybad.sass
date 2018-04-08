@@ -1,3 +1,33 @@
+$bgColor: #c276e0
+$color: #111
+
+$imageHeight: 400px
+
 body
-  background-color: red
+  background-color: $bgColor
+
+.post-container
+  position: relative
+
+
+.post-background
+  position: absolute
+  right: 0
+  background-repeat: no-repeat
+  background-position: top
+  background-size: contain
+  height: $imageHeight
+  z-index: 0
+  width: 100%
+  background-color: #000
+
+.post
+  h1
+    font-size: 70px
+    text-align: center
+    width: 100%
+  .post-content
+    width: 700px
+    margin: 0 auto
+    padding-top: $imageHeight + 100px
 

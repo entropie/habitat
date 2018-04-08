@@ -20,6 +20,7 @@ gem 'sass'
 gem 'warden'
 gem 'bcrypt'
 gem "sequel"
+gem "redcarpet"
 
 gem "unicorn"
 # /home/habitats/dogary/current/quarters/dogary/log/

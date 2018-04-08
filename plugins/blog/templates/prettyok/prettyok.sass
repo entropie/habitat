@@ -1,3 +1,83 @@
-body
-  background-color: green
+@import url(https://fonts.googleapis.com/css?family=Architects+Daughter)
+
+//$bgColor: rgba(247, 226, 255, 1)
+$bgColor: #000
+$color: #c276e0
+
+$animation: neon1 3s ease-in-out infinite alternate
+
+@-webkit-keyframes neon1
+  from
+
+    color: black
+    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #FF1177, 0 0 70px #FF1177, 0 0 80px #FF1177, 0 0 100px #FF1177, 0 0 150px #FF1177
+  to
+    color: red
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #FF1177, 0 0 35px #FF1177, 0 0 40px #FF1177, 0 0 50px #FF1177, 0 0 75px #FF1177
+
+
+html, body
+  background-color: $bgColor
+
+.post-background
+  position: absolute
+  right: 0
+  background-repeat: no-repeat
+  background-position: right 300px
+  background-size: contain
+  height: 100%
+  width: 45%
+  z-index: 0
+
+
+.post-container
+  position: relative
+
+.post
+  color: $color
+  padding-bottom: 50px
+  background-color: $bgColor
+  .post-content
+    font-family: 'Architects Daughter', cursive
+    margin-right: 50%
+    background-color: $bgColor
+    z-index: 99
+    padding-top: 70px
+    h1
+      font-variant: small-caps
+      position: absolute
+      top: 40px
+      right: 60px
+      color: red
+      padding-top: 30px
+      font-size: 128px
+      margin: 0
+      margin-bottom: 40px
+      transform: rotate(90deg)
+      -webkit-animation: $animation
+      -moz-animation: $animation
+      animation: $animation
+      letter-spacing: 4px
+    h2,h3,h4,h5
+      background-color: lighten($bgColor, 2)
+      width: 100%
+      text-align: center
+      padding: 15px
+      margin: 0
+      margin-top: 20px
+      margin-bottom: 30px
+      padding: 0 auto
+      color: lighten($color, 10)
+      border-left: 5px solid red
+    p
+      &:first-of-type:first-letter
+        font-size: 60px
+        background-color: lighten($color, 10)
+        color: $bgColor
+        border-radius: 5px
+      margin-left: 30px
+
+      font-size: 20px
+      margin-bottom: 25px
+      z-index: 100
 
