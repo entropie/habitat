@@ -8,10 +8,11 @@ module Blog
       :created_at  => Time,
       :updated_at  => Time,
       :tags        => Array,
-      :image       => Image
+      :image       => Image,
+      :template    => String
     }
 
-    OptionalAttributes = [:image]
+    OptionalAttributes = [:image, :template]
     
     attr_reader :image, *Attributes.keys
 
@@ -88,8 +89,12 @@ module Blog
       Dir.glob(datadir("image") + "/*.*").map {|ipath| Image.from_datadir(self, ipath) }
     end
 
-    def with_template(template = Blog::Templates::DEFAULT_TEMPLATE)
-      Blog.templates(Blog::TEMPLATE_PATH)[template].apply(self)
+    def template
+      (@template || Blog::Templates::DEFAULT_TEMPLATE).to_sym
+    end
+
+    def with_template(t = template)
+      Blog.templates(Blog::TEMPLATE_PATH)[t].apply(self)
     end
 
     def for_yaml
