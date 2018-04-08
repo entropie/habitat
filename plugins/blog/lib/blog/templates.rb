@@ -26,7 +26,7 @@ module Blog
     end
 
     class Template
-      attr_reader :path, :target, :result
+      attr_reader :path, :target, :result, :styles, :javascript
 
       def initialize(path)
         @path = path
@@ -88,7 +88,9 @@ module Blog
 
       def compile
         @result, @javascript, @styles = nil
-        
+
+        @javascript = javascript
+        @styles     = styles
         a = eval(File.readlines(ruby).join, binding)
         self
       end
