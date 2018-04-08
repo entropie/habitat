@@ -84,6 +84,14 @@ module Blog
       end
     end
 
+    def images
+      Dir.glob(datadir("image") + "/*.*").map {|ipath| Image.from_datadir(self, ipath) }
+    end
+
+    def with_template(template)
+      Blog.templates(Blog::TEMPLATE_PATH)[template].apply(self)
+    end
+
     def for_yaml
       ret = dup
       begin

@@ -168,6 +168,7 @@ class TestCreatePost < Minitest::Test
   def setup
     @user = MockUser1
     @adapter = Habitat.adapter(:blog)
+    @template_path = File.join(File.dirname(__FILE__), "templates")
   end
 
   def test_create_wo_user
@@ -175,16 +176,31 @@ class TestCreatePost < Minitest::Test
   end
 
   def test_create_with_user
+    # post = @adapter.with_user(@user) do |a|
+    #   a.create(PostHash)
+    # end
+    
     post = @adapter.with_user(@user) do |a|
-      a.create(PostHash.merge(:image => File.new("/tmp/RackMultipart20180407-7546-78w5py.png") ))
+      i = File.open( File.join(File.dirname(__FILE__), "test.jpg"))
+      post = a.create(PostHash)
+      a.upload(post, i)
+      post
     end
 
     @adapter.with_user(@user) do |a|
       a.store(post)
     end
 
-    assert post.image.path
+    # assert post.image.path
+    # t =  Blog.templates(@template_path)[:alpha].apply(post)
+    # puts t.javascript
+    # puts t.styles
+    # p t.ruby
+    # p t.template
+    # p t.compile
+    p post.with_template(:prettyok).compile
 
   end
 
 end
+

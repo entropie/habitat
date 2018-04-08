@@ -13,6 +13,10 @@ require_relative "templates"
 
 module Blog
 
+  DEFAULT_ADAPTER = :File
+
+  TEMPLATE_PATH = File.join(File.dirname(__FILE__), "../../templates")
+
   module BlogControllerMethods
     def blog(*args, &blk)
       adapter(:blog).with_user(session_user, &blk)
@@ -37,16 +41,13 @@ module Blog
     end
   end
 
-  DEFAULT_ADAPTER = :File
-
-
 end
 
 if Habitat.quart
   Habitat.add_adapter(:blog, Blog::Database.with_adapter.new(Habitat.quart.media_path))  
 end
 
-
+p Blog::TEMPLATE_PATH
 # Blogs = Blog
 =begin
 Local Variables:

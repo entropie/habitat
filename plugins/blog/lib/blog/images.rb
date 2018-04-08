@@ -2,10 +2,17 @@ module Blog
 
   class Image
 
-    attr_reader :path, :basename, :dirname
+    attr_accessor :path, :basename, :dirname
+
+    def self.from_datadir(post, image_path)
+      ret = new
+      *ret.dirname, ret.basename = *image_path.split("/").last(3)
+      ret.dirname = ret.dirname.join("/")
+      ret
+    end
     
-    def initialize(path)
-      @path = path
+    def initialize(path = nil)
+      @path = path if path
     end
 
     def written?
