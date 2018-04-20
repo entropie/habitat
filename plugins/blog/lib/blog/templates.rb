@@ -27,6 +27,7 @@ module Blog
       end
     end
 
+
     class Template
       attr_reader :path, :target, :result, :styles, :javascript
 
@@ -44,6 +45,10 @@ module Blog
       end
 
       def apply(obj)
+        Class.new(Template).new(path).apply_for(obj)
+      end
+
+      def apply_for(obj)
         @target = obj
         self
       end
@@ -52,11 +57,14 @@ module Blog
         target.title
       end
 
+      def markdown_renderer
+        Redcarpet::Render::HTML
+      end
+
       def content
         @content ||=
           begin
-            renderer = Redcarpet::Render::HTML.new(OPTIONS[:haml])
-            Redcarpet::Markdown.new(renderer).render(target.content)
+            Redcarpet::Markdown.new(markdown_renderer, OPTIONS[:haml]).render(target.content)
           end
       end
 
@@ -95,7 +103,7 @@ module Blog
         root("#{identifier}.rb")
       end
 
-      def compile
+      def compile(params)
         @result, @javascript, @styles = nil
 
         @javascript = javascript

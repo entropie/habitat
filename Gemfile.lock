@@ -232,6 +232,7 @@ DEPENDENCIES
   hanami-webpack!
   minitest
   multi_json
+  nokogiri
   puma
   rake
   redcarpet

@@ -1,0 +1,63 @@
+@import url(https://fonts.googleapis.com/css?family=Coda)
+
+$bgColor: silver
+$color: #111
+$oBgColor: rgba(12, 58, 4, 1)
+$oColor: rgb(92, 183, 16)
+
+body
+  background-color: $bgColor
+
+.post-container
+
+
+.post-background
+
+.intro
+
+.post
+  font-family: "Coda"
+  .post-title
+    font-size: 70px
+    width: 100%
+    margin: 0 auto
+    padding-top: 30px
+    text-align: center
+  aside
+    position: relative
+    background-color: $oBgColor
+    color: $oColor
+    font-size: 1.5em
+    width: 100%
+    canvas
+      width: 100%
+      position: absolute
+      top: 0
+      left: 0
+      z-index: 1
+    p
+      z-index: 10
+      padding: 10%
+      background-color: silver
+      background: rgba(0, 0, 0, 0.8)
+
+
+  .post-content
+    max-width: 900px
+    margin: 0 auto
+    p, h1, h2, h3, h4, h5, h6, ol, ul
+      max-width: 600px
+      margin: 0 auto 20px
+    .post-paragraphs
+      margin: 0 auto 20px
+      display: flex
+      flex-direction: row
+      flex-wrap: wrap
+    .post-left, .post-right
+      width: calc(50% - 30px)
+      padding: 10px
+      margin: 15px
+    .post-left
+      background-color:  $bgColor + 10
+    .post-right
+      background-color:  $bgColor - 10

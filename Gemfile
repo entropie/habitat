@@ -22,6 +22,8 @@ gem 'bcrypt'
 gem "sequel"
 gem "redcarpet"
 
+gem "nokogiri"
+
 gem "unicorn"
 # /home/habitats/dogary/current/quarters/dogary/log/
 # stderr_path=/home/habitats/dogary/current/quarters/dogary/log/

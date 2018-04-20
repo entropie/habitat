@@ -44,6 +44,10 @@ module Blog
       img.copy_to(self)
       @image = img
     end
+
+    def http_data_dir(*args)
+      File.join("/attachments", slug, *args)
+    end
     
     def to_hash
       Attributes.keys.inject({}) {|m, v|
