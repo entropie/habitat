@@ -47,8 +47,7 @@ if Habitat.quart
   Habitat.add_adapter(:blog, Blog::Database.with_adapter.new(Habitat.quart.media_path))  
 end
 
-p Blog::TEMPLATE_PATH
-# Blogs = Blog
+
 =begin
 Local Variables:
   mode:ruby

@@ -40,6 +40,10 @@ module Habitat::Quarters
       ENV["HANAMI_ENV"]
     end
 
+    def banner
+      "[[#{identifier}:#{env}]]"
+    end
+
     def production?
       env == "production"
     end

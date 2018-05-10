@@ -57,5 +57,9 @@ end
 
 if Habitat.quart
   Habitat.add_adapter(:user, User::Database.with_adapter.new(Habitat.quart.media_path))  
+
+  #p Habitat.adapter(:user).create(:name => "entropie", :password => "lala", :email => "mictro@gmail.com")
 end
+
+
 

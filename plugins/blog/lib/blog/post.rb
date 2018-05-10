@@ -150,6 +150,11 @@ module Blog
       ret
     end
 
+    # returns [ "Saturday", "May", 12 ]
+    def to_calendar_ico 
+      created_at.strftime("%A;%B;%d").split(";")
+    end
+    
   end
 
   class Draft < Post
