@@ -97,6 +97,12 @@ module Blog
       Dir.glob(datadir("image") + "/*.*").map {|ipath| Image.from_datadir(self, ipath) }
     end
 
+    def image
+
+      @image.post = self
+      @image
+    end
+
     def template
       (@template || Blog::Templates::DEFAULT_TEMPLATE).to_sym
     end

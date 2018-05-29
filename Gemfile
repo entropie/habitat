@@ -1,5 +1,7 @@
 puts "Gemfile mother" if $DEBUG
 
+source 'https://rubygems.org'
+
 gem 'rake'
 gem 'hanami',       '~> 1.1'
 gem 'hanami-model', '~> 1.1'
@@ -23,8 +25,8 @@ gem "redcarpet"
 gem "nokogiri"
 
 gem "unicorn"
-# /home/habitats/dogary/current/quarters/dogary/log/
-# stderr_path=/home/habitats/dogary/current/quarters/dogary/log/
+
+gem "dimensions"
 
 gem "capistrano", "~> 3.6", require: false
 gem "capistrano-bundler", '~> 1.3'
@@ -33,6 +35,7 @@ gem "capistrano-rvm"
 gem "multi_json"
 gem "roar"
 gem "uglifier"
+
 
 group :development do
   gem 'shotgun'

@@ -3,6 +3,7 @@ module Blog
   class Image
 
     attr_accessor :path, :basename, :dirname
+    attr_accessor :post
 
     def self.from_datadir(post, image_path)
       ret = new
@@ -38,8 +39,16 @@ module Blog
       File.join(dirname, basename)
     end
 
+    def fullpath
+      @post.datadir("..", dirname, basename)
+    end
+
     def url
       File.join("/attachments", dirname, basename)
+    end
+
+    def dimensions
+      Dimensions.dimensions(fullpath)
     end
 
     def to_html(opts = {})
@@ -50,6 +59,15 @@ module Blog
       
       ret << "<img src='%s' class='%s' />" % [url, cls]
       ret
+    end
+
+    def alignment
+      w,h = dimensions
+      if h > w
+        :vertical
+      else
+        :horizontal
+      end
     end
     
   end  
