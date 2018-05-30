@@ -85,6 +85,7 @@ module Habitat
   def self._require(file)
     log(:debug, "::::require #{Habitat.S(file)}")
     require file
+  rescue LoadError
   end
 
   def log(k, msg, &blk)

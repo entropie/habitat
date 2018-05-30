@@ -160,6 +160,14 @@ module Blog
     def to_calendar_ico 
       created_at.strftime("%A;%B;%d").split(";")
     end
+
+    def with_filter
+      Filter.new(self).apply
+    end
+
+    def html
+      Filter.new(self).apply(Filter::Nokogiri)
+    end
     
   end
 
