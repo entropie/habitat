@@ -168,7 +168,11 @@ module Blog
     def html
       Filter.new(self).apply(Filter::Nokogiri)
     end
-    
+
+    def css_class
+      draft? ? "post-draft" : "post"
+    end
+
   end
 
   class Draft < Post
@@ -189,6 +193,7 @@ module Blog
     def draft?
       true
     end
+
   end
 
 
