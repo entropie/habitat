@@ -74,6 +74,11 @@ module Habitat
         r.first
       end
 
+      def activated?(symorstr)
+        sym = symorstr.to_sym
+        select{|p| p.identifier == sym }.any?
+      end
+
       def name
         self.class.to_s.split("::").last
       end

@@ -74,7 +74,25 @@ quarters.each do |quart|
       q.prepare_assets_for_production
     end
 
+    if q.plugins.activated?(:projectsettings)
+      sopts.on("-c", "--config", "get projectsettings") do
+        puts ProjectSettings.to_s
+      end
+
+      sopts.on("-C", "--set-config key,value", "set key value pair in projectsettings") do |keyvalue|
+        key, value = keyvalue.split(",")
+        C[key] = value
+        C.write
+      end
+      sopts.on("-D", "--delete-config key", "delete key from projectsettings") do |key|
+        C.delete(key)
+      end
+
+
+    end
+    
   end
+  
 end
 
 cmd = opt_parse
