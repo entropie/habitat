@@ -43,7 +43,7 @@ module PageMeta
     def to_meta
       str = "<meta content='%s' property='%s' />"
       ret = []
-      to_hash.each_pair do |k, v|
+      to_hash.each_pair do |v, k|
         ret << str % [k,v]
       end
       ret.join("\n")
