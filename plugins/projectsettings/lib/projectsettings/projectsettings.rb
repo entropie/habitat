@@ -1,10 +1,8 @@
-require Habitat::Source.join("lib/habitat/mixins/fu")
-
 module ProjectSettings
 
   class Settings < Hash
 
-    include FU
+    include Habitat::Mixins::FU
 
     SETTINGSFILE = ".projectsettings.yaml".freeze
     
@@ -59,5 +57,4 @@ module ProjectSettings
     settings.write(target)
   end
 end
-
 C = ProjectSettings
