@@ -2,10 +2,9 @@ const webpack = require('webpack');
 
 const path = require('path');
 
-const StatsPlugin = require("stats-webpack-plugin");
-
-const ManifestPlugin = require('webpack-manifest-plugin');
-
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 
 var devServerPort = process.env.WEBPACK_DEV_SERVER_PORT,
     devServerHost = process.env.WEBPACK_DEV_SERVER_HOST,
@@ -17,52 +16,43 @@ module.exports = {
     mode: env || 'development',
     
     entry: {
-        bundle: [
-            './src/index.js',
-        ]
+        app: './apps/blog/assets/javascripts/app.js',
     },
 
     output: {
-        path: path.resolve(__dirname, 'public'),
-        filename: '[name].js',
+        path: path.resolve(__dirname + '/media/assets'),
+        filename: 'bundle.js',
+        publicPath: './public'
     },
 
-    plugins: [
-        new StatsPlugin("webpack_manifest.json"),
-    ],
-
     resolve: {
-        modules: [
-            "node_modules",
-            path.resolve(__dirname, "app")
-        ],
+        alias: {
+        //'vue$': 'vue/dist/vue.esm.js'
+        }
     },
 
     module: {
+        rules: [
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                loader: 'babel-loader'
+            },
+            {
+                test: /\.sass$/,
+                use: [
+                    // fallback to style-loader in development
+                    process.env.NODE_ENV !== 'production' ? 'style-loader' : MiniCssExtractPlugin.loader,
+                    "css-loader",
+                    "sass-loader"
+                ]
+            }            
+
+        ]
     }
-};
-
-
-if (process.env.INBUILT_WEBPACK_DEV_SERVER) {
-
-    var merge = require("webpack-merge");
-
-    var dev_server_config = {
-        devServer: {
-            port: devServerPort,
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-            }
-        }
-    };
-
-    var dev_server_output = {
-        output: {
-            publicPath: "//" + devServerHost + ":" + devServerPort + "/"
-        }
-
-    };
-    module.exports = merge(module.exports, dev_server_config, dev_server_output);
-}
-
-console.log(module.exports);
+    , plugins: [
+        new MiniCssExtractPlugin({
+            filename: "screen.css",
+        })
+    ]
+};   
