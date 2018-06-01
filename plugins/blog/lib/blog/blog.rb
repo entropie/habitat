@@ -21,9 +21,15 @@ module Blog
     def blog(*args, &blk)
       adapter(:blog).with_user(session_user, &blk)
     end
+
   end
 
   module BlogViewMethods
+    def blog_author(post)
+      adapter(:user).by_id(post.user_id)
+    end
+
+
     def active_link_li(href, text, opts = {})
       path = locals[:params].env["REQUEST_PATH"]
 
