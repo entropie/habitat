@@ -153,10 +153,18 @@ module Pager
 
     MAX = 10
 
+    def max
+      ret = C[:pager] or raise "page not set in config"
+      ret.to_i
+    rescue
+      Habitat.log :info, "pager not set in config, using default (set: pager)"
+      MAX
+    end
+
     def initialize(params, list)
       @params, @list = params, list
       @page = params[:page] && params[:page].to_i || 1
-      @pager = ArrayPager.new(list, @page, MAX)
+      @pager = ArrayPager.new(list, @page, max)
     end
 
     def link(g, n, text = n, hash = {})
@@ -174,37 +182,37 @@ module Pager
       g.ul :class => :pagination do
             
         if first_page?
-          g.li(:class => "disabled") {
+          g.li(:class => "page-item disabled") {
             g.span(:class => 'first grey'){ g.span(:class => "glyphicon glyphicon-fast-backward") } }
-          g.li(:class => "disabled") {
+          g.li(:class => "page-item disabled") {
             g.span(:class => 'previous grey'){ g.span(:class => "glyphicon glyphicon glyphicon-backward") } } 
         else
-          g.li { link(g, 1, '<span class="glyphicon glyphicon-fast-backward"></span>', :class => "hl first") }
-          g.li { link(g, prev_page, '<span class="glyphicon glyphicon-backward"></span>', :class => "hl previous") }              
+          g.li(:class => "page-item") { link(g, 1, '<span class="glyphicon glyphicon-fast-backward"></span>', :class => "page-item hl first") }
+          g.li(:class => "page-item ") { link(g, prev_page, '<span class="glyphicon glyphicon-backward"></span>', :class => "page-item hl previous") }              
         end
 
         lower = limit ? (current_page - limit) : 1
         lower = lower < 1 ? 1 : lower
 
         (lower...current_page).each do |n|
-          g.li { link(g, n) }
+          g.li(:class => "page-item") { link(g, n) }
         end
 
-        g.li(:class => "active disabled") { g.span current_page }
+        g.li(:class => "page-item active disabled") { g.span current_page }
         
         if last_page?
-          g.li(:class => "disabled") {
+          g.li(:class => "page-item disabled") {
             g.span(:class => 'next grey'){ g.span(:class => "glyphicon glyphicon-fast-forward") } }
-          g.li(:class => "disabled") {
+          g.li(:class => "page-item disabled") {
             g.span(:class => 'next grey'){ g.span(:class => "glyphicon glyphicon-forward") } } 
         elsif next_page
           higher = limit ? (next_page + limit) : page_count
           higher = [higher, page_count].min
           (next_page..higher).each do |n|
-            g.li { link(g, n) }
+            g.li(:class => "page-item") { link(g, n) }
           end
-          g.li { link(g, next_page,  '<span class="glyphicon glyphicon-forward"></span>', :class => "hl next") }
-          g.li { link(g, page_count, '<span class="glyphicon glyphicon-fast-forward"></span>', :class => "hl last") }              
+          g.li(:class => "page-item") { link(g, next_page,  '<span class="glyphicon glyphicon-forward"></span>', :class => "hl next") }
+          g.li(:class => "page-item") { link(g, page_count, '<span class="glyphicon glyphicon-fast-forward"></span>', :class => "hl last") }              
         end
       end
       g.to_s

@@ -1,5 +1,3 @@
-p 24
-
 module PageMeta
 
   def self.for(obj)

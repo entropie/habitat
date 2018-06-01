@@ -173,6 +173,14 @@ module Blog
       draft? ? "post-draft" : "post"
     end
 
+    def to_human
+      created_at.to_human
+    end
+
+    def intro_html
+      Filter::TO_HTML.call(intro, false)
+    end
+    
   end
 
   class Draft < Post

@@ -25,6 +25,7 @@ module Blog
   end
 
   module BlogViewMethods
+    
     def blog_author(post)
       adapter(:user).by_id(post.user_id)
     end

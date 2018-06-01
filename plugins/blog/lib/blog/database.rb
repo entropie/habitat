@@ -69,6 +69,11 @@ module Blog
           posts.dup.select{|p| p.slug == slug }.first
         end
 
+        def by_tags(tag)
+          posts.dup.reject{|p| !p.tags.include?(tag) }
+        end
+
+
         def load_file(yamlfile)
           log :debug, "loading #{Habitat.S(yamlfile)}"
           YAML::load_file(yamlfile)

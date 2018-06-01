@@ -2,8 +2,8 @@ module Blog
 
   class Filter
 
-    TO_HTML = -> (content) {
-        markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true, footnotes: true)
+    TO_HTML = -> (content, footnotes = true) {
+        markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true, footnotes: footnotes)
         markdown.render(content)
     }
     
