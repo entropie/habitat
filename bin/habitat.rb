@@ -66,9 +66,9 @@ quarters.each do |quart|
       app_run("routes")
     end
 
-    sopts.on("-S", "--start", "start local development server") do
-      app_run("server")
-    end
+    # sopts.on("-S", "--start", "start local development server") do
+    #   app_run("server")
+    # end
 
     sopts.on("-U", "--uglifi", "asd") do
       q.prepare_assets_for_production
@@ -77,20 +77,20 @@ quarters.each do |quart|
     if q.plugins.activated?(:user)
 
       Habitat.add_adapter(:user, User::Database.with_adapter.new(q.media_path))
-      adapter = adapter = Habitat.adapter(:user)
+      user_adapter = Habitat.adapter(:user)
 
       sopts.on("-U", "--print-users", "put users") do
-        pp adapter.user
+        pp user_adapter.user
       end
 
-      sopts.on("-u", "--add-user", "put users") do
+      sopts.on("-u", "--add-user", "add user") do
         opts = {}
         [:name, :password, :email].each do |k|
           print "%20s " % [k.to_s]
           opts[k] = STDIN.gets.strip
         end
 
-        adapter.create(opts)
+        user_adapter.create(opts)
       end
     end
 
@@ -108,8 +108,26 @@ quarters.each do |quart|
       sopts.on("-D", "--delete-config key", "delete key from projectsettings") do |key|
         C.delete(key)
       end
+    end
 
+    if q.plugins.activated?(:snippets)
+      sopts.on("-s", "--snippets", "snippets") do
+        puts Snippets.all
+        p 1
+      end
 
+      sopts.on("-g", "--get-snippet SNIPPET", "get snippet") do |k|
+        p Habitat.adapter(:snippets)[k].to_s
+      end
+
+      sopts.on("-S", "--create-snippet ident.kind", "create a snippet") do |key|
+        k, v = key.split(".")
+        snippet = Habitat.adapter(:snippets).create(k.to_sym, "", (v && v.to_sym) || Snippets::DEFAULT_SNIPPET_TYPE)
+        #snippet.create
+        p 1
+      end
+
+     
     end
     
   end
