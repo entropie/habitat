@@ -1,10 +1,7 @@
+# coding: utf-8
 module Snippets
 
   DEFAULT_ADAPTER = :File
-
-  def self.[](obj)
-    Habitat.adapter(:snippets)[obj]
-  end
 
   def self.all
     Habitat.adapter(:snippets).snippets
@@ -23,7 +20,6 @@ module Snippets
       ident = obj.to_sym
       ret = select{|s| s.ident == ident}
       return ret.first if ret
-      nil
     end
   end
 
@@ -31,6 +27,7 @@ module Snippets
 
     attr_reader :ident
     attr_accessor :path
+    attr_accessor :env
 
     def initialize(ident)
       @ident = ident
@@ -68,6 +65,37 @@ module Snippets
     def to_s
       read
     end
+
+  end
+
+  class Env
+    attr_reader :locals
+
+    def initialize(locals)
+      @locals = locals
+
+      if Habitat.quart.plugins.activated?(:flickr)
+        extend(Flickr)
+      end
+    end
+
+    def active_path(path)
+      path == locals[:request_path]
+    end
+
+    def active_path_li(path, desc)
+      "<li class='%s'><a href='%s'>%s</a></li>" % [active_path(path) ? "active" : "", path, desc, desc]
+    end
+  end
+
+
+  class NotExistingSnippet < Snippet
+    def read
+      ""
+    end
+    def render
+      "<span class='not-existing-snippet'><code>#{ident}</code> not exist</span>"
+    end
   end
 
   class MarkdownSnippet < Snippet
@@ -77,8 +105,7 @@ module Snippets
 
     def render
       markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true, footnotes: false)
-      super(markdown.render(to_s))
-      "lala"
+      markdown.render
     end
   end
 
@@ -88,7 +115,11 @@ module Snippets
     end
 
     def render
-      "%s" % Haml::Engine.new(to_s).render
+      locals = {}
+      if env
+        locals[:request_path] = env.env['REQUEST_PATH']
+      end
+      "%s" % Haml::Engine.new(to_s).render(Env.new(locals), locals)
     end
   end
 

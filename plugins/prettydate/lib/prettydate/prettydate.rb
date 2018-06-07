@@ -26,7 +26,7 @@ module PrettyDate
       fmtstr =
         case what
         when :def
-          "%A der %e %B %Y"
+          "%A, %e %B %Y"
         when :int
           "%c"
         end

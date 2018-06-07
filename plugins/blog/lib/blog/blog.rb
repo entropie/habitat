@@ -30,8 +30,7 @@ module Blog
       adapter(:user).by_id(post.user_id)
     end
 
-
-    def active_link_li(href, text, opts = {})
+    def active_link(href, text, opts = {})
       path = locals[:params].env["REQUEST_PATH"]
 
       path.gsub!(/\/edit$/, "")

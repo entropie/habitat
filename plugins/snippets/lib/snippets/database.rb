@@ -65,9 +65,14 @@ module Snippets
           Dir.glob(toglob)
         end
 
-        def [](obj)
+        def render(obj, env = nil)
           ident = obj.to_sym
-          snippets[ident]
+          ret = snippets[ident]
+          unless ret
+            return NotExistingSnippet.new(obj)
+          end
+          ret.env = env
+          ret
         end
 
         def snippets

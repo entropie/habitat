@@ -11,13 +11,17 @@ module PageMeta
                      :url => request_path,
                      :title => current_post.title)
 
-      fbm.to_meta
+      fbm
+    else
+      Default.new
     end
   end
 
 
   class Meta
+
     Attrs = [:image, :description, :url, :title]
+
     attr_reader *Attrs
     
     def initialize(hsh)
@@ -30,20 +34,35 @@ module PageMeta
       File.join(::ProjectSettings[:host], str)
     end
 
+    def site_title(title = "")
+      title = "#{title} &mdash; " if title.size > 1
+      "<title>%s%s</title>" % [title, C[:title]]
+    end
+
   end
 
+  class Default < Meta
+    def initialize()
+    end
+
+    def to_meta(args)
+      site_title(args.to_s)
+    end
+  end
+  
   class FaceBook < Meta
 
     def key(sym)
       "og:#{sym}"
     end
 
-    def to_meta
+    def to_meta(*args)
       str = "<meta content='%s' property='%s' />"
       ret = []
       to_hash.each_pair do |v, k|
         ret << str % [k,v]
       end
+      ret << site_title(title)
       ret.join("\n")
     end
 

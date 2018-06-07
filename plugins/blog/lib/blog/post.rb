@@ -173,6 +173,10 @@ module Blog
       draft? ? "post-draft" : "post"
     end
 
+    def date
+      updated_at
+    end
+
     def to_human
       created_at.to_human
     end
