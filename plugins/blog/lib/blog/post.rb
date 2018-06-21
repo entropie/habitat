@@ -182,7 +182,11 @@ module Blog
     end
 
     def intro_html
-      Filter::TO_HTML.call(intro, false)
+      html = Filter::TO_HTML.call(intro, false)
+      t=Nokogiri::HTML(html)
+      html = t.xpath("//text()").remove.to_html
+      html.gsub!(/\[\^[0-9]+\]/, "")
+      html
     end
     
   end
