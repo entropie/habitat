@@ -183,9 +183,11 @@ module Pager
             
         if first_page?
           g.li(:class => "page-item disabled") {
-            g.span(:class => 'first grey'){ g.span(:class => "glyphicon glyphicon-fast-backward") } }
+            g.span(:class => 'first grey'){
+              g.span(:class => "glyphicon glyphicon-fast-backward") {""}
+            } }
           g.li(:class => "page-item disabled") {
-            g.span(:class => 'previous grey'){ g.span(:class => "glyphicon glyphicon glyphicon-backward") } } 
+            g.span(:class => 'previous grey'){ g.span(:class => "glyphicon glyphicon-backward") {""} } } 
         else
           g.li(:class => "page-item") { link(g, 1, '<span class="glyphicon glyphicon-fast-backward"></span>', :class => "page-item hl first") }
           g.li(:class => "page-item ") { link(g, prev_page, '<span class="glyphicon glyphicon-backward"></span>', :class => "page-item hl previous") }              
@@ -202,9 +204,9 @@ module Pager
         
         if last_page?
           g.li(:class => "page-item disabled") {
-            g.span(:class => 'next grey'){ g.span(:class => "glyphicon glyphicon-fast-forward") } }
+            g.span(:class => 'next grey'){ g.span(:class => "glyphicon glyphicon-fast-forward") {""} } }
           g.li(:class => "page-item disabled") {
-            g.span(:class => 'next grey'){ g.span(:class => "glyphicon glyphicon-forward") } } 
+            g.span(:class => 'next grey'){ g.span(:class => "glyphicon glyphicon-forward") {""} } } 
         elsif next_page
           higher = limit ? (next_page + limit) : page_count
           higher = [higher, page_count].min
