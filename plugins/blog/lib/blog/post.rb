@@ -165,6 +165,10 @@ module Blog
       Filter.new(self).apply
     end
 
+    def with_plugin(pluginmod)
+      self.extend(pluginmod)
+    end
+
     def html
       Filter.new(self).apply(Filter::Nokogiri)
     end

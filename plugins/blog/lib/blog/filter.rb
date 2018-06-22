@@ -34,8 +34,8 @@ module Blog
         begin
           Habitat.log :debug, "filter: #{fc} for #{post.id}"
           res = fc.new(post).filter(res)
-        rescue NameError
-          Habitat.log :warn, "something went wrong with #{fc}"
+        # rescue NameError
+        #   Habitat.log :warn, "something went wrong with #{fc}"
         end
       end
       res

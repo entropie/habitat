@@ -127,7 +127,20 @@ quarters.each do |quart|
         p 1
       end
 
-     
+      if q.plugins.activated?(:vgwort)
+
+        sopts.on("", "--vgwort-initialize", "initializes vgwort database from ~media/vgwort.csv") do |key|
+          VGWort.initialize
+        end
+
+        sopts.on("", "--vgwort-attach", "initializes vgwort database from ~media/vgwort.csv") do |key|
+          Habitat.adapter(:blog).posts.each do |post|
+            post.with_plugin(VGWort).attach_id
+          end
+        end
+        
+
+      end
     end
     
   end
