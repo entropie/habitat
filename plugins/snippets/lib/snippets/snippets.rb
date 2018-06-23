@@ -66,6 +66,10 @@ module Snippets
       read
     end
 
+    def exist?
+      true
+    end
+
   end
 
   class Env
@@ -95,6 +99,10 @@ module Snippets
     end
     def render
       "<span class='not-existing-snippet'><code>#{ident}</code> not exist</span>"
+    end
+
+    def exist?
+      false
     end
   end
 
