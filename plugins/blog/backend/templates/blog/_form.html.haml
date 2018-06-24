@@ -1,0 +1,16 @@
+#be-post-edit
+  %form{:action => action, :method => :post, enctype: 'multipart/form-data'}
+    .form-group
+      .form-label{:for => :title} Title
+      %input.form-input{:type => :text, :id => :title, :value => (post && post.title)}
+    
+      .form-label{:for => :tags} Title
+      %input.form-input{:type => :text, :id => :tags, :value => (post && post.tags)}
+
+      .form-label{:for => :tags} Header Image
+      %input.form-input{:type => :file, :name => :image}
+
+        .form-label{:for => :text} Text
+      %textarea.form-input{:id => :text, :rows => 15}= (post && post.content)
+      
+    %input.btn.btn-primary{:type => :submit, :value => "Absenden"}

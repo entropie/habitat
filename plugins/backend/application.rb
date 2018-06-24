@@ -21,7 +21,9 @@ module Backend
 
         if_plugin(:blog) do
           get '/blog/',            to: "blog#index", as: :blog
-          get '/blog/:slug',       to: "blog#post", as: :post
+          get '/blog/:slug',       to: "blog#post", as:  :post
+          get '/blog/:slug/edit',  to: "blog#edit", as:  :postEdit
+          post '/blog/:slug/edit',  to: "blog#edit"
           get '/blog/page/:page',  to: "blog#index", as: :posts
         end
 

@@ -1,4 +1,6 @@
 %li.post-preview
   %strong
+    %a{:href => routes.postEdit_path(post.slug)}
+      .glyphicon.glyphicon-pencil
     %a{:href => routes.post_path(post.slug)}= post.title
   = post.intro

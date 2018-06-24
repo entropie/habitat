@@ -1,5 +1,5 @@
 module Backend::Controllers::Blog
-  class Post
+  class Edit
     include Api::Action
     include ::Blog::BlogControllerMethods
     expose :post
