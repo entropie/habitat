@@ -21,10 +21,13 @@ module Backend
 
         if_plugin(:blog) do
           get '/blog/',            to: "blog#index", as: :blog
+          get '/blog/:slug',       to: "blog#post", as: :post
+          get '/blog/page/:page',  to: "blog#index", as: :posts
         end
 
         if_plugin(:snippets) do
           get '/snippets/',        to: "snippets#index", as: :snippets
+          get '/snippets/:slug',   to: "snippets#snippet", as: :snippet
         end
       end
 
@@ -46,14 +49,14 @@ module Backend
       instance_eval(&Habitat.default_application_config)
 
       controller.prepare do
-        def reject_unless_authenticated
-          unless logged_in?
-            #redirect_to "/" 
-            #exit
-          end
-        end
+        # def reject_unless_authenticated
+        #   unless logged_in?
+        #     #redirect_to "/" 
+        #     #exit
+        #   end
+        # end
 
-        before :reject_unless_authenticated
+        # before :reject_unless_authenticated
         include ::Blog::BlogControllerMethods
       end
 
@@ -82,3 +85,4 @@ module Backend
 end
 
 Habitat.mounts[ Backend::Application ] = "/backend"
+

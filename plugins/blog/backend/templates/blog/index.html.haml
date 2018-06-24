@@ -1,3 +1,5 @@
-lala
-keke
-= posts.size
+#db-blog-list
+  - pager.each do |post|
+    = render template: "blog/_preview", locals: {post: post}
+
+  = pager.navigation

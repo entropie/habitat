@@ -1,1 +1,6 @@
-snippets index
+#db-snippets-list
+  %ul
+  - snippets.each do |snippet|
+    %li
+      %a{:href => routes.snippet_path(snippet.ident)}= snippet.ident
+
