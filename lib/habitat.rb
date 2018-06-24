@@ -86,6 +86,8 @@ module Habitat
     log(:debug, "::::require #{Habitat.S(file)}")
     require file
   rescue LoadError
+    p $!
+    p "!!!%s" % file
   end
 
   def log(k, msg, &blk)
@@ -145,6 +147,20 @@ module Habitat
       raw("<script src='#{src}' defer></script>")
     end
 
+    def al(href, text = nil, opts = {})
+      text = href unless text
+      path = locals[:params].env["REQUEST_PATH"]
+
+      add_content = ""
+
+      if icon = opts[:icon]
+        add_content << "<span class='glyphicon glyphicon-#{icon}'></span>"
+      end
+      clz = path == href ? "active" : ""
+
+      ret = "<a href='%s' class='%s'>%s</a>" % [href, "#{clz} #{opts[:class] || "alink"}", text + add_content]
+      _raw(ret)
+    end
     def adapter(ident)
       ident = ident.to_sym
       Habitat.adapter(ident)

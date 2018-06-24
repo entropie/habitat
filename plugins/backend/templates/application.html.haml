@@ -1,0 +1,11 @@
+%html{:lang => "de"}
+  %head
+    %title Its ze Backend
+  %body.backend
+    .container.grid-xl
+      .columns
+        .column.col-2.nav-col
+          = render template: "layout/_header"
+        .column.col-10.rel
+          = yield
+  %script{:src => '/assets/bundle.js'}

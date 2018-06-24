@@ -1,5 +1,11 @@
 module Habitat
 
+  module Backendable
+    def backend?
+      true
+    end
+  end
+  
   module Plugins
 
     def self.load_from_symbols(symbol_array)
@@ -104,6 +110,10 @@ module Habitat
     class Plugin
       attr_reader :quarter, :path
 
+      def backend?
+        @backend ||= File.exist?(File.join(path, "backend"))
+      end
+      
       def activate
         quarter.plugins.push(self)
         quarter.plugins.available.delete_if{|plug| plug.identifier == identifier}

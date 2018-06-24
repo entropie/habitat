@@ -21,7 +21,6 @@ module Blog
     def blog(*args, &blk)
       adapter(:blog).with_user(session_user, &blk)
     end
-
   end
 
   module BlogViewMethods

@@ -1,0 +1,15 @@
+#db-navigation
+  .nav-block
+    %ul.nav
+      %li.nav-item 
+        %a{:href => "/"} Frontend
+
+      %li.nav-item.text-bold
+        %a{:href => routes.dashboard_path} Dashboard
+
+  .nav-block
+    %h2 Modules
+
+    %ul.nav.modules
+      - Backend.backend_modules.each do |bm|
+        %li.nav-item= al(routes.send("%s_path" % bm), bm.to_s)
