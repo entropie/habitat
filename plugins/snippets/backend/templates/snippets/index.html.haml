@@ -1,6 +1,6 @@
-#db-snippets-list
+#db-snippets
   %ul
-  - snippets.each do |snippet|
-    %li
-      %a{:href => routes.snippet_path(snippet.ident)}= snippet.ident
+    - snippets.each do |snippet|
+      = render template: "snippets/_snippet", locals: {snippet: snippet}
+
 

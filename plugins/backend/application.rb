@@ -44,8 +44,10 @@ module Backend
         end
 
         if_plugin(:snippets) do
-          get '/snippets/',        to: "snippets#index", as: :snippets
-          get '/snippets/:slug',   to: "snippets#snippet", as: :snippet
+          get '/snippets/',             to: "snippets#index",   as: :snippets
+          get '/snippets/:slug',        to: "snippets#snippet", as: :snippet
+          get '/snippets/:slug/edit',   to: "snippets#edit",    as: :snippetEdit
+          post '/snippets/:slug/edit',   to: "snippets#edit"
         end
       end
 

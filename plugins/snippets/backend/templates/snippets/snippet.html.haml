@@ -1,1 +1,6 @@
-lala snippet
+#db-snippets
+  %ul
+    = render template: "snippets/_snippet", locals: {snippet: snippet }
+
+  #db-snippet-content
+    = snippet.render
