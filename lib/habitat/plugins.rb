@@ -85,6 +85,8 @@ module Habitat
         select{|p| p.identifier == sym }.any?
       end
 
+      alias :enabled? :activated?
+
       def name
         self.class.to_s.split("::").last
       end
