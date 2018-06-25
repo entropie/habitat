@@ -2,7 +2,7 @@
 %html{:lang => "de"}
   %head
     - if Habitat.quart.production?
-      = stylesheet "screen"
+      %link{:href => "/assets/screen.css", :type => "text/css", :rel => "stylesheet"}
   %body
     = # render template: "layout/_header"
     %main
