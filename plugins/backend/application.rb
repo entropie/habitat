@@ -97,8 +97,10 @@ module Backend
 
     configure :development do
       handle_exceptions false
-      
     end
+    # configure :production do
+    #   handle_exceptions false
+    # end
     configure :test do
       handle_exceptions false
     end
