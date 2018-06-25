@@ -144,27 +144,25 @@ module Pager
 
 
 
-  def self.paginate(params, list)
-    Pager.new(params, list)
+  def self.paginate(params, list, max = nil)
+    Pager.new(params, list, max)
   end
   
   class Pager
     attr_reader :params, :list, :link_proc
+    attr_accessor :max
 
     MAX = 10
 
     def max
-      ret = C[:pager] or raise "page not set in config"
-      ret.to_i
-    rescue
-      Habitat.log :info, "pager not set in config, using default (set: pager)"
-      MAX
+      (@max || C[:pager] || MAX).to_i
     end
 
-    def initialize(params, list)
+    def initialize(params, list, m = max)
+      m = max unless m
       @params, @list = params, list
       @page = params[:page] && params[:page].to_i || 1
-      @pager = ArrayPager.new(list, @page, max)
+      @pager = ArrayPager.new(list, @page, m)
     end
 
     def link(g, n, text = n, hash = {})

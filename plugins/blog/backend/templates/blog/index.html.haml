@@ -1,5 +1,6 @@
 #db-blog-list
-  - pager.each do |post|
-    = render template: "blog/_preview", locals: {post: post}
+  %ul.main-listing
+    - pager.each do |post|
+      = render template: "blog/_preview", locals: {post: post}
 
   = pager.navigation

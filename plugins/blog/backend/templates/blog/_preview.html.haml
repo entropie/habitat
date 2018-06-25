@@ -1,6 +1,20 @@
-%li.post-preview
-  %strong
-    %a{:href => routes.postEdit_path(post.slug)}
-      .glyphicon.glyphicon-pencil
-    %a{:href => routes.post_path(post.slug)}= post.title
-  = post.intro
+%li.post-preview{:class => post.css_class }
+  .container
+    .columns
+      .column.col-3
+        %img.img-responsive{:src => post.image.url}
+      .column.col-9
+        %h3.post-title
+          %a{:href => routes.post_path(post.slug)}= post.title
+          .post-info
+            = module_info(post)
+  .post-controls
+    .published
+      %a{:href => routes.postPublish_path(post.slug)}
+        - if post.draft?
+          .glyphicon.glyphicon-ok
+        - else
+          .glyphicon.glyphicon-remove
+    .edit
+      %a{:href => routes.postEdit_path(post.slug)}
+        .glyphicon.glyphicon-pencil

@@ -21,7 +21,8 @@ module User
 
 
     def self.filename(usr)
-      "%s%s" % [ usr.name.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, ''), ::User::Database::Adapter::File::USERFILE_EXTENSION ]
+      us = usr.kind_of?(User) ? usr.name : usr
+      "%s%s" % [ us.strip.gsub(' ', '-').gsub(/[^\w-]/, ''), ::User::Database::Adapter::File::USERFILE_EXTENSION ]
     end
 
     def initialize

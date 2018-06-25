@@ -1,8 +1,24 @@
 $nav-bgcolor: rgb(181, 229, 198)
 
+@mixin clean()
+  list-style-type: none
+  margin: 0
+  padding: 0
+  li,ul
+    margin: 0
+    padding: 0
+
 
 #db-header
   height: calc(100% - 4px)
+
+.post-info
+  font-size: 13
+  .modvgwort
+
+    span
+      font-family: monospace
+
 
 body.backend
   background: white
@@ -16,7 +32,41 @@ body.backend
 
 #db-blog-list
   list-style-type: none
+  margin-top: 20px
+  ul.main-listing
+    @include clean()
+    display: flex
+    flex-wrap: wrap
+    li
+      padding: 10px
+      h3
+        font-size: 20px
+      width: calc(50% - 20px)
+      margin-bottom: 20px
+      margin-right: 10px
+      margin-left: 10px
+
+      position: relative
+      padding-right: 20px
+      .post-controls
+        position: absolute
+        top: 0
+        height: 100%
+        right: 0
+        width: 20px
+      &.post-draft
+        background-color: #ffebd8
+
+#db-post
+  @include clean()
+  margin-top: 20px
+        
 
 #db-navigation
   .nav-block
     margin-bottom: 20px
+
+  ul.sub
+    @include clean()
+    margin-right: 5px
+    font-size: .8em

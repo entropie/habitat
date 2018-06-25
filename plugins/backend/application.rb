@@ -19,11 +19,27 @@ module Backend
       routes do
         get '/', to: "dashboard#index", as: :dashboard
 
+        if_plugin(:user) do
+          get 'login',             to: "user#login", as:  :login
+          post 'login',            to: "user#login"
+          get 'logout',            to: "user#logout", as: :logout
+        end
+        
         if_plugin(:blog) do
           get '/blog/',            to: "blog#index", as: :blog
+
+          get '/blog/create',      to: "blog#edit", as:  :postCreate
+          post '/blog/create',     to: "blog#edit"
+
           get '/blog/:slug',       to: "blog#post", as:  :post
+
+
           get '/blog/:slug/edit',  to: "blog#edit", as:  :postEdit
-          post '/blog/:slug/edit',  to: "blog#edit"
+
+          get '/blog/:slug/publish',  to: "blog#publish", as:  :postPublish
+
+          post '/blog/:slug/edit', to: "blog#edit"
+
           get '/blog/page/:page',  to: "blog#index", as: :posts
         end
 
@@ -51,14 +67,15 @@ module Backend
       instance_eval(&Habitat.default_application_config)
 
       controller.prepare do
-        # def reject_unless_authenticated
-        #   unless logged_in?
-        #     #redirect_to "/" 
-        #     #exit
-        #   end
-        # end
+        def reject_unless_authenticated
+          logging_in = ["login", "logout"].include?(params.env["REQUEST_PATH"].split("/").last)
+          if not logged_in? and not logging_in
+            redirect_to "/" 
+            exit
+          end
+        end
 
-        # before :reject_unless_authenticated
+        before :reject_unless_authenticated
         include ::Blog::BlogControllerMethods
       end
 

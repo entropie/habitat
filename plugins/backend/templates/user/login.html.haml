@@ -1,0 +1,17 @@
+!!!
+%html{:lang => "de"}
+  %head
+    - if Habitat.quart.production?
+      = stylesheet "screen"
+  %body
+    = # render template: "layout/_header"
+    %main
+      %div#content.full
+        .text-center{:style => "margin-top: 45vh"}
+          %form{action: routes.login_path, method: :post}
+            %input{type: "text", name: :username}
+            %input{type: "password", name: :password}
+            %input{type: :submit}
+    = # render template: "layout/_footer"
+  %script{:src => '/assets/bundle.js'}
+

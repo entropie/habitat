@@ -98,9 +98,14 @@ module Blog
     end
 
     def image
-
       @image.post = self
       @image
+    rescue
+      ret = ""
+      def ret.url
+        ""
+      end
+      ret
     end
 
     def template

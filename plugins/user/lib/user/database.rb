@@ -41,7 +41,9 @@ module User
 
         def user(username = nil)
           if username
-            return YAML::load_file(repository_path(username + USERFILE_EXTENSION))
+            fn = User.filename(username)
+            
+            return YAML::load_file(repository_path(fn))
           end
           user_files.map{|uf| YAML::load_file(uf) }
         end

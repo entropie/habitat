@@ -115,6 +115,11 @@ module Habitat
       def backend?
         @backend ||= File.exist?(File.join(path, "backend"))
       end
+
+      def submenu_template(a)
+        file = File.join(path, "backend/templates/", a, "_submenu.html.haml")
+        File.exist?(file) and "_submenu"
+      end
       
       def activate
         quarter.plugins.push(self)
