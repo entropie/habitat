@@ -113,7 +113,7 @@ module Snippets
 
     def render
       markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true, footnotes: false)
-      markdown.render
+      markdown.render(to_s)
     end
   end
 
