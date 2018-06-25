@@ -1,6 +1,9 @@
 %html{:lang => "de"}
   %head
     %title Its ze Backend
+    - if Habitat.quart.production?
+      %link{:href => "/assets/screen.css", :type => "text/css", :rel => "stylesheet"}
+
   %body.backend
     .container.grid-xl
       .columns
