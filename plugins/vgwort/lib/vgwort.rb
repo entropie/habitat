@@ -161,14 +161,26 @@ module VGWort
       File.exist?(file)
     end
 
+    def contents
+      @contents ||= File.readlines(file)
+    end
+
     def counter
       if id_attached?
-        @counter ||= File.readlines(file).first
+        @counter = contents.first
       else
         post.attach_id
         Habitat.log :warn, "counter for #{post.slug} not attached"
         ""
       end
+    end
+
+    def code
+      @code ||= contents[1].strip
+    end
+
+    def refid
+      @code ||= contents.last.strip
     end
 
     def write(url, code, id)
