@@ -27,7 +27,6 @@ module Backend
         
         if_plugin(:blog) do
           namespace :blog do
-            get  '/',            to: "blog#index", as: :blog
 
             get  '/create',      to: "blog#edit", as:  :postCreate
             post '/create',     to: "blog#edit"
@@ -42,16 +41,18 @@ module Backend
             post '/:slug/edit', to: "blog#edit"
 
             get  '/page/:page',  to: "blog#index", as: :posts
+            get  '/',            to: "blog#index", as: :blog
+
           end
         end
 
         if_plugin(:snippets) do
           namespace :snippets do
-            get  '/',             to: "snippets#index",   as: :snippets
+            get  '/create',       to: "snippets#create",  as: :snippetsCreate
             get  '/:slug',        to: "snippets#snippet", as: :snippet
             get  '/:slug/edit',   to: "snippets#edit",    as: :snippetEdit
             post '/:slug/edit',   to: "snippets#edit"
-            get  '/create',       to: "snippets#create",  as: :snippetsCreate
+            get  '/',             to: "snippets#index",   as: :snippets
           end
         end
 
