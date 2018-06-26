@@ -65,7 +65,7 @@ module Snippets
           Dir.glob(toglob)
         end
 
-        def render(obj, env = nil)
+        def select(obj, env = nil)
           ident = obj.to_sym
           ret = snippets[ident]
           unless ret
@@ -73,6 +73,10 @@ module Snippets
           end
           ret.env = env
           ret
+        end
+
+        def exist?(obj)
+          not select(obj).kind_of?(NotExistingSnippet)
         end
 
         def snippets
