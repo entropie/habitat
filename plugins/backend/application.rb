@@ -17,38 +17,50 @@ module Backend
       layout :application
 
       routes do
-        get '/', to: "dashboard#index", as: :dashboard
+        get     '/', to: "dashboard#index", as: :dashboard
 
         if_plugin(:user) do
-          get 'login',             to: "user#login", as:  :login
-          post 'login',            to: "user#login"
-          get 'logout',            to: "user#logout", as: :logout
+          get   'login',             to: "user#login", as:  :login
+          post  'login',            to: "user#login"
+          get   'logout',            to: "user#logout", as: :logout
         end
         
         if_plugin(:blog) do
-          get '/blog/',            to: "blog#index", as: :blog
+          namespace :blog do
+            get  '/',            to: "blog#index", as: :blog
 
-          get '/blog/create',      to: "blog#edit", as:  :postCreate
-          post '/blog/create',     to: "blog#edit"
+            get  '/create',      to: "blog#edit", as:  :postCreate
+            post '/create',     to: "blog#edit"
 
-          get '/blog/:slug',       to: "blog#post", as:  :post
+            get  '/:slug',       to: "blog#post", as:  :post
 
 
-          get '/blog/:slug/edit',  to: "blog#edit", as:  :postEdit
+            get  '/:slug/edit',  to: "blog#edit", as:  :postEdit
 
-          get '/blog/:slug/publish',  to: "blog#publish", as:  :postPublish
+            get  '/:slug/publish',  to: "blog#publish", as:  :postPublish
 
-          post '/blog/:slug/edit', to: "blog#edit"
+            post '/:slug/edit', to: "blog#edit"
 
-          get '/blog/page/:page',  to: "blog#index", as: :posts
+            get  '/page/:page',  to: "blog#index", as: :posts
+          end
         end
 
         if_plugin(:snippets) do
-          get '/snippets/',             to: "snippets#index",   as: :snippets
-          get '/snippets/:slug',        to: "snippets#snippet", as: :snippet
-          get '/snippets/:slug/edit',   to: "snippets#edit",    as: :snippetEdit
-          post '/snippets/:slug/edit',   to: "snippets#edit"
+          namespace :snippets do
+            get  '/',             to: "snippets#index",   as: :snippets
+            get  '/:slug',        to: "snippets#snippet", as: :snippet
+            get  '/:slug/edit',   to: "snippets#edit",    as: :snippetEdit
+            post '/snippets/:slug/edit',   to: "snippets#edit"
+          end
         end
+
+        if_plugin(:user) do
+          namespace :user do
+            get  '/',             to: "user#index",   as: :user
+          end
+        end
+
+
       end
 
       security.x_frame_options 'DENY'

@@ -59,7 +59,7 @@ module Backend
       end
     end
 
-    class UserIfno < Info
+    class UserInfo < Info
       def user
         @user ||= Habitat.adapter(:user).by_id(@post.user_id)
       end

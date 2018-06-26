@@ -1,6 +1,5 @@
 module Backend::Views::User
-  class Login
+  class Index
     include Backend::View
-    layout :login
   end
 end
