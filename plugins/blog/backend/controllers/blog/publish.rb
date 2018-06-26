@@ -12,7 +12,6 @@ module Backend::Controllers::Blog
           post_with_vgw = post.with_plugin(VGWort)
 
           if post_with_vgw.id_attached?
-            Habitat.log :info, "vgwort: #{post.slug} already ID attached: #{post_with_vgw.refid}"
           else
             attach_id = post_with_vgw.attach_id
           end

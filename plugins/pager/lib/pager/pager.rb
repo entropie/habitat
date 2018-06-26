@@ -177,7 +177,7 @@ module Pager
 
     def navigation(limit = 8)
       g = Gestalt.new
-      g.ul :class => :pagination do
+      g.ul :class => :pager do
             
         if first_page?
           g.li(:class => "page-item disabled") {
