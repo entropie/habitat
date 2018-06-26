@@ -13,7 +13,9 @@
     %ul.nav.modules
       - Backend.backend_modules.each do |bm|
         %li.nav-item
-          = al(routes.send("%s_path" % bm), bm.to_s)
+          - begin # have not found a way to check wheter a route exist, FIXME: 
+            = al(routes.send("%s_path" % bm), bm.to_s)
+          - rescue
         - if tmpl = Backend.submenu_template(bm)
           = render template: tmpl
 
