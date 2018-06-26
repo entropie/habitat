@@ -94,10 +94,10 @@ module Snippets
           store(snippet, content)
         end
 
-        def update_or_create(param_hash)
-          snippet = adapter_class(kind).new(ident).extend(SnippetCreater)
-          store(snippet, content)
-        end
+        # def update_or_create(ident, param_hash)
+        #   snippet = adapter_class(kind).new(ident).extend(SnippetCreater)
+        #   store(snippet, content)
+        # end
 
         def store(snippet, content)
           log :info, "snippet:STORE:#{snippet.ident}"

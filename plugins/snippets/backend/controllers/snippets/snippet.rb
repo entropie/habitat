@@ -5,7 +5,7 @@ module Backend::Controllers::Snippets
     expose :snippet
 
     def call(params)
-      @snippet = adapter(:snippets).render(params[:slug])
+      @snippet = adapter(:snippets).select(params[:slug])
     end
   end
 end

@@ -3,6 +3,13 @@ module Snippets
 
   DEFAULT_ADAPTER = :File
 
+  module SnippetsViewMethods
+    def Snip(arg, env = nil)
+      Habitat.adapter(:snippets).select(arg, env || locals[:params])
+    end
+  end
+
+
   def self.all
     Habitat.adapter(:snippets).snippets
   end
@@ -28,6 +35,7 @@ module Snippets
     attr_reader :ident
     attr_accessor :path
     attr_accessor :env
+    attr_accessor :content
 
     def initialize(ident)
       @ident = ident

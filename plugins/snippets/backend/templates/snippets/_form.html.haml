@@ -1,0 +1,6 @@
+#db-snippets-form
+  %form{:method => :post, :action => routes.snippetEdit_path(snippet.ident)}
+    .form-group
+      %textarea#snippet-form.form-input{:rows => 15, :name => :content}= snippet.content
+
+    %input.btn.btn-primary{:type => :submit, :value => "Absenden"}    

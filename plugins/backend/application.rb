@@ -50,7 +50,8 @@ module Backend
             get  '/',             to: "snippets#index",   as: :snippets
             get  '/:slug',        to: "snippets#snippet", as: :snippet
             get  '/:slug/edit',   to: "snippets#edit",    as: :snippetEdit
-            post '/snippets/:slug/edit',   to: "snippets#edit"
+            post '/:slug/edit',   to: "snippets#edit"
+            get  '/create',       to: "snippets#create",  as: :snippetsCreate
           end
         end
 
