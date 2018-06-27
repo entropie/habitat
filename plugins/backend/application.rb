@@ -9,6 +9,7 @@ def if_plugin(plug, &blk)
 end
 
 module Backend
+
   class Application < Hanami::Application
     configure do
       root __dir__
@@ -92,12 +93,19 @@ module Backend
         end
 
         before :reject_unless_authenticated
-        include ::Blog::BlogControllerMethods
+
+        if Habitat.quart.plugins.enabled?(:blog)
+          include ::Blog::BlogControllerMethods
+        end
+
       end
 
       view.prepare do
 
-        include ::Blog::BlogViewMethods
+        if Habitat.quart.plugins.enabled?(:blog)
+          include ::Blog::BlogViewMethods
+        end
+        
 
         def Snip(arg)
           Habitat.adapter(:snippets).render(arg, locals[:params])
