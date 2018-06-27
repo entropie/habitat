@@ -5,6 +5,7 @@ require_relative "blog/blog"
   Dir.glob("%s/**/*.rb" % target_dir).each do |tf|
     begin
       Habitat._require tf
+
     # rescue
     #   p $!
     end
