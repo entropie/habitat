@@ -1,6 +1,97 @@
+require "open-uri"
+
 module Tumblog
 
   class Post
+
+    class Handler
+
+      attr_reader :post
+
+      def self.handler
+        @@handler ||= []
+      end
+
+      def self.inherited(o)
+        handler << o
+      end
+
+      def self.select_for(post)
+        ret = handler.select{|h|
+          h.responsible_for?(post)
+        }
+        handler = ret.first.new(post)
+        handler
+      end
+
+      def self.responsible_for?(post)
+        r = match.any?{|r| post.content =~ r}
+      end
+      
+      def initialize(post)
+        @post = post
+      end
+
+      def process!
+      end
+      
+      class YoutubeDLer < Handler
+        def self.match
+          [/reddit\.com/,
+           /youtube.com/
+          ]
+        end
+
+        def process!
+          FileUtils.mkdir_p(post.datadir)
+
+          target_file = post.datadir(post.id + ".mp4")
+          ydl = YoutubeDL.download(post.content, output: target_file)
+          post.title = ydl.information[:title]
+          true
+        end
+
+        def to_html
+          add = "<h3>#{post.title}</h3>"
+          ret = "%s<video controls><source src='%s' type='video/mp4'></video>"
+          ret % [add, post.http_data_dir(post.id + ".mp4")]
+        end
+      end
+
+      class Img < Handler
+        def self.match
+          [/\.gif$/i, /\.gifv$/i]
+        end
+
+        def process!
+          FileUtils.mkdir_p(post.datadir)
+
+          target_file = post.datadir(post.id + ".mp4")
+
+          srcurl = ""
+          open(post.content) do |uri|
+            html = Nokogiri::HTML(uri.read)
+            srcurl = html.xpath('//meta[@itemprop="contentURL"]').first[:content]
+          end
+          ret = nil
+          open(srcurl){|v|
+            File.open(target_file, "wb") {|fp|
+              ret = fp.write(v.read)
+            }
+          }
+          ret
+        end
+
+
+        def to_html
+          add = "<h3>#{post.title}</h3>"
+          ret = "%s<video controls><source src='%s' type='video/mp4'></video>"
+          ret % [add, post.http_data_dir(post.id + ".mp4")]
+        end
+        
+      end
+    end
+
 
     Attributes = {
       :content     => String,
@@ -15,7 +106,7 @@ module Tumblog
     OptionalAttributes = [:image, :title, :tags]
 
     attr_reader *Attributes.keys
-    attr_accessor :user_id, :datadir, :filename
+    attr_accessor :user_id, :datadir, :filename, :title
 
     def initialize(a)
       @adapter = a
@@ -40,6 +131,7 @@ module Tumblog
     def to_yaml
       r = self.dup
       r.remove_instance_variable("@adapter")
+      r.remove_instance_variable("@handler")
       YAML::dump(r)
     end
 
@@ -68,11 +160,12 @@ module Tumblog
       "entries/#{@created_at.strftime("%Y%m")}"
     end
 
+    def handler
+      @handler = Handler.select_for(self)
+    end
+
     def to_html
-      title = "<h3>#{title}</h3>"
-      ret = "%s<video controls><source src='%s' type='video/mp4'></video>"
-      #File.exist?(datadir(id + ".mp4"))
-      ret % [title, http_data_dir(id + ".mp4")]
+      handler.to_html
     end
 
   end
