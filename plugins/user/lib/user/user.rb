@@ -36,6 +36,10 @@ module User
       id == obj
     end
 
+    def token
+      Digest::SHA256.base64digest("#{id}#{email}#{password}")
+    end
+
     def populate(param_hash)
       @password = Password.create(param_hash.delete(:password))
       @user_id  = Habitat::Database.get_random_id

@@ -43,6 +43,11 @@ module Tumblog
       YAML::dump(r)
     end
 
+    def http_data_dir(*args)
+      File.join("/attachments", id, *args)
+    end
+
+
     def datadir(*args)
       if @datadir
         File.join(@datadir, *args)
@@ -61,6 +66,13 @@ module Tumblog
 
     def dirname
       "entries/#{@created_at.strftime("%Y%m")}"
+    end
+
+    def to_html
+      title = "<h3>#{title}</h3>"
+      ret = "%s<video controls><source src='%s' type='video/mp4'></video>"
+      #File.exist?(datadir(id + ".mp4"))
+      ret % [title, http_data_dir(id + ".mp4")]
     end
 
   end

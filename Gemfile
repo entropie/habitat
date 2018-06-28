@@ -29,7 +29,6 @@ gem "unicorn"
 gem "dimensions"
 
 gem "flickraw"
-
 gem "builder"
 
 gem "capistrano", "~> 3.6", require: false

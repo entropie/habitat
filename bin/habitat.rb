@@ -80,7 +80,11 @@ quarters.each do |quart|
       user_adapter = Habitat.adapter(:user)
 
       sopts.on("-U", "--print-users", "put users") do
-        pp user_adapter.user
+        user_adapter.user.each do |u|
+          pp u
+          puts u.token
+          
+        end
       end
 
       sopts.on("-u", "--add-user", "add user") do

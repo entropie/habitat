@@ -52,6 +52,12 @@ module User
           user.select{|u| u == id }.first
         end
 
+        def by_token(tkn)
+          user.select{|u|
+            u.token == tkn
+          }.first
+        end
+
         def create(param_hash)
           store( User.new.populate(param_hash) )
         end

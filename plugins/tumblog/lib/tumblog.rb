@@ -1,4 +1,4 @@
-require_relative "blog/blog"
+require_relative "tumblog/tumblog"
 
 %w"controllers".each do |parent_dir|
   target_dir = File.join(File.dirname(File.expand_path(__FILE__)), "../", parent_dir)
@@ -6,9 +6,10 @@ require_relative "blog/blog"
     begin
       Habitat._require tf
 
-    rescue
-      p $!
+    # rescue
+    #   p $!
     end
   end
 end
+
 
