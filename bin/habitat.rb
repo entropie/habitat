@@ -81,10 +81,9 @@ quarters.each do |quart|
 
       sopts.on("-U", "--print-users", "put users") do
         user_adapter.user.each do |u|
-          pp u
-          puts u.token
-          
+          puts u
         end
+
       end
 
       sopts.on("-u", "--add-user", "add user") do

@@ -37,7 +37,7 @@ module User
     end
 
     def token
-      Digest::SHA256.base64digest("#{id}#{email}#{password}")
+      token = JWT.encode({:password => password, :user_id => id}, Habitat.quart.secret, 'HS256')
     end
 
     def populate(param_hash)
@@ -55,6 +55,10 @@ module User
 
     def filename
       User.filename(self)
+    end
+
+    def to_s
+      '[%s <%s> "%s"]' % [name, email, token]
     end
 
   end

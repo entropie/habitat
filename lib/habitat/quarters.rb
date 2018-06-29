@@ -40,6 +40,14 @@ module Habitat::Quarters
       ENV["HANAMI_ENV"]
     end
 
+    def secret=(obj)
+      @secret = obj
+    end
+
+    def secret
+      @secret
+    end
+
     def banner
       "[[#{identifier}:#{env}]]"
     end

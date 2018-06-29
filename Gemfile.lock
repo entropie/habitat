@@ -138,6 +138,7 @@ GEM
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
     inflecto (0.0.2)
+    jwt (2.1.0)
     kgio (2.11.2)
     mail (2.7.0)
       mini_mime (>= 0.1.1)
@@ -237,6 +238,7 @@ DEPENDENCIES
   hanami (~> 1.1)
   hanami-model (~> 1.1)
   hanami-webpack!
+  jwt
   minitest
   multi_json
   nokogiri

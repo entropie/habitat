@@ -52,10 +52,17 @@ module User
           user.select{|u| u == id }.first
         end
 
-        def by_token(tkn)
-          user.select{|u|
-            u.token == tkn
-          }.first
+        def by_token(token)
+          decoded = JWT.decode(token, Habitat.quart.secret, true, { algorithm: 'HS256' })
+          e = decoded.first
+          usr = by_id(e["user_id"])
+          if usr.password.to_s == e["password"]
+            return usr
+          else
+            return nil
+          end
+        rescue JWT::VerificationError
+          return nil
         end
 
         def create(param_hash)

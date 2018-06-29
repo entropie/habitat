@@ -17,6 +17,8 @@ gem 'haml'
 
 gem 'sass'
 
+gem 'jwt'
+
 gem 'warden'
 gem 'bcrypt'
 gem "sequel"
