@@ -7,6 +7,7 @@ module Api
       root __dir__
       routes do 
         get '/post/new',         to: "post#create", as: :create
+        post '/post/new',         to: "post#create", as: :create
         get '/post/',            to: "post#index", as: :posts
 
         get '/post/:slug',       to: "post#index", as:  :post

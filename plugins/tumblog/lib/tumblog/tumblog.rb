@@ -1,5 +1,6 @@
 require_relative "database"
 require_relative "post"
+require_relative "api"
 
 module BackgroundJob
   def self.anytime(&blk)
@@ -16,6 +17,14 @@ end
 module Tumblog
 
   DEFAULT_ADAPTER = :File
+
+  def self.token=(tknstr)
+    @token = tknstr.strip
+  end
+
+  def self.token
+    @token
+  end
 
   module ControllerMethods
 
@@ -38,6 +47,7 @@ module Tumblog
     def perform(content, user)
     end
   end
+
 
 
   

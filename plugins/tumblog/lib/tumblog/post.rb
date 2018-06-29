@@ -20,6 +20,7 @@ module Tumblog
         ret = handler.select{|h|
           h.responsible_for?(post)
         }
+        Habitat.log(:info, "#{post.content}: #{ret.first}")
         handler = ret.first.new(post)
         handler
       end
@@ -34,33 +35,142 @@ module Tumblog
 
       def process!
       end
+
+      def download(url, target)
+        ret = nil
+        Habitat.log :debug, "DL: #{url} -> #{target}"
+        open(url){|v|
+          File.open(target, "wb") {|fp|
+            ret = fp.write(v.read)
+            Habitat.log :debug, "DL: wrote #{ret}"
+          }
+        }
+        ret
+      end
+
+      def thumbnail?
+        File.exist?(thumbnail_file)
+      end
+
+      def thumbnail_file
+        post.datadir("thumbnail.jpg")
+      end
+
+      def thumbnail_src
+        post.http_data_dir("thumbnail.jpg")
+      end
+
+      def to_html
+        b = "%s"
+        add = "<h3>#{post.title}</h3>"
+        if thumbnail?
+          add << %Q|<img class='preview' src='#{thumbnail_src}''/>|
+        end
+        ret = "#{add}<video controls style='display:#{thumbnail? ? "none" : "inline-block"}'><source src='%s' type='video/mp4'></video>"
+        b % ret
+      end
+
       
-      class YoutubeDLer < Handler
+
+      module YoutubeDLMixin
+        def media_file
+          Dir.glob("%s/%s.*" % [post.datadir, post.id]).first          
+        end
+
+        def media_file_src
+          post.http_data_dir(File.basename(media_file))
+        end
+      end
+
+
+      class Reddit < Handler
+
+        include YoutubeDLMixin
+        
+        def thumbnail_file
+          post.datadir("#{post.id}.jpg")
+        end
+
+        def thumbnail_src
+          post.http_data_dir("#{post.id}.jpg")
+        end
+
+
         def self.match
-          [/reddit\.com/,
-           /youtube.com/
-          ]
+          [/reddit\.com/]
         end
 
         def process!
           FileUtils.mkdir_p(post.datadir)
 
           target_file = post.datadir(post.id + ".mp4")
+          ydl = YoutubeDL.download(post.content, output: target_file, write_thumbnail: true)
+          post.title = ydl.information[:title]
+          true
+        end
+
+        def to_html
+          super % post.http_data_dir(post.id + ".mp4")
+        end
+      end
+
+      class Youtube < Handler
+        include YoutubeDLMixin
+
+        def self.match
+          [/youtube\.com/]
+        end
+
+        def process!
+          FileUtils.mkdir_p(post.datadir)
+
+          target_file = post.datadir(post.id)
           ydl = YoutubeDL.download(post.content, output: target_file)
           post.title = ydl.information[:title]
           true
         end
 
         def to_html
-          add = "<h3>#{post.title}</h3>"
+          add = "<h3>yt: #{post.title}</h3>"
           ret = "%s<video controls><source src='%s' type='video/mp4'></video>"
-          ret % [add, post.http_data_dir(post.id + ".mp4")]
+          ret % [add, media_file_src]
         end
       end
 
+
+      class GFYcat < Handler
+        def self.match
+          [/gfycat\.com/]
+        end
+
+        def process!
+          FileUtils.mkdir_p(post.datadir)
+          
+          target_file = post.datadir(post.id + ".mp4")
+
+          srcurl, thumbnail = "", ""
+          open(post.content) do |uri|
+            html = Nokogiri::HTML(uri.read)
+            srcurl = html.xpath('//source[@id="mp4Source"]').first[:src]
+            thumbnail = html.xpath('//video[@class="share-video-noscript"]').first[:poster]
+          end
+          ret = nil
+
+          ret = download(srcurl, target_file)
+          download(thumbnail, thumbnail_file)
+          ret
+        end
+
+
+        def to_html
+          super % post.http_data_dir(post.id + ".mp4")
+        end
+      end
+
+
       class Img < Handler
         def self.match
-          [/\.gif$/i, /\.gifv$/i]
+          [/\.gifv$/i]
         end
 
         def process!
@@ -68,25 +178,20 @@ module Tumblog
 
           target_file = post.datadir(post.id + ".mp4")
 
-          srcurl = ""
+          srcurl, thumbnail = "", ""
           open(post.content) do |uri|
             html = Nokogiri::HTML(uri.read)
             srcurl = html.xpath('//meta[@itemprop="contentURL"]').first[:content]
+            thumbnail = html.xpath('//meta[@itemprop="thumbnailUrl"]').first[:content]
           end
-          ret = nil
-          open(srcurl){|v|
-            File.open(target_file, "wb") {|fp|
-              ret = fp.write(v.read)
-            }
-          }
+          ret = download(srcurl, target_file)
+          download(thumbnail, thumbnail_file)
           ret
         end
 
 
         def to_html
-          add = "<h3>#{post.title}</h3>"
-          ret = "%s<video controls><source src='%s' type='video/mp4'></video>"
-          ret % [add, post.http_data_dir(post.id + ".mp4")]
+          super % post.http_data_dir(post.id + ".mp4")
         end
         
       end
@@ -100,7 +205,8 @@ module Tumblog
       :id          => String,
       :updated_at  => Time,
       :tags        => Array,
-      :user_id     => Fixnum
+      :user_id     => Fixnum,
+      :private     => Fixnum
     }
 
     OptionalAttributes = [:image, :title, :tags]
@@ -110,6 +216,7 @@ module Tumblog
 
     def initialize(a)
       @adapter = a
+      @private = 0
     end
 
     def populate(param_hash)
@@ -128,10 +235,14 @@ module Tumblog
       }
     end
 
+    def private?
+      @private != 0
+    end
+
     def to_yaml
       r = self.dup
       r.remove_instance_variable("@adapter")
-      r.remove_instance_variable("@handler")
+      r.remove_instance_variable("@handler") if @handler
       YAML::dump(r)
     end
 

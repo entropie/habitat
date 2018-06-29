@@ -131,6 +131,17 @@ quarters.each do |quart|
         p 1
       end
 
+      if q.plugins.activated?(:tumblog)
+        
+        token = File.readlines(File.expand_path("~/.tumbldog.token")).join.strip or raise "no token provided in ~/.tumbldog.token"
+        Tumblog.token = token
+        sopts.on("-A", "--submit value", "post") do |val|
+
+          pp Tumblog::Api.submit(val)
+        end
+
+      end
+
       if q.plugins.activated?(:vgwort)
 
         sopts.on("", "--vgwort-initialize", "initializes vgwort database from ~media/vgwort.csv") do |key|

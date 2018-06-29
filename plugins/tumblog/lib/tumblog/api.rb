@@ -33,8 +33,6 @@ module Tumblog
       def submit
         Net::HTTP.post_form(endpoint, options)
       end
-      
     end
-    end
-  
+  end
 end
