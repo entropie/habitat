@@ -60,9 +60,17 @@ module Tumblog
         post.http_data_dir("thumbnail.jpg")
       end
 
-      def to_html
+      def title
+        if post.title and not post.title.to_s.strip.empty?
+          post.title
+        else
+          "&nbsp;"
+        end
+      end
+
+      def to_html(logged_in = false)
         b = "%s"
-        add = "<h3>#{post.title}</h3>"
+        add = ""
         if thumbnail?
           add << %Q|<img class='preview' src='#{thumbnail_src}''/>|
         end
@@ -109,7 +117,7 @@ module Tumblog
           true
         end
 
-        def to_html
+        def to_html(logged_in = false)
           super % post.http_data_dir(post.id + ".mp4")
         end
       end
@@ -130,7 +138,7 @@ module Tumblog
           true
         end
 
-        def to_html
+        def to_html(logged_in = false)
           add = "<h3>yt: #{post.title}</h3>"
           ret = "%s<video controls><source src='%s' type='video/mp4'></video>"
           ret % [add, media_file_src]
@@ -162,7 +170,7 @@ module Tumblog
         end
 
 
-        def to_html
+        def to_html(logged_in = false)
           super % post.http_data_dir(post.id + ".mp4")
         end
       end
@@ -190,7 +198,7 @@ module Tumblog
         end
 
 
-        def to_html
+        def to_html(logged_in = false)
           super % post.http_data_dir(post.id + ".mp4")
         end
         
@@ -212,7 +220,7 @@ module Tumblog
     OptionalAttributes = [:image, :title, :tags]
 
     attr_reader *Attributes.keys
-    attr_accessor :user_id, :datadir, :filename, :title
+    attr_accessor :user_id, :datadir, :filename, :title, :private
 
     def initialize(a)
       @adapter = a
@@ -241,7 +249,7 @@ module Tumblog
 
     def to_yaml
       r = self.dup
-      r.remove_instance_variable("@adapter")
+      r.remove_instance_variable("@adapter") if @adapter
       r.remove_instance_variable("@handler") if @handler
       YAML::dump(r)
     end
@@ -275,8 +283,8 @@ module Tumblog
       @handler = Handler.select_for(self)
     end
 
-    def to_html
-      handler.to_html
+    def to_html(logged_in = false)
+      handler.to_html(logged_in)
     end
 
   end

@@ -26,12 +26,14 @@ module Tumblog
       def options
         {
           :token => @token,
-          :s => what
+          :s => what,
         }
       end
 
       def submit
-        Net::HTTP.post_form(endpoint, options)
+        http = Net::HTTP.new(endpoint.host, endpoint.port)
+        http.request_post(endpoint.path)
+        Net::HTTP.post_form(endpoint, options.merge(:read_timeout => 500))
       end
     end
   end

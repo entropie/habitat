@@ -1,0 +1,51 @@
+#!/usr/bin/env ruby
+
+require "fileutils"
+require "pp"
+name, action = ARGV
+
+exit 1 unless name || action
+
+dir = Dir.pwd
+
+cntrl = <<-HEREDOC
+module Backend::Controllers::#{name.capitalize}
+  class #{action.capitalize}
+    include Api::Action
+
+    def call(params)
+    end
+  end
+end
+HEREDOC
+
+
+
+view = <<-HEREDOC
+module Backend::Views::#{name.capitalize}
+  class #{action.capitalize}
+    include Backend::View
+  end
+end
+HEREDOC
+
+
+template = <<-HEREDOC
+#{action}
+HEREDOC
+
+
+{
+  "controllers/#{name}/#{action}.rb" => cntrl,
+  "views/#{name}/#{action}.rb" => view,
+  "templates/#{name}/#{action}.html.haml" => template
+}.each_pair do |fn, fc|
+  if File.exist?(fn)
+    warn "existing: #{fn}"
+  else
+    FileUtils.mkdir_p(File.dirname(fn), :verbose => true)
+    File.open(fn, "w+"){|fp| fp.puts(fc)}
+  end
+
+end
+

@@ -55,13 +55,18 @@ module Tumblog
             Dir.glob(toglob)
           }
           files = []
-          # files.push(*fileglob.call("drafts")) if @user
           files.push(*fileglob.call("entries/*"))
           files
         end
 
+        def by_id(id)
+          entries.select{|e| e.id == id}.first
+        end
+
         def entries(user = nil)
           @posts = Entries.new(user || @user).push(*post_files.map{|pfile| load_file(pfile)})
+          @posts.reject!{|post| post.private? } unless @user
+          @posts
         end
 
         def load_file(yamlfile)
@@ -77,7 +82,7 @@ module Tumblog
 
         def store(post)
           raise NoUserContext, "trying to call #store without valid user context " unless @user
-          log :info, "blog:STORE:#{post.id}"
+          log :info, "tumblog:STORE:#{post.id}"
           retval = post
           post.user_id = @user.id
           post.datadir = post.datadir
@@ -98,9 +103,10 @@ module Tumblog
           post.upload(obj)
         end
 
-        def destroy(post_or_draft)
-          log :info, "blog:REMOVE:#{post_or_draft.title}"
-          rm(post_or_draft.filename, :verbose => true)
+        def destroy(post)
+          log :info, "tumblog:REMOVE:#{post.title}"
+          rm_rf(post.filename)
+          rm_rf(post.datadir)
         end
 
         def with_user(user, &blk)

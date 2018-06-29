@@ -6,10 +6,12 @@ module Api
     configure do
       root __dir__
       routes do 
-        get '/post/new',         to: "post#create", as: :create
-        post '/post/new',         to: "post#create", as: :create
-        get '/post/',            to: "post#index", as: :posts
+        post '/post/new',            to: "post#create", as: :create
+        post '/post/:id/toggle',     to: "post#toggle", as: :toggle
+        post '/post/:id/destroy',    to: "post#destroy", as: :destroy
+        post '/post/:id/topic',      to: "post#topic", as:  :topic
 
+        get '/post/',            to: "post#index", as: :posts
         get '/post/:slug',       to: "post#index", as:  :post
         get '/post/pid/:pid',    to: "post#index", as:   :pid
       end

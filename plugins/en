@@ -1,0 +1,27 @@
+#!/usr/bin/env ruby
+
+require "fileutils"
+require "pp"
+
+arg = ARGV.shift
+
+exit unless arg
+
+target = "backend/%s"
+
+Dir.chdir "backend"
+
+def cmd(cmd)
+  puts "> $ #{cmd}"
+  system cmd
+end
+
+["controllers", "templates", "views"].each do |i|
+  target = "#{i}/#{arg}"
+  if File.exist?(target)
+    cmd "unlink #{target}"
+  else
+    cmd "ln -s ../../#{arg}/backend/#{i}/#{arg}  #{i}/#{arg}"
+  end
+  
+end
