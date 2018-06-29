@@ -31,9 +31,7 @@ module Tumblog
       end
 
       def submit
-        http = Net::HTTP.new(endpoint.host, endpoint.port)
-        http.request_post(endpoint.path)
-        Net::HTTP.post_form(endpoint, options.merge(:read_timeout => 500))
+        Net::HTTP.post_form(endpoint, options)
       end
     end
   end
