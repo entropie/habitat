@@ -6,7 +6,9 @@ module Api
     configure do
       root __dir__
       routes do 
+        get '/post/new',             to: "post#create"
         post '/post/new',            to: "post#create", as: :create
+
         post '/post/:id/toggle',     to: "post#toggle", as: :toggle
         post '/post/:id/destroy',    to: "post#destroy", as: :destroy
         post '/post/:id/topic',      to: "post#topic", as:  :topic
