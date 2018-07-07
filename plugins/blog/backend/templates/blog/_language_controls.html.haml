@@ -1,0 +1,9 @@
+#language-controls
+  - if post.native?
+    %a{:href => routes.postEdit_path(post.slug, lang: :en)} English variant?
+  - else
+    %a{:href => routes.postEdit_path(post.slug)} German variant?
+    - if post.languages(params[:lang])
+      &bull;
+      %a.text-warning{:href => routes.postKill_path(post.slug, lang: params[:lang])} Destroy
+

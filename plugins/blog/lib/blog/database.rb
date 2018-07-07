@@ -110,7 +110,7 @@ module Blog
           content = post_or_draft.content
 
           write(for_yaml.filename, YAML.dump(for_yaml))
-          write(for_yaml.datafile, content)
+          write(post_or_draft.datafile, content)
 
           post_or_draft
         end
@@ -151,9 +151,14 @@ module Blog
           store(draft.to_post(self))
         end
 
-        def destroy(post_or_draft)
-          log :info, "blog:REMOVE:#{post_or_draft.title}"
-          rm(post_or_draft.filename, :verbose => true)
+        def destroy(post_or_draft, lang = nil)
+          if not lang
+            log :info, "blog:REMOVE:#{post_or_draft.title}"
+            rm(post_or_draft.filename, :verbose => true)
+          else
+            log :info, "blog:LANGUAGE-REMOVE:#{post_or_draft.title}"
+            rm(post_or_draft.datafile, :verbose => true)
+          end
         end
 
         def with_user(user, &blk)

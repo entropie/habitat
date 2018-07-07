@@ -34,8 +34,8 @@ module Backend
 
             get  '/:slug',       to: "blog#post", as:  :post
 
-
-            get  '/:slug/edit',  to: "blog#edit", as:  :postEdit
+            get  '/:slug/edit',        to: "blog#edit", as:  :postEdit
+            get  '/:slug/destroy',        to: "blog#destroy", as:  :postKill
 
             get  '/:slug/publish',  to: "blog#publish", as:  :postPublish
 

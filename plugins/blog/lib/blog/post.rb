@@ -1,13 +1,76 @@
+# coding: utf-8
 module Blog
 
   module I18N
+
+    TRANSLATIONS = {
+      en: "This post was originally written in german titled <strong>%title%</strong>, <a href='%url%'>but is also in available english</a>.",
+      de: "Dieser Beitrag wurde usprünglich auf Deutsch verfasst und befindet sich hier: <a href='%url%'>%title%</a>."
+    }
+    
     def request_language=(obj)
       @request_language = obj
     end
 
-    def languages
+    def request_language
+      @request_language
+    end
+
+    def self.valid_language(lstr)
+      TRANSLATIONS.keys.include?(lstr.to_sym)
+    end
+
+    def native?
+      if @request_language
+        return false
+      end
+      true
+    end
+
+    def i18n(langstr)
+      return false unless langstr
+      if Blog::I18N.valid_language(langstr)
+        self.request_language = langstr
+      end
+    end
+
+    def languages(l = nil)
       re = /^content\-([a-zA-Z]{2})\./
-      Dir.entries(datadir).select{|e| e =~ re}.map{|file| file =~ re && $1}
+      ret = Dir.entries(datadir).select{|e| e =~ re}.map{|file| file =~ re && $1}
+      if l
+        return ret.include?(l)
+      end
+      ret
+    end
+
+    def language
+      request_language ? request_language : nil
+    end
+
+    def alternatives?
+      languages.size > 0
+    end
+
+    def alternatives
+      ret = []
+      replacer = -> (l) {
+        lang = !native? ? :de : l.to_sym
+        str = TRANSLATIONS[lang]
+        str.gsub!(/%title%/, title)
+        u = native? ? url(l.to_sym) : url
+        str.gsub!(/%url%/, u)
+        str
+      }
+      
+      languages.each {|lang|
+        ret << replacer.call(lang)
+      }
+      ret.join
+    end
+
+    def datafile
+      datafileident = "content%s" % (@request_language ? "-#{@request_language}" : "")
+      datadir("#{datafileident}.markdown")
     end
   end
 
@@ -87,7 +150,7 @@ module Blog
       @content ||= if File.exist?(datafile)
                      File.readlines(datafile).join
                    else
-                     "[could not read datafile #{datafile}]"
+                     "[could not read datafile]"
                    end
     end
 
@@ -115,11 +178,6 @@ module Blog
       end
     end
 
-    def datafile
-      datafileident = "content%s" % (@request_language ? "-#{@request_language}" : "")
-      datadir("#{datafileident}.markdown")
-    end
-
     def images
       Dir.glob(datadir("image") + "/*.*").map {|ipath| Image.from_datadir(self, ipath) }
     end
@@ -142,7 +200,7 @@ module Blog
     def for_yaml
       ret = dup
       begin
-        [:adapter, :content].map{|iv| "@#{iv}"}.each do |iv|
+        [:adapter, :content, :request_language, :lang].map{|iv| "@#{iv}"}.each do |iv|
           ret.remove_instance_variable(iv) if ret.instance_variable_get(iv)
         end
 
@@ -151,8 +209,13 @@ module Blog
       ret
     end
 
-    def url
-      slug
+    def url(variant = nil)
+      if variant
+        Blog.routes.post_path(slug, variant)
+      else
+        Blog.routes.post_path(slug)
+      end
+
     end
 
     def draft?

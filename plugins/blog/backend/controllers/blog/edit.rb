@@ -9,11 +9,16 @@ module Backend::Controllers::Blog
 
     def call(params)
       @post  = blog.by_slug(params[:slug])
-      p 1
+
+      @post.i18n(params[:lang]) if @post
+
       if request.post?
+
         params = params.to_h
         pimg = params.delete(:image)
         post = blog.update_or_create(params)
+
+        post.i18n(params[:lang]) 
 
         if pimg
           blog.upload(post, pimg[:tempfile])

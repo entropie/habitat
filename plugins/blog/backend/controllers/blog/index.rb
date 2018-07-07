@@ -7,7 +7,8 @@ module Backend::Controllers::Blog
       @title = "Hi"
       @posts = blog.posts.sort_by {|p| p.created_at }.reverse
       @pager = Pager.paginate(params, @posts, 14)
-      @pager.link_proc = -> (n) { routes.posts_path(n) }      
+      @pager.link_proc = -> (n) { routes.posts_path(n) }
+
     end
   end
 end

@@ -1,1 +1,4 @@
-= render template: "blog/_form", locals: { action: post ? routes.postEdit_path(post.slug) : routes.postCreate_path() }
+- if post
+  = render template: "blog/_language_controls"
+- action = post ? (params[:lang] ? routes.postEdit_path(post.slug, lang: params[:lang]) : routes.postEdit_path(post.slug)): routes.postCreate_path()
+= render template: "blog/_form", locals: { action: action }
