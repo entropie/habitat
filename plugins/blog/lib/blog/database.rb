@@ -102,23 +102,37 @@ module Blog
         def store(post_or_draft)
           raise NoUserContext, "trying to call #store without valid user context " unless @user
           log :info, "blog:STORE:#{post_or_draft.title}"
-          retval = post_or_draft.for_yaml
-          retval.user_id = @user.id
+
+          for_yaml = setup_post(post_or_draft)
+
+          for_yaml.updated_at = Time.now
+
+          content = post_or_draft.content
+
+          write(for_yaml.filename, YAML.dump(for_yaml))
+          write(for_yaml.datafile, content)
+
+          post_or_draft
+        end
+
+        def setup_post(post_or_draft)
+
+          for_yaml = post_or_draft.for_yaml
+
+          for_yaml.user_id = @user.id
 
           unless exist?(post_or_draft)
+
             FileUtils.mkdir_p(::File.dirname(post_or_draft.filename), :verbose => true)
-            FileUtils.mkdir_p(post_or_draft.datadir, :verbose => true)
+            FileUtils.mkdir_p(post_or_draft.datadir, :verbose => true)          
 
-            unless retval.valid?
-              raise Habitat::Database::EntryNotValid, "post not valid #{PP.pp(post_or_draft.for_yaml, "")}"
+            unless post_or_draft.valid?
+              raise Habitat::Database::EntryNotValid, "post not valid #{PP.pp(for_yaml, "")}"
             end
-            retval.filename = post_or_draft.filename
-            retval.datadir = post_or_draft.datadir
+            for_yaml.filename = post_or_draft.filename
+            for_yaml.datadir = post_or_draft.datadir
           end
-
-          retval.updated_at = Time.now
-          write(retval.filename, YAML.dump(retval))
-          post_or_draft
+          for_yaml
         end
 
         def upload(post, obj)

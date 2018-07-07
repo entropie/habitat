@@ -69,6 +69,14 @@ module Blog
       slug
     end
 
+    def content
+      @content ||= if File.exist?(datafile)
+                     File.readlines(datafile).join
+                   else
+                     "[could not read datafile #{datafile}]"
+                   end
+    end
+
     def dirname
       "posts"
     end
@@ -82,7 +90,7 @@ module Blog
     end
 
     def intro
-      @content.split("\r\n\r\n").first
+      content.split("\r\n\r\n").first
     end
 
     def datadir(*args)
@@ -91,6 +99,10 @@ module Blog
       else
         @adapter.datadir(slug, *args)
       end
+    end
+
+    def datafile
+      datadir("content.markdown")
     end
 
     def images
@@ -120,8 +132,11 @@ module Blog
     def for_yaml
       ret = dup
       begin
-        ret.remove_instance_variable("@adapter")
-      rescue
+        [:adapter, :content].map{|iv| "@#{iv}"}.each do |iv|
+          ret.remove_instance_variable(iv) if ret.instance_variable_get(iv)
+        end
+
+      #rescue
       end
       ret
     end
@@ -150,15 +165,6 @@ module Blog
 
     def to_draft(adapter)
       Draft.new(adapter).populate(to_hash)
-    end
-
-    def tag_html
-      ret = "<div class='post-tags btn-group'>"
-      @tags.each do |t|
-        ret << "<a class='btn btn-secondary' href='/post/tags/#{t}''>#{t}</a>"
-      end
-      ret << "</div>"
-      ret
     end
 
     # returns [ "Saturday", "May", 12 ]
