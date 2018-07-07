@@ -1,6 +1,20 @@
 module Blog
 
+  module I18N
+    def request_language=(obj)
+      @request_language = obj
+    end
+
+    def languages
+      re = /^content\-([a-zA-Z]{2})\./
+      Dir.entries(datadir).select{|e| e =~ re}.map{|file| file =~ re && $1}
+    end
+  end
+
+
   class Post
+
+    include I18N
 
     Attributes = {
       :content     => String,
@@ -102,7 +116,8 @@ module Blog
     end
 
     def datafile
-      datadir("content.markdown")
+      datafileident = "content%s" % (@request_language ? "-#{@request_language}" : "")
+      datadir("#{datafileident}.markdown")
     end
 
     def images
@@ -110,14 +125,9 @@ module Blog
     end
 
     def image
+      return nil unless @image
       @image.post = self
       @image
-    rescue
-      ret = ""
-      def ret.url
-        ""
-      end
-      ret
     end
 
     def template

@@ -5,8 +5,9 @@ module PageMeta
     request_path = params.env["REQUEST_PATH"]
 
     if current_post = obj.post
+      imgurl = current_post.image ? current_post.image.url : ""
       fbm =
-        FaceBook.new(:image => current_post.image.url,
+        FaceBook.new(:image => imgurl,
                      :description => current_post.intro,
                      :url => request_path,
                      :title => current_post.title)

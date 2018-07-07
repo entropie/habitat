@@ -43,6 +43,17 @@ module Backend
       end
     end
 
+    class UserInfo < Info
+      def user
+        @user ||= Habitat.adapter(:user).by_id(@post.user_id)
+      end
+      
+      def to_html
+        super % user.name
+      end
+    end
+
+
     class VGWortInfo < Info
       def post
         @post.with_plugin(VGWort)
@@ -59,13 +70,12 @@ module Backend
       end
     end
 
-    class UserInfo < Info
-      def user
-        @user ||= Habitat.adapter(:user).by_id(@post.user_id)
-      end
-      
+
+    class LanguagesInfo < Info
       def to_html
-        super % user.name
+        langs = @post.languages
+        return "" if langs.empty?
+        super % langs.map {|l| "<a href='#{Blog.routes.post_path(@post.slug, l)}'>#{l}</a>"}
       end
     end
     

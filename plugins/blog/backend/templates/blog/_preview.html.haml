@@ -2,9 +2,11 @@
   .container
     .columns
       .column.col-3
-        %img.img-responsive{:src => post.image.url}
+        - if post.image
+          %img.img-responsive{:src => post.image.url}
       .column.col-9
         %h3.post-title.text-ellipsis
+          %a{:href => Blog.routes.post_path(post.slug)} #
           %a{:href => routes.post_path(post.slug)}= post.title
           .post-info
             = module_info(post)
