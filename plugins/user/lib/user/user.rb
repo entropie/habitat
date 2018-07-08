@@ -58,7 +58,7 @@ module User
     end
 
     def to_s
-      '[%s <%s> "%s"]' % [name, email, token]
+      '[%s  %s <%s> "%s"]' % [id, name, email, token]
     end
 
   end
