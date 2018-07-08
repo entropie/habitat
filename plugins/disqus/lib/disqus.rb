@@ -1,11 +1,16 @@
 module Disqus
   def self.to_html
     ret = <<-DOC
+<div id="disqus-wrapper">
+<div class="container grid-xl">
+<div class="columns">
+<div class="col-8 col-mx-auto">
 <div id="disqus_thread"></div>
-(function() {
+</div></div></div></div>
+<script>(function() {
 var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
 dsq.src = '//' + '%s' + '.disqus.com/embed.js';
-(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);})();
+(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);})();</script>
 DOC
     ident = C[:disqus_ident]
     unless ident
