@@ -95,6 +95,14 @@ module Snippets
       path == locals[:request_path]
     end
 
+    def routes
+      Blog.routes
+    end
+
+    def Snip(arg)
+      Habitat.adapter(:snippets).snippets[arg.to_sym]
+    end
+
     def active_path_li(path, desc)
       "<li class='%s'><a href='%s'>%s</a></li>" % [active_path(path) ? "active" : "", path, desc, desc]
     end
