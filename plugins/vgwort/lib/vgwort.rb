@@ -168,6 +168,13 @@ module VGWort
         else
           []
         end
+
+      if C[:host] and C[:host] =~ /^https\:/ and not @contents.empty?
+        @contents.first.gsub!(/http/, "https")
+        @contents.first.gsub!(/(vg[0-9]+)\./, "ssl-vg03.")
+      end
+
+      @contents
     end
 
     def counter
@@ -193,6 +200,7 @@ module VGWort
 
     def write(url, code, id)
       img = "<img src='%s' alt='vgwort zaehlmarke' />" % url
+
       str = [img, code, id].join("\n")
 
       File.open(file, "w+") {|fp|
