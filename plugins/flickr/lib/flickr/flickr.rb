@@ -57,6 +57,10 @@ module Flickr
       image
     end
 
+    def flickr
+      FlickRaw::Flickr.new(ENV['FLICKRAW_API_KEY'], ENV['FLICKRAW_SHARED_SECRET'])
+    end
+
     def sizes(which = nil)
       @sizes ||=
         begin
@@ -163,6 +167,8 @@ module Flickr
       exit(1)
     else
       eval(File.readlines(file).join)
+      ENV['FLICKRAW_API_KEY'] = FlickRaw.api_key
+      ENV['FLICKRAW_SHARED_SECRET'] = FlickRaw.shared_secret
     end
 
   end
