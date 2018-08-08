@@ -30,7 +30,7 @@ gem "unicorn"
 
 gem "dimensions"
 
-gem "flickraw"
+gem "flickraw", github: 'hanklords/flickraw'
 gem "builder"
 
 gem "capistrano", "~> 3.6", require: false
