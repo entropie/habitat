@@ -192,7 +192,7 @@ module Habitat::Quarters
 
     def run_script(script)
       script = script.to_s
-      Bundler.with_clean_env do
+      Dir.chdir(Habitat::Source) do
         system("ruby scripts/#{script}")
       end
     end
@@ -221,9 +221,8 @@ module Habitat::Quarters
       from_skel("package.json")
 
       app_run "bundle install --quiet"
-      # app_run "npm --silent install --quiet > /dev/null 2>&1"
-      # app_run "bundle exec hanami assets precompile"
-      # app_run "npm --silent run build"
+      
+      app_run "npm --silent install --quiet > /dev/null 2>&1"
 
       app_run("bundle exec cap install")
       from_skel("Capfile")
@@ -242,9 +241,8 @@ module Habitat::Quarters
       from_skel(".projectsettings.yaml")
       
       app_run "mkdir -p media/assets"
-      app_run "npm install"
 
-      #run_script("git_init.rb #{identifier}")
+      run_script("git_init.rb #{identifier}")
     end
 
     def create
