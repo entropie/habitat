@@ -41,6 +41,14 @@ module Habitat::Mixins
       end
       log :fs, "write: #{file} #{r}"
     end
+
+    def log(*args)
+      super(*args)
+    rescue
+      pp args
+    end
+    
+    
   end
 end
 
