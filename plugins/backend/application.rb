@@ -1,13 +1,6 @@
 require 'hanami/helpers'
 require 'hanami/assets'
 
-
-def if_plugin(plug, &blk)
-  if Habitat.quart.plugins.activated?(plug)
-    blk.call
-  end
-end
-
 module Backend
 
   class Application < Hanami::Application
@@ -20,13 +13,13 @@ module Backend
       routes do
         get     '/', to: "dashboard#index", as: :dashboard
 
-        if_plugin(:user) do
+        Habitat.plugin_enabled?(:user) do
           get   'login',             to: "user#login", as:  :login
-          post  'login',            to: "user#login"
+          post  'login',             to: "user#login"
           get   'logout',            to: "user#logout", as: :logout
         end
         
-        if_plugin(:blog) do
+        Habitat.plugin_enabled?(:blog) do
           namespace :blog do
 
             get  '/create',      to: "blog#edit", as:  :postCreate
@@ -47,7 +40,7 @@ module Backend
           end
         end
 
-        if_plugin(:snippets) do
+        Habitat.plugin_enabled?(:snippets) do
           namespace :snippets do
             get  '/create',       to: "snippets#create",  as: :snippetsCreate
             get  '/:slug',        to: "snippets#snippet", as: :snippet
@@ -57,7 +50,7 @@ module Backend
           end
         end
 
-        if_plugin(:user) do
+        Habitat.plugin_enabled?(:user) do
           namespace :user do
             get  '/',             to: "user#index",   as: :user
           end

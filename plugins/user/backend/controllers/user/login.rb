@@ -4,7 +4,7 @@ module Backend::Controllers::User
     include Hanami::Action::Session
 
     def call(params)
-
+      
       if logged_in?
         redirect_to routes.dashboard_path
       end

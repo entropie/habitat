@@ -30,7 +30,7 @@ module Habitat::Quarters
     attr_reader :identifier, :path
     include Habitat
     extend Habitat
-    
+
     def self.read(path)
       log :debug, "registering #{path}"
       new(path)
@@ -200,17 +200,12 @@ module Habitat::Quarters
     def habit_inhabit
       from_skel("Gemfile")
 
-      # login
       from_skel("config/initializers/warden.rb")
-      action_from_skel("app/login")
-      from_skel("apps/web/controllers/app/logout.rb")
-
       from_skel("config/environment.rb")
 
       patch_file("config/environment.rb", /(%%%identifier%%%)/, identifier.to_s)
 
       from_skel("apps/web/application.rb")
-      from_skel("apps/web/templates/app/index.html.haml")
 
       hanami_generate("action web app#index")
       from_skel("apps/web/config/routes.rb")
