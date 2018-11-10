@@ -241,15 +241,13 @@ module Habitat::Quarters
         patch_file(cfgfile, /(%%%identifier%%%)/, identifier.to_s)
       end
 
-      
-      # from_skel("config/nginx.conf")
-      # patch_file("config/nginx.conf", /(%%%identifier%%%)/, identifier.to_s)
-      # from_skel("config/unicorn_init.sh")
-      # patch_file("config/unicorn_init.sh", /(%%%identifier%%%)/, identifier.to_s)
-      # from_skel("config/unicorn.rb")
-      # patch_file("config/unicorn.rb", /(%%%identifier%%%)/, identifier.to_s)
-      
       from_skel(".gitignore")
+
+      from_skel(".quartersettings.yaml")
+      from_skel(".projectsettings.yaml")
+      
+      app_run "mkdir -p media/assets"
+      app_run "npm install"
 
       #run_script("git_init.rb #{identifier}")
     end
