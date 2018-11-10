@@ -41,7 +41,12 @@ module Habitat
     Quarters::Quarters.read_dir
     Habitat.quart = quarters(ident)
   end
-  
+
+  def self.plugin_enabled?(plug, &blk)
+    if ::Habitat.quart.plugins.activated?(plug)
+      blk.call
+    end
+  end
 
   def self.quarters(arg = nil)
     @quarters ||= Quarters::Quarters.new
