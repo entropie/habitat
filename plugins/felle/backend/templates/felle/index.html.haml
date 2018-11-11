@@ -1,1 +1,7 @@
-index
+#db-felle-list
+  %ul.main-listing
+    - pager.each do |fell|
+      = render template: "felle/_preview", locals: {fell: fell}
+
+  = pager.navigation
+

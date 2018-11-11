@@ -3,22 +3,18 @@
 module Felle
 
   module ControllerMethods
+
     def felle(*args, &blk)
       adapter(:felle).with_user(session_user, &blk)
     end
 
     def create_fell_from_params(params)
-      user_attributes = (params[:attributes] || []).inject({}) do |m, attrib_name|
-        m[attrib_name.to_sym] = 1
-        m
-      end
-
       mktime = -> (s) { Time.parse(s) rescue nil }
 
       ts, te = mktime.call(params[:datestart]), mktime.call(params[:dateend])
 
       fell = felle.create(params[:name],
-                          attributes: user_attributes,
+                          attributes: params[:attributes],
                           breed: params[:breed],
                           origin: params[:origin],
                           gender: params[:gender],
@@ -30,6 +26,13 @@ module Felle
       end
       fell
     end
+
+
+    def update_fell_from_params(fell, params)
+      felle.update(fell, params)
+      fell
+    end
+    
   end
   
   class Fell
@@ -61,11 +64,19 @@ module Felle
       end
 
       def value_end
-        @date_or_range.last
+        if @date_or_range.kind_of?(Range)
+          @date_or_range.last
+        else
+          nil
+        end
       end
 
       def value_start
-        @date_or_range.first
+        if @date_or_range.kind_of?(Range)
+          @date_or_range.first
+        else
+          @date_or_range
+        end
       end
     end
 
@@ -268,7 +279,8 @@ module Felle
 
     def attributes=(hash)
       attributes
-      @attributes.merge!(hash)
+      hash.each_pair{|hk,hv| hash[hk.to_sym] = hv.to_i}
+      @attributes = FellAttributes.new.merge!(hash)
       @attributes
     end
 

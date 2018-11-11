@@ -49,9 +49,7 @@ module Felle
 
         def fell_files
           toglob = repository_path + "/**/*.yaml"
-          Dir.glob(toglob).map {|ff|
-            YAML::load_file(ff)
-          }
+          Dir.glob(toglob)
         end
 
         def select(obj, env = nil)
@@ -61,21 +59,24 @@ module Felle
         end
 
         def felle
+          fell_files.map {|ff|
+            YAML::load_file(ff)
+          }
         end
 
         def load_file(yamlfile)
         end
 
         def find(slug)
-          res = fell_files.select {|ff| ff.slug == slug }
+          res = felle.select {|ff| ff.slug == slug }
           res.size == 1 and res.first
         end
 
         def create(ident, attributes: {}, type: :Hund, state: 0, gender:, birthday:, origin:, breed: "crossbreed")
           clz = fellclass(type).new(ident) #, attributes: attributes)
           clz.adapter = self
-          clz.attributes = attributes
 
+          clz.attributes = attributes
           clz.gender   = gender
           clz.birthday = birthday
           clz.origin   = origin
@@ -85,6 +86,23 @@ module Felle
           clz.root = clz.root
           clz.datadir = clz.datadir
           clz.updated_at = Time.now
+          clz
+        end
+
+        def update(fell_or_fellident, params)
+          fell = fell_or_fellident
+          unless fell.kind_of?(Fell)
+            fell = find(fell_or_fellident)
+          end
+
+          clz = fell
+            
+          [:attributes, :gender, :birthday, :origin, :breed, :state].each do |t|
+            if r = params[t]
+              clz.send("#{t}=", params[t])
+            end
+          end
+
           clz
         end
 

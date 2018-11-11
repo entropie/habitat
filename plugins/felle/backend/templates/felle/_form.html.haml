@@ -10,32 +10,32 @@
             .columns
               .column.col-6
                 .form-label{:for => :title} Name
-                %input.form-input{:type => :text, :name => :name, :value => "", :name => :name}
+                %input.form-input{:type => :text, :name => :name, :value => (fell && fell.name), :name => :name}
               .column.col-6
                 %label.form-label{:for => :title} Gender
                 %label.form-radio
-                  %input{:type => :radio, :value => 1, :name => :gender, :checked => :checked}
+                  %input{checked(fell && fell.gender == "1").merge(:type => :radio, :value => 1, :name => :gender)}
                   %i.form-icon
                   Female
                 %label.form-radio
-                  %input{:type => :radio, :value => 0, :name => :gender}
+                  %input{checked(fell && fell.gender == "0").merge(:type => :radio, :value => 0, :name => :gender)}
                   %i.form-icon
                   Male
 
             .columns
               .column.col-6
                 .form-label{:for => :title} Breed
-                %input.form-input{:type => :text, :value => "", :name => :breed}
+                %input.form-input{:type => :text, :value => (fell && fell.breed), :name => :breed}
               .column.col-6
                 .form-label{:for => :title} Origin
-                %input.form-input{:type => :text, :value => "", :name => :origin}
+                %input.form-input{:type => :text, :value => (fell && fell.origin), :name => :origin}
 
             .form-label{:for => :tags} Birthday- or range
             .columns
               .column.col-6
-                %input.form-input.input-tagline{:type => :date, :value => "", :name => :datestart}
+                %input.form-input.input-tagline{:type => :date, :value => date_value(fell && fell.birthday.value_start), :name => :datestart}
               .column.col-6
-                %input.form-input.input-tagline{:type => :date, :value => "", :name => :dateend}
+                %input.form-input.input-tagline{:type => :date, :value => date_value(fell && fell.birthday.value_end), :name => :dateend}
             -# .form-label{:for => :text} Text
             -# %textarea#blog-post-form.form-input{:rows => 15, :name => :content}= "lala"
         .column.col-6
@@ -51,7 +51,7 @@
 
               - Felle::Fell::Attributes.each do |attr|
                 %label.form-switch
-                  %input{:type => :checkbox, :name => "attributes[]", :value => attr}
+                  %input{checkbox(fell, attr, fell && fell.attributes[attr] || 1)}
                   %i.form-icon
                   = attr
                   

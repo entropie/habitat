@@ -30,32 +30,35 @@ body.backend
   background-color: $nav-bgcolor
   text-align: right
 
+
+ul.main-listing
+  @include clean()
+  display: flex
+  flex-wrap: wrap
+  li
+    padding: 10px
+    h3
+      font-size: 20px
+    width: calc(50% - 20px)
+    margin-bottom: 20px
+    margin-right: 10px
+    margin-left: 10px
+
+    position: relative
+    padding-right: 20px
+    .post-controls, .controls
+      position: absolute
+      top: 0
+      height: 100%
+      right: 0
+      width: 20px
+    &.post-draft
+      background-color: #ffebd8
+
+
 #db-blog-list
   list-style-type: none
   margin-top: 20px
-  ul.main-listing
-    @include clean()
-    display: flex
-    flex-wrap: wrap
-    li
-      padding: 10px
-      h3
-        font-size: 20px
-      width: calc(50% - 20px)
-      margin-bottom: 20px
-      margin-right: 10px
-      margin-left: 10px
-
-      position: relative
-      padding-right: 20px
-      .post-controls
-        position: absolute
-        top: 0
-        height: 100%
-        right: 0
-        width: 20px
-      &.post-draft
-        background-color: #ffebd8
 
 #db-fell-edit
 

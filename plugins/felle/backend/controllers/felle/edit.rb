@@ -1,8 +1,6 @@
 module Backend::Controllers::Felle
   class Edit
     include Api::Action
-
-
     include ::Felle::ControllerMethods
 
     expose :fell
@@ -14,7 +12,17 @@ module Backend::Controllers::Felle
         felle do |f|
           f.store(@fell)
         end
+      else
+        @fell = felle.find(params[:slug])
+
+        if request.post?
+          @fell = update_fell_from_params(@fell, params)
+          felle do |f|
+            f.store(@fell)
+          end
+        end
       end
+
     end
   end
 end
