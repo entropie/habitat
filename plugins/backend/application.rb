@@ -21,14 +21,13 @@ module Backend
           namespace :user do
             get   '/',                 to: "user#index", as: :user
           end
-          
         end
         
         Habitat.plugin_enabled?(:blog) do
           namespace :blog do
 
             get  '/create',      to: "blog#edit", as:  :postCreate
-            post '/create',     to: "blog#edit"
+            post '/create',      to: "blog#edit"
 
             get  '/:slug',       to: "blog#post", as:  :post
 
@@ -42,6 +41,13 @@ module Backend
             get  '/page/:page',  to: "blog#index", as: :posts
             get  '/',            to: "blog#index", as: :blog
 
+          end
+        end
+
+        Habitat.plugin_enabled?(:felle) do
+          namespace :felle do
+            get  '/',            to: "felle#index",  as:  :felle
+            get  '/create',      to: "felle#edit",   as:  :felleCreate
           end
         end
 
