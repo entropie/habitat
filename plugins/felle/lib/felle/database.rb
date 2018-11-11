@@ -3,28 +3,6 @@ module Felle
 
   DEFAULT_ADAPTER = :File
 
-  Male   = 0
-  Female = 1
-
-  STATES = {
-    0 => "suchen",
-    9 => "gefunden",
-    3 => "ausserhalb",
-    4 => "vorbehalt",
-    7 => "verstorben",
-    8 => "system"
-  }
-
-  STATES_TRANSLATED = {
-    0 => "Auf der suche",
-    9 => "Schon angekommen",
-    3 => "Vereinsfremde",
-    4 => "Unter Vorbehalt",
-    8 => "System",
-    7 => "Regenbogenbrücke",
-  }
-
-
   module Database
 
     extend Habitat::Database
@@ -129,6 +107,15 @@ module Felle
           # log :info, "snippet:REMOVE:#{snippet.ident}"
           # rm(repository_path(snippet.filename), :verbose => true)
         end
+
+        def with_user(user, &blk)
+          @user, @felle = user, nil
+          ret = yield self if block_given?
+          #@user, @posts = nil, nil
+          ret || self
+        end
+
+
       end
 
     end

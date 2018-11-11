@@ -1,1 +1,2 @@
-edit
+- action = fell ? routes.felleEdit_path(fell.slug) : routes.felleCreate_path()
+= render template: "felle/_form", locals: { action: action }

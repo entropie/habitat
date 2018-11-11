@@ -1,6 +1,36 @@
 # coding: utf-8
 
 module Felle
+
+  module ControllerMethods
+    def felle(*args, &blk)
+      adapter(:felle).with_user(session_user, &blk)
+    end
+
+    def create_fell_from_params(params)
+      user_attributes = (params[:attributes] || []).inject({}) do |m, attrib_name|
+        m[attrib_name.to_sym] = 1
+        m
+      end
+
+      mktime = -> (s) { Time.parse(s) rescue nil }
+
+      ts, te = mktime.call(params[:datestart]), mktime.call(params[:dateend])
+
+      fell = felle.create(params[:name],
+                          attributes: user_attributes,
+                          breed: params[:breed],
+                          origin: params[:origin],
+                          gender: params[:gender],
+                          birthday: (ts && te ? ts .. te : ts),
+                          state: params[:state].to_i)
+      unless fell.valid?
+        p fell.missing_fields
+        raise "invalid dataset, probably due to missing fields"
+      end
+      fell
+    end
+  end
   
   class Fell
 
@@ -52,6 +82,28 @@ module Felle
     end
 
     Attributes = [:neutered, :hd, :ailments, :medication, :pedigree]
+
+    Male   = 0
+    Female = 1
+
+    STATES = {
+      0 => "suchen",
+      9 => "gefunden",
+      3 => "ausserhalb",
+      4 => "vorbehalt",
+      7 => "verstorben",
+      8 => "system"
+    }
+
+    STATES_TRANSLATED = {
+      0 => "Auf der suche",
+      9 => "Schon angekommen",
+      3 => "Vereinsfremde",
+      4 => "Unter Vorbehalt",
+      8 => "System",
+      7 => "Regenbogenbrücke",
+    }
+
     
     class FellAttributes < Hash
       def initialize
@@ -139,7 +191,7 @@ module Felle
     end
 
     def gender=(fixn)
-      raise "'#{fixn}' not a gender" unless [ Felle::Male, Felle::Female ].include?(fixn)
+      raise "'#{fixn}' not a gender" unless [ Felle::Fell::Male, Felle::Fell::Female ].include?(fixn.to_i)
       @gender = fixn
     end
 
@@ -167,11 +219,16 @@ module Felle
       File.exist?(yaml_file)
     end
 
-    def valid?
-      [:name, :birthday, :breed, :origin, :gender].map do |at|
+    def missing_fields
+      v = [:name, :birthday, :breed, :origin, :gender].map do |at|
         val = self.send(at)
-        true if not val or val.to_s.strip.empty?
-      end.compact.empty?
+        if not val or val.to_s.strip.empty? then at else nil end
+      end.compact
+      v
+    end
+
+    def valid?
+      missing_fields.empty?
     end
     
     def initialize(name = nil)

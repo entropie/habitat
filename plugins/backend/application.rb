@@ -14,59 +14,56 @@ module Backend
         get     '/', to: "dashboard#index", as: :dashboard
 
         Habitat.plugin_enabled?(:user) do
-          get   'login',             to: "user#login", as:  :login
+          get   'login',             to: "user#login", as:     :login
           post  'login',             to: "user#login"
-          get   'logout',            to: "user#logout", as: :logout
+          get   'logout',            to: "user#logout", as:    :logout
 
           namespace :user do
-            get   '/',                 to: "user#index", as: :user
+            get   '/',               to: "user#index", as:     :user
           end
         end
         
         Habitat.plugin_enabled?(:blog) do
           namespace :blog do
 
-            get  '/create',      to: "blog#edit", as:  :postCreate
-            post '/create',      to: "blog#edit"
+            get  '/create',          to: "blog#edit", as:      :postCreate
+            post '/create',          to: "blog#edit"
 
-            get  '/:slug',       to: "blog#post", as:  :post
+            get  '/:slug',           to: "blog#post", as:      :post
 
-            get  '/:slug/edit',        to: "blog#edit", as:  :postEdit
-            get  '/:slug/destroy',        to: "blog#destroy", as:  :postKill
+            get  '/:slug/edit',      to: "blog#edit", as:      :postEdit
+            get  '/:slug/destroy',   to: "blog#destroy", as:   :postKill
 
-            get  '/:slug/publish',  to: "blog#publish", as:  :postPublish
+            get  '/:slug/publish',   to: "blog#publish", as:   :postPublish
 
-            post '/:slug/edit', to: "blog#edit"
+            post '/:slug/edit',      to: "blog#edit"
 
-            get  '/page/:page',  to: "blog#index", as: :posts
-            get  '/',            to: "blog#index", as: :blog
+            get  '/page/:page',      to: "blog#index", as:     :posts
+            get  '/',                to: "blog#index", as:     :blog
 
           end
         end
 
         Habitat.plugin_enabled?(:felle) do
           namespace :felle do
-            get  '/',            to: "felle#index",  as:  :felle
-            get  '/create',      to: "felle#edit",   as:  :felleCreate
+            get  '/',                to: "felle#index", as:    :felle
+            get  '/create',          to: "felle#edit", as:     :felleCreate
+            post '/create',          to: "felle#edit"
+
+            get  '/:slug/edit',      to: "felle#edit", as:     :felleEdit
+            post '/:slug/edit',      to: "felle#edit"
           end
         end
 
         Habitat.plugin_enabled?(:snippets) do
           namespace :snippets do
-            get  '/create',       to: "snippets#create",  as: :snippetsCreate
-            get  '/:slug',        to: "snippets#snippet", as: :snippet
-            get  '/:slug/edit',   to: "snippets#edit",    as: :snippetEdit
+            get  '/create',       to: "snippets#create", as:   :snippetsCreate
+            get  '/:slug',        to: "snippets#snippet", as:  :snippet
+            get  '/:slug/edit',   to: "snippets#edit", as:     :snippetEdit
             post '/:slug/edit',   to: "snippets#edit"
-            get  '/',             to: "snippets#index",   as: :snippets
+            get  '/',             to: "snippets#index", as:    :snippets
           end
         end
-
-        # Habitat.plugin_enabled?(:user) do
-        #   namespace :user do
-        #     get  '/',             to: "user#index",   as: :user
-        #   end
-        # end
-
 
       end
 

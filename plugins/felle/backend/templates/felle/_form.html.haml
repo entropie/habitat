@@ -1,0 +1,65 @@
+#db-fell-edit
+  %form{:action => action, :method => :post, enctype: 'multipart/form-data'}
+    - unless fell
+      %input{:type => :hidden, :name => :create, :value => 1}
+    .container
+      .columns
+        .column.col-6
+          .form-group
+
+            .columns
+              .column.col-6
+                .form-label{:for => :title} Name
+                %input.form-input{:type => :text, :name => :name, :value => "", :name => :name}
+              .column.col-6
+                %label.form-label{:for => :title} Gender
+                %label.form-radio
+                  %input{:type => :radio, :value => 1, :name => :gender, :checked => :checked}
+                  %i.form-icon
+                  Female
+                %label.form-radio
+                  %input{:type => :radio, :value => 0, :name => :gender}
+                  %i.form-icon
+                  Male
+
+            .columns
+              .column.col-6
+                .form-label{:for => :title} Breed
+                %input.form-input{:type => :text, :value => "", :name => :breed}
+              .column.col-6
+                .form-label{:for => :title} Origin
+                %input.form-input{:type => :text, :value => "", :name => :origin}
+
+            .form-label{:for => :tags} Birthday- or range
+            .columns
+              .column.col-6
+                %input.form-input.input-tagline{:type => :date, :value => "", :name => :datestart}
+              .column.col-6
+                %input.form-input.input-tagline{:type => :date, :value => "", :name => :dateend}
+            -# .form-label{:for => :text} Text
+            -# %textarea#blog-post-form.form-input{:rows => 15, :name => :content}= "lala"
+        .column.col-6
+          .form-group
+            .form-label{:for => :state} State
+            %select.form-select{:name => :state}
+              - Felle::Fell::STATES.each_pair do |state, sv|
+                %option{:value => state}= sv
+
+
+            .form-label{:for => :title}
+              Attributes
+
+              - Felle::Fell::Attributes.each do |attr|
+                %label.form-switch
+                  %input{:type => :checkbox, :name => "attributes[]", :value => attr}
+                  %i.form-icon
+                  = attr
+                  
+
+            .form-label{:for => :tags} Header Image
+            %input.form-input{:type => :file, :name => :image, :name => :image}
+
+    %hr
+
+    %input.btn.btn-primary{:type => :submit, :value => "Absenden"}
+            
