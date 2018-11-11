@@ -17,6 +17,11 @@ module Backend
           get   'login',             to: "user#login", as:  :login
           post  'login',             to: "user#login"
           get   'logout',            to: "user#logout", as: :logout
+
+          namespace :user do
+            get   '/',                 to: "user#index", as: :user
+          end
+          
         end
         
         Habitat.plugin_enabled?(:blog) do
@@ -50,11 +55,11 @@ module Backend
           end
         end
 
-        Habitat.plugin_enabled?(:user) do
-          namespace :user do
-            get  '/',             to: "user#index",   as: :user
-          end
-        end
+        # Habitat.plugin_enabled?(:user) do
+        #   namespace :user do
+        #     get  '/',             to: "user#index",   as: :user
+        #   end
+        # end
 
 
       end

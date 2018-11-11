@@ -1,4 +1,7 @@
 #!/usr/bin/env ruby
+# coding: utf-8
+
+#  λ ../../gen blog destroy
 
 require "fileutils"
 require "pp"
