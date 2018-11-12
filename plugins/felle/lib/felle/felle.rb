@@ -175,9 +175,14 @@ module Felle
       }
     end
 
-    def upload(obj)
+    def header_image
+      ret = images.select{|i| i.header?}
+      ret.shift if ret.kind_of?(Array)
+    end
+
+    def upload(obj, fn = nil)
       img = Image.new(obj.path)
-      img.copy_to(self)
+      img.copy_to(self, fn)
       @image = img
     end
     

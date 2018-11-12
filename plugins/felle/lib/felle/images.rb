@@ -25,16 +25,20 @@ module Felle
         end
       end
 
-      def copy_to(fell)
-        filename = Digest::SHA1.hexdigest(File.new(@path).read) + ::File.extname(@path)
+      def copy_to(fell, fn = nil)
+        fn = Digest::SHA1.hexdigest(File.new(@path).read) unless fn
+        filename =  fn + ::File.extname(@path)
         target = fell.datadir("images", filename)
-
         
         FileUtils.mkdir_p(fell.datadir("images"), :verbose => true)
         FileUtils.cp(@path, fell.datadir("images", filename), :verbose => true)
         @dirname = File.join(fell.slug, "images")
         @basename = filename
         self
+      end
+
+      def header?
+        basename =~ /^header/
       end
 
       def path
@@ -46,7 +50,6 @@ module Felle
       end
 
       def url
-        pp self
         File.join("/attachments", dirname, basename)
       end
 

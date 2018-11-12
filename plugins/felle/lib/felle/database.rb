@@ -76,6 +76,10 @@ module Felle
           fell.upload(obj)
         end
 
+        def upload_header(fell, obj)
+          fell.upload(obj, "header")
+        end
+
         def create(ident, attributes: {}, type: :Hund, state: 0, gender:, birthday:, origin:, breed: "crossbreed")
           clz = fellclass(type).new(ident) #, attributes: attributes)
           clz.adapter = self

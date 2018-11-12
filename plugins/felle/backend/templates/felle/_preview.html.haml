@@ -1,13 +1,13 @@
 %li.fell-preview
   .container
     .columns
-      .column.col-3
-        - if fell.images.first
+      .column.col-3<
+        - if fell.header_image
           %img.img-responsive{:src => fell.images.first.url}
-      .column.col-8
-        %h3.text-elipsis
+      .column.col-8<
+        %h3.text-elipsis<
           %a{:href => routes.felleEdit_path(fell.slug)}= fell.name
 
-        %p
-          %a{:href => Web.routes.fell_path(fell.stateslug, fell.slug)} #
+        %p<
+          -# %a{:href => Web.routes.fell_path(fell.stateslug, fell.slug)} #
           %a{:href => Web.routes.fell_path(fell.slug)} #
