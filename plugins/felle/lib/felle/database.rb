@@ -72,6 +72,10 @@ module Felle
           res.size == 1 and res.first
         end
 
+        def upload(fell, obj)
+          fell.upload(obj)
+        end
+
         def create(ident, attributes: {}, type: :Hund, state: 0, gender:, birthday:, origin:, breed: "crossbreed")
           clz = fellclass(type).new(ident) #, attributes: attributes)
           clz.adapter = self

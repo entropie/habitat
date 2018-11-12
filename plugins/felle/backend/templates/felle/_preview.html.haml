@@ -1,5 +1,13 @@
 %li.fell-preview
-  %h3
-    %a{:href => "/asd"} #
-    %a{:href => routes.felleEdit_path(fell.slug)}= fell.name
+  .container
+    .columns
+      .column.col-3
+        - if fell.images.first
+          %img.img-responsive{:src => fell.images.first.url}
+      .column.col-8
+        %h3.text-elipsis
+          %a{:href => routes.felleEdit_path(fell.slug)}= fell.name
 
+        %p
+          %a{:href => Web.routes.fell_path(fell.stateslug, fell.slug)} #
+          %a{:href => Web.routes.fell_path(fell.slug)} #

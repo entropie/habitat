@@ -35,7 +35,9 @@ ul.main-listing
   @include clean()
   display: flex
   flex-wrap: wrap
+  margin: 20px
   li
+    border: 1px solid $nav-bgcolor
     padding: 10px
     h3
       font-size: 20px
@@ -52,9 +54,6 @@ ul.main-listing
       height: 100%
       right: 0
       width: 20px
-    &.post-draft
-      background-color: #ffebd8
-
 
 #db-blog-list
   list-style-type: none

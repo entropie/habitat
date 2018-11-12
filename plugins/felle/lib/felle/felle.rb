@@ -174,6 +174,12 @@ module Felle
         Image.from_datadir(self, imgfile)
       }
     end
+
+    def upload(obj)
+      img = Image.new(obj.path)
+      img.copy_to(self)
+      @image = img
+    end
     
     def scoville
       @scoville || 0
@@ -216,6 +222,10 @@ module Felle
 
     def http_path(*args)
       File.join("/felle", STATES[state], slug)
+    end
+
+    def stateslug
+      STATES[state.to_i]
     end
 
     def http_datadir(*args)
