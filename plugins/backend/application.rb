@@ -47,7 +47,7 @@ module Backend
         Habitat.plugin_enabled?(:felle) do
           namespace :felle do
             get  '/',                to: "felle#index", as:    :felle
-            get  '/:page',           to: "felle#index", as:    :fellePager
+            get  '/page/:page',      to: "felle#index", as:    :fellePager
             get  '/create',          to: "felle#edit", as:     :felleCreate
             post '/create',          to: "felle#edit"
 

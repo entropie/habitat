@@ -1,4 +1,81 @@
+$color1: #000
+$color2: #333333
+$color3: rgb(222, 232, 39)
+$color4: #d6ca1d
+$color5: #aeee00
+$color5: #aa5b1e
+
+@mixin content-block()
+  max-width: 800px
+  margin: 0 auto 30px
+  @include mobile()
+    max-width: unset
+    padding: 5px
+
+
+@mixin mobile()
+  @content
+
+
 $nav-bgcolor: rgb(181, 229, 198)
+
+$pagerBackground: rgba(white, .5)
+$pagerBorder: 1px solid silver
+$pagerBorderDisabled: $pagerBorder
+$pagerBackgroundDisabled: transparent
+$pagerColor: $color1
+$pagerColorDisabled: silver
+
+
+
+
+.pager
+  align-items: center
+  text-align: center
+  flex-shrink: 1
+  display: block
+  width: 100%
+  @include content-block()
+  display: flex
+  justify-content: center
+  align-items: center
+  align-content: space-between
+  color: $pagerColor
+  font-weight: bold
+  .glyphicon
+    padding-left: 20px
+    padding-right: 20px
+  .page-item
+    display: inline-block
+    flex-grow: 1
+    > span, > a
+      background-color: $pagerBackground
+      display: inline-block
+      min-width: 50px
+      border-radius: 35%
+      border: $pagerBorder
+      padding: 5px
+      &:active
+        box-shadow: none
+    a
+      &:hover
+
+  .disabled
+    > span, > a
+      background-color: $pagerBackgroundDisabled
+      border: $pagerBorderDisabled
+      color: $pagerColorDisabled
+      box-shadow: none
+  .active
+    > span
+
+      background-color: $color1
+      color: white
+  a
+    text-decoration: none
+    color: $pagerColor
+
+
 
 @mixin clean()
   list-style-type: none

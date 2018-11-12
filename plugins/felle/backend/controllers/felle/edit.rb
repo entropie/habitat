@@ -6,6 +6,7 @@ module Backend::Controllers::Felle
     expose :fell
 
     def call(params)
+      p 1
       if params[:create]
         @fell = create_fell_from_params(params)
         felle do |f|

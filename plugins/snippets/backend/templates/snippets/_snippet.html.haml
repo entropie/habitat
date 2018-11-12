@@ -1,5 +1,6 @@
 %li.snippet
   - glyphcls = snippet.kind_of?(Snippets::MarkdownSnippet) ? "glyphicon glyphicon-star-empty" : "glyphicon glyphicon-star"
+  
   %span{:class => glyphcls}
   
   %a{:href => routes.snippetEdit_path(snippet.ident)}

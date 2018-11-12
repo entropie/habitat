@@ -3,7 +3,7 @@
   %head
     %title Its ze Backend
     - if Habitat.quart.production?
-      %link{:href => "/assets/screen.css", :type => "text/css", :rel => "stylesheet"}
+      %link{:href => "/assets/screen-be.css", :type => "text/css", :rel => "stylesheet"}
 
   %body.backend
     .container.grid-xl
@@ -12,4 +12,5 @@
           = render template: "layout/_header"
         .column.col-10.rel
           = yield
-  %script{:src => '/assets/bundle.js'}
+
+  %script{:src => '/assets/bundle-be.js'}
