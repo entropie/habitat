@@ -289,8 +289,8 @@ module Felle
 
     def attributes=(hash)
       attributes
-      hash.each_pair{|hk,hv| hash[hk.to_sym] = hv.to_i}
-      @attributes = FellAttributes.new.merge!(hash)
+      if hash then hash.each_pair{|hk,hv| hash[hk.to_sym] = hv.to_i} end
+      @attributes = FellAttributes.new.merge!(hash || {})
       @attributes
     end
 
