@@ -59,6 +59,7 @@ module Backend
         Habitat.plugin_enabled?(:snippets) do
           namespace :snippets do
             get  '/create',       to: "snippets#create", as:   :snippetsCreate
+            post '/create',       to: "snippets#create"
             get  '/:slug',        to: "snippets#snippet", as:  :snippet
             get  '/:slug/edit',   to: "snippets#edit", as:     :snippetEdit
             post '/:slug/edit',   to: "snippets#edit"

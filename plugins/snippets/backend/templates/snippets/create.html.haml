@@ -1,1 +1,4 @@
-create
+#db-snippets
+
+= render template: "snippets/_form", locals: { snippet: snippet, action: snippet ? routes.snippetEdit_path(snippet.ident) : routes.snippetsCreate_path() }
+

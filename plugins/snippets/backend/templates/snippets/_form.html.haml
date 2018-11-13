@@ -1,6 +1,28 @@
 #db-snippets-form
-  %form{:id => :snippet_form, :method => :post, :action => routes.snippetEdit_path(snippet.ident)}
+  %form{:id => :snippet_form, :method => :post, :action => action}
     .form-group
-      %textarea#snippet-form.form-input{:rows => 15, :name => :content}= snippet.content
+      .form-label{:for => :ident}
+        .columns
+          .column.col-6
+            .input-group
+              %span.input-group-addon
+                Ident
+              - if snippet
+                %input.form-input{:value => snippet.ident, :disabled => :disabled}
+              - else
+                %input.form-input{:value => "", :name => :ident, :style => "width:100%"}
+                  %select.form-select{:type => :select, :name => :extension}
+                    %option{:value => :haml} HAML
+                    %option{:value => :markdown} Markdown
+          .column.col-6
+            %em
+              Ident is a dash seperated combination of words that are uniq. Example: 
+              %samp 
+                block-about-us
+                
+              They not meant to change.
+
+    .form-group
+      %textarea#snippet-form.form-input{:rows => 15, :name => :content}= snippet && snippet.content
 
     %input.btn.btn-primary{:type => :submit, :value => "Absenden"}    

@@ -1,5 +1,5 @@
 #db-snippets
   %ul
-    = render template: "snippets/_snippet", locals: {snippet: snippet }
+    = render template: "snippets/_snippet", locals: { snippet: snippet }
 
-= render template: "snippets/_form", locals: {snippet: snippet }
+  = render template: "snippets/_form", locals: { snippet: snippet, action: snippet ? routes.snippetEdit_path(snippet.ident) : routes.snippetsCreate_path() }
