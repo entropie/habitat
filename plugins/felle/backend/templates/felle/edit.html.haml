@@ -1,2 +1,8 @@
+.backend-page-header
+  %h1= fell ? t("felle-page-topic-edit") : t("felle-page-topic-create")
+  
+
+
+
 - action = fell ? routes.felleEdit_path(fell.slug) : routes.felleCreate_path()
 = render template: "felle/_form", locals: { action: action }

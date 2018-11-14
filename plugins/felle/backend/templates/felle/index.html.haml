@@ -1,4 +1,8 @@
-#db-felle-list
+.backend-page-header
+  %h1= t("felle-page-topic-index")
+
+
+#db-felle-list.main-content-block
   %ul.main-listing
     - pager.each do |fell|
       = render template: "felle/_preview", locals: {fell: fell}

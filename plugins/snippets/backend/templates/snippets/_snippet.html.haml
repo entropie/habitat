@@ -1,11 +1,13 @@
 %li.snippet
-  - glyphcls = snippet.kind_of?(Snippets::MarkdownSnippet) ? "glyphicon glyphicon-star-empty" : "glyphicon glyphicon-star"
+  .columns
+    .column.col-12
+      - glyphcls = snippet.kind_of?(Snippets::MarkdownSnippet) ? "glyphicon glyphicon-star-empty" : "glyphicon glyphicon-star"
   
-  %span{:class => glyphcls}
-  
-  %a{:href => routes.snippetEdit_path(snippet.ident)}
-    %span{:class => "glyphicon glyphicon-pencil"}
+      %span{:class => glyphcls}
+        
+      %a{:href => routes.snippetEdit_path(snippet.ident)}
+        %span{:class => "glyphicon glyphicon-pencil"}
 
-  %a{:href => routes.snippet_path(snippet.ident)}
-    = snippet.ident
+      %a{:href => routes.snippet_path(snippet.ident)}
+        = snippet.ident
 

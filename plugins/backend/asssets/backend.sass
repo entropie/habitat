@@ -1,11 +1,14 @@
-@import url(https://fonts.googleapis.com/css?family=Roboto+Slab)
+@import url(https://fonts.googleapis.com/css?family=Allerta+Stencil|Roboto)
 
 $color1: #000
 $color2: #333333
 $color3: rgb(222, 232, 39)
 $color4: #d6ca1d
 $color5: #aeee00
-$color5: #aa5b1e
+$color6: #aa5b1e
+
+$ff1: 'Roboto', sans-serif
+$ff2: 'Allerta Stencil', sans-serif
 
 @mixin content-block()
   max-width: 800px
@@ -19,7 +22,8 @@ $color5: #aa5b1e
   @content
 
 
-$nav-bgcolor: rgb(181, 229, 198)
+$nav-bgcolor: $color2
+$content-bgcolor: rgb(252, 252, 252)
 
 $pagerBackground: rgba(white, .5)
 $pagerBorder: 1px solid silver
@@ -99,23 +103,41 @@ $pagerColorDisabled: silver
       font-family: monospace
 
 
-body.backend
+body
+  display: flex
+  flex-direction: column
+  height: 100vh
   background: white
   background-color: white
   margin: 0
   padding: 0
-  font-family: 'Roboto Slab', serif
-
-.nav-col
+  font-family: $ff1
   background-color: $nav-bgcolor
-  text-align: right
 
+
+.CodeMirror-scroll
+  background-color: #efefef
+
+.main-content
+
+  background-color: $content-bgcolor
+  .backend-page-header
+    width: 100%
+    background-color: $nav-bgcolor
+
+    color: $color3
+    height: 50px
+    h1
+      font-size: 24px
+      line-height: 50px
+      font-family: $ff2
+      text-transform: uppercase
 
 ul.main-listing
   @include clean()
   display: flex
   flex-wrap: wrap
-  margin: 20px
+  margin-top: 20px
   li
     border: 1px solid $nav-bgcolor
     padding: 10px
@@ -134,36 +156,56 @@ ul.main-listing
       height: 100%
       right: 0
       width: 20px
+  &.single
+    li
+      width: 100%
+.top-seperator
+  margin-top: 40px
 
-#db-blog-list
-  list-style-type: none
-  margin-top: 20px
-
-#db-fell-edit
-
-#db-post
-  @include clean()
-  margin-top: 20px
-        
-#db-post-edit
-  .CodeMirror
-    height: auto
+.CodeMirror
+  height: auto
 
 #db-navigation
+  height: 100%
+  letter-spacing: 2px
+  font-variant: capitalized
+  padding-right: 20px
+  ul
+    margin: 0
+    padding: 0
+  li
+    margin: 0
+    padding: 0
+  a.alink
+    color: $color5
+    display: inline-block
+    width: 100%
+    padding: 10px
+    border-bottom: 3px solid transparent
+
+    &.active
+      border-bottom-color: $color5
+      background-color: lighten($nav-bgcolor, 3)
+    &:hover
+      background-color: $color5
+      color: $nav-bgcolor
   .nav-block
-    margin-bottom: 20px
+    margin: 0
+  .modules-head
+    font-size: .8em
+
+.navigation-block
+  font-family: $ff2
+  text-transform: uppercase
+  background-color: $nav-bgcolor
+  text-align: right
+  height: 100vh
+
 
   ul.sub
     @include clean()
-    margin-right: 5px
     font-size: .8em
 
-#db-snippets
-  margin-top: 20px
-  ul
-    @include clean()
-  #db-snippet-content
-    height: calc(100% - 100px)
 
 #db-snippets-form
   .CodeMirror

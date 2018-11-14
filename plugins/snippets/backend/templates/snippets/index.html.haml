@@ -1,5 +1,8 @@
-#db-snippets
-  %ul
+.backend-page-header
+  %h1= t("snippets-page-topic-index")
+
+#db-snippets.main-content-block
+  %ul.main-listing
     - snippets.each do |snippet|
       = render template: "snippets/_snippet", locals: {snippet: snippet}
 

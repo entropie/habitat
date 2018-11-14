@@ -1,6 +1,12 @@
+.backend-page-header
+  %h1= t("snippets-page-topic-show")
+
 #db-snippets
-  %ul
+  %ul.main-listing.single
     = render template: "snippets/_snippet", locals: {snippet: snippet }
 
-  #db-snippet-content
-    = snippet.render
+  .container
+    .columns
+      .column.col-12
+        #db-snippet-content
+          = snippet.render

@@ -2,64 +2,65 @@
   %form{:action => action, :method => :post, enctype: 'multipart/form-data'}
     - unless fell
       %input{:type => :hidden, :name => :create, :value => 1}
-    .container
+    .container.top-seperator
       .columns
-        .column.col-6
-          .form-group
-
-            .columns
-              .column.col-6
-                .form-label{:for => :title} Name
+        .column.col-8
+          .columns
+            .column.col-8
+              .input-group
+                %span.input-group-addon
+                  Name
                 %input.form-input{:type => :text, :name => :name, :value => (fell && fell.name), :name => :name}
-              .column.col-6
-                %label.form-label{:for => :title} Gender
-                %label.form-radio
+            .column.col-4
+              .input-group
+                %span.input-group-addon
+                  State
+                %select.form-select{:name => :state}
+                  - Felle::Fell::STATES.each_pair do |state, sv|
+                    %option{:value => state}= sv
+          .columns.top-seperator
+            .column.col-8
+              .form-group
+                %label.form-label.form-inline{:for => :title} Gender
+                %label.form-radio.form-inline
                   %input{checked(fell && fell.gender == "1").merge(:type => :radio, :value => 1, :name => :gender)}
                   %i.form-icon
                   Female
-                %label.form-radio
+                %label.form-radio.form-inline
                   %input{checked(fell && fell.gender == "0").merge(:type => :radio, :value => 0, :name => :gender)}
                   %i.form-icon
                   Male
-
-            .columns
-              .column.col-6
-                .form-label{:for => :title} Breed
+          .columns.top-seperator
+            .column.col-6
+              .input-group
+                %span.input-group-addon
+                  Breed
                 %input.form-input{:type => :text, :value => (fell && fell.breed), :name => :breed}
-              .column.col-6
-                .form-label{:for => :title} Origin
-                %input.form-input{:type => :text, :value => (fell && fell.origin), :name => :origin}
+            .column.col-6
+              .input-group
+                %span.input-group-addon                
+                  Origin
+                %input.form-input.form-inline{:type => :text, :value => (fell && fell.origin), :name => :origin}
 
-            .form-label{:for => :tags} Birthday- or range
-            .columns
-              .column.col-6
+          .columns.top-seperator
+            .column.col-6
+              .input-group
+                .input-group-addon
+                  BDay Start
                 %input.form-input.input-tagline{:type => :date, :value => date_value(fell && fell.birthday.value_start), :name => :datestart}
-              .column.col-6
+            .column.col-6
+              .input-group
+                .input-group-addon
+                  BDay End
                 %input.form-input.input-tagline{:type => :date, :value => date_value(fell && fell.birthday.value_end), :name => :dateend}
-            -# .form-label{:for => :text} Text
-            -# %textarea#blog-post-form.form-input{:rows => 15, :name => :content}= "lala"
-        .column.col-6
-          .form-group
-            .form-label{:for => :state} State
-            %select.form-select{:name => :state}
-              - Felle::Fell::STATES.each_pair do |state, sv|
-                %option{:value => state}= sv
 
-
-            .form-label{:for => :title}
-              Attributes
-
-              - Felle::Fell::Attributes.each do |attr|
-                %label.form-switch
-                  %input{checkbox(fell, attr, fell && fell.attributes[attr] || 1)}
-                  %i.form-icon
-                  = attr
-                  
-
-            .form-label{:for => :tags} Header Image
-            %input.form-input{:type => :file, :name => :image, :name => :image}
-
-    %hr
-
-    %input.btn.btn-primary{:type => :submit, :value => "Absenden"}
+        .column.col-4
+          - Felle::Fell::Attributes.each do |attr|
+            %label.form-switch
+              %input{checkbox(fell, attr, fell && fell.attributes[attr] || 1)}
+              %i.form-icon
+              = attr
+      .columns.top-seperator
+        .column.col-8.text-right
+          %input.btn.btn-primary{:type => :submit, :value => "Absenden"}
             

@@ -1,4 +1,11 @@
+- action = post ? (params[:lang] ? routes.postEdit_path(post.slug, lang: params[:lang]) : routes.postEdit_path(post.slug)): routes.postCreate_path()
+
+.backend-page-header
+  %h1= post ? t("blog-page-topic-edit") : t("blog-page-topic-create")
+
+
 - if post
   = render template: "blog/_language_controls"
-- action = post ? (params[:lang] ? routes.postEdit_path(post.slug, lang: params[:lang]) : routes.postEdit_path(post.slug)): routes.postCreate_path()
+
+
 = render template: "blog/_form", locals: { action: action }

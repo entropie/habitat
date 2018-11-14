@@ -7,10 +7,11 @@
 
   %body.backend
     .container.grid-xl
-      .columns
-        .column.col-2.nav-col
-          = render template: "layout/_header"
-        .column.col-10.rel
+      .columns.col-gapless
+        .column.col-2
+          .navigation-block
+            = render template: "layout/_header"
+        .column.col-10.rel.main-content
           = yield
 
   %script{:src => '/assets/bundle-be.js'}

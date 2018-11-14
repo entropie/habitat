@@ -2,19 +2,17 @@
   .nav-block
     %ul.nav
       %li.nav-item 
-        %a{:href => "/"} Frontend
+        = al("/", "Frontend")
 
       %li.nav-item.text-bold
-        %a{:href => routes.dashboard_path} Dashboard
+        = al(routes.dashboard_path, "Backend")
 
   .nav-block
-    %h2 Modules
-
     %ul.nav.modules
       - Backend.backend_modules.each do |bm|
-        %li.nav-item
+        %li.nav-item.modules-head
           - begin # have not found a way to check wheter a route exist, FIXME:
-            %strong= al(routes.send("%s_path" % bm), bm.to_s)
+            = al(routes.send("%s_path" % bm), bm.to_s)
           - rescue
         - if tmpl = Backend.submenu_template(bm)
           = render template: tmpl
