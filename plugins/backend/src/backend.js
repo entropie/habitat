@@ -1,13 +1,16 @@
-// ::backend::
-
 import "spectre.css"
+
 
 import 'jquery';
 
 import 'jquery-tags-input/src/jquery.tagsinput.js'
 import 'jquery-tags-input/src/jquery.tagsinput.css' 
 
-import '../../../plugins/backend/asssets/backend.sass'
+
+
+
+import '../../../plugins/backend/src/backend.sass'
+import "../../../plugins/backend/src/fa.css.sass"
 
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/theme/monokai.css'
@@ -33,14 +36,23 @@ function betterTab(cm) {
 $(document).ready(function() {
     console.log("backend deine mama");
 
-    if($("#snippet-form").length)
-        var beditor = CodeMirror.fromTextArea(document.getElementById("snippet-form"), {
+
+    if($(".cm-form").length) {
+        var jform  = $(".cm-form")
+        var beditorid = jform.attr("id");
+        // console.log(beditorid, $(jform).attr("data-codemirror-mode"));
+        var cmmode = $(jform).attr("data-codemirror-mode");
+        // if($(".cm-mode")) {
+        //     console.log( $(".cm-mode").find("option:selected").val() );
+        // }
+        var beditor = CodeMirror.fromTextArea( document.getElementById(beditorid), {
             lineNumbers: false,
             lineWrapping: true,
-            mode: "text/x-haml",
-            // keyMap: "emacs",
+            mode: cmmode,
             matchBrackets: true,
-            extraKeys: { Tab: betterTab }
+            extraKeys: { Tab: betterTab },
+            height: "100%"
         });
-
+    }
 });
+

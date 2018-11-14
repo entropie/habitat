@@ -24,6 +24,7 @@ $ff2: 'Allerta Stencil', sans-serif
 
 $nav-bgcolor: $color2
 $content-bgcolor: rgb(252, 252, 252)
+$nav-bgcolor: $color1
 
 $pagerBackground: rgba(white, .5)
 $pagerBorder: 1px solid silver
@@ -192,7 +193,8 @@ ul.main-listing
   .nav-block
     margin: 0
   .modules-head
-    font-size: .8em
+    margin-top: 30px
+
 
 .navigation-block
   font-family: $ff2
@@ -200,11 +202,8 @@ ul.main-listing
   background-color: $nav-bgcolor
   text-align: right
   height: 100vh
-
-
   ul.sub
     @include clean()
-    font-size: .8em
 
 
 #db-snippets-form
