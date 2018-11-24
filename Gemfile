@@ -36,7 +36,7 @@ gem "dimensions"
 gem "flickraw", github: 'hanklords/flickraw'
 gem "builder"
 
-gem "capistrano", "~> 3.6", require: false
+gem "capistrano", "= 3.11.0", require: false
 gem "capistrano-bundler", '~> 1.3'
 gem "capistrano-rvm"
 
