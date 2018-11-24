@@ -21,7 +21,7 @@ gem 'haml'
 gem 'sass'
 
 gem 'jwt'
-
+gem "rack", ">= 2.0.6"
 gem 'warden'
 gem 'bcrypt'
 gem "sequel"

@@ -17,6 +17,14 @@ module Blog
 
   TEMPLATE_PATH = File.join(File.dirname(__FILE__), "../../templates")
 
+  def self.template_path
+    @template_path
+  end
+
+  def self.template_path=(obj)
+    @template_path = obj
+  end
+
   module BlogControllerMethods
     def blog(*args, &blk)
       adapter(:blog).with_user(session_user, &blk)

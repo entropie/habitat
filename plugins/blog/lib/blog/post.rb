@@ -189,12 +189,12 @@ module Blog
     end
 
     def template
-      (@template || Blog::Templates::DEFAULT_TEMPLATE).to_sym
+      @template
     end
 
     def with_template(t = template)
       templ = (t || template).to_sym
-      Blog.templates(Blog::TEMPLATE_PATH)[templ].apply(self)
+      Blog.templates(Blog.template_path)[templ].apply(self)
     end
 
     def for_yaml

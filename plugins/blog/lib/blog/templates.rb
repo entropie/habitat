@@ -1,6 +1,6 @@
 module Blog
 
-  def self.templates(path = Blog::TEMPLATE_PATH)
+  def self.templates(path = Blog.template_path || Blog::TEMPLATE_PATH)
     Templates::Templates.read(path)
   end
 
@@ -55,6 +55,13 @@ module Blog
 
       def title
         target.title
+      end
+
+      def ==(obj)
+        if obj.kind_of?(Template)
+          return identifier == obj.identifier
+        end
+        identifier == obj.to_sym
       end
 
       def markdown_renderer

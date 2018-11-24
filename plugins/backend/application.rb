@@ -22,7 +22,6 @@ module Backend
             get   '/',               to: "user#index", as:     :user
           end
         end
-        
         Habitat.plugin_enabled?(:blog) do
           namespace :blog do
 

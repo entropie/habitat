@@ -1,5 +1,5 @@
-.backend-page-header
+.backend-page-header.main-content-block
   %h1= t("snippets-page-topic-create")
-#db-snippets.main-content-block
+#db-snippets.main-content-block.top-seperator
   = render template: "snippets/_form", locals: { snippet: snippet, action: snippet ? routes.snippetEdit_path(snippet.ident) : routes.snippetsCreate_path() }
 

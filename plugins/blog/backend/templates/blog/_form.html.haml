@@ -3,17 +3,28 @@
     .columns
       .column.col-12
         %form{:action => action, :method => :post, enctype: 'multipart/form-data'}
-          .form-group
-            .form-label{:for => :title} Title
-            %input.form-input{:type => :text, :id => :title, :value => (post && post.title), :name => :title}
-    
-            .form-label{:for => :tags} Tags
-            %input.form-input.input-tagline{:type => :text, :id => :tags, :value => (post && post.tags.join(",")), :name => :tags}
+          .columns
+            .column.col-12
+              .form-group
+                .form-label{:for => :title} Title
+                %input.form-input{:type => :text, :id => :title, :value => (post && post.title), :name => :title}
+          
+            .column.col-4
+              .form-label{:for => :tags} Tags
+              %input.form-input.input-tagline{:type => :text, :id => :tags, :value => (post && post.tags.join(",")), :name => :tags}
+            .column.col-4
+              - if C[:default_template]
+                .form-label{:for => :tags} Template
+                = templates_select(post)
 
-            .form-label{:for => :tags} Header Image
-            %input.form-input{:type => :file, :name => :image, :name => :image}
+            .column.col-4
+              .form-label{:for => :tags} Header Image
+              %input.form-input{:type => :file, :name => :image, :name => :image}
 
-            .form-label{:for => :text} Text
-            %textarea#blog-post-form.form-input.cm-form{:rows => 15, :name => :content, "data-codemirror-mode" => "text/x-markdown"}= (post && post.content)
+
+          .columns
+            .column.col-12
+              .form-label{:for => :text} Text
+              %textarea#blog-post-form.form-input.cm-form{:rows => 15, :name => :content, "data-codemirror-mode" => "text/x-markdown"}= (post && post.content)
       
-            %input.btn.btn-primary{:type => :submit, :value => "Absenden"}
+              %input.btn.btn-primary{:type => :submit, :value => "Absenden"}

@@ -1,16 +1,16 @@
-#db-navigation
+#db-navigation.shadow
   .nav-block
     %ul.nav
-      %li.nav-item 
+      %li.nav-item<
         = al("/", "Frontend")
 
-      %li.nav-item.text-bold
+      %li.nav-item.text-bold<
         = al(routes.dashboard_path, "Backend")
 
   .nav-block
     %ul.nav.modules
       - Backend.backend_modules.each do |bm|
-        %li.nav-item.modules-head
+        %li.nav-item.modules-head<
           - begin # have not found a way to check wheter a route exist, FIXME:
             = al(routes.send("%s_path" % bm), bm.to_s)
           - rescue
