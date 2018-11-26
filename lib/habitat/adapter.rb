@@ -40,7 +40,7 @@ module Habitat
         if Object.constants.include?(:Habitat)
           Habitat.log(w, msg)
         else
-          puts "DIARY> #{msg}"
+          puts ">>> #{msg}"
         end
       end
     
