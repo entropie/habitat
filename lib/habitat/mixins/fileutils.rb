@@ -43,7 +43,7 @@ module Habitat::Mixins
     end
 
     def log(*args)
-      super(*args)
+      Habitat.log(*args)
     rescue
       pp args
     end
