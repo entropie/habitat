@@ -1,4 +1,10 @@
 %li
   %ul.sub
     %li.nav-item
-      = al(routes.postCreate_path, "anlegen ", {:icon => "pencil"})
+      = al(routes.postCreate_path, "neues post ", {:icon => "pencil"})
+    - if C[:default_template]
+      %li.nav-item
+        = al(routes.templates_path, "templates ", {:icon => "list-alt"})
+      %li.nav-item
+        = al(routes.templateCreate_path, "neues template ", {:icon => "plus"})
+

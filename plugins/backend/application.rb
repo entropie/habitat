@@ -20,13 +20,23 @@ module Backend
 
           namespace :user do
             get   '/',               to: "user#index", as:     :user
+            get   '/:name',          to: "user#user",  as:     :userpage
           end
         end
+
         Habitat.plugin_enabled?(:blog) do
           namespace :blog do
 
             get  '/create',          to: "blog#edit", as:      :postCreate
             post '/create',          to: "blog#edit"
+
+            get '/templates',        to: "blog#templates", as: :templates
+
+            get '/templates/create',       to: "blog#template_create",  as: :templateCreate
+            post '/templates/create',      to: "blog#template_create",  as: :templateCreateOrEdit
+
+            get '/templates/:slug',       to: "blog#template",         as: :template
+            get '/templates/:slug/edit',  to: "blog#template",         as: :templateEdit
 
             get  '/:slug',           to: "blog#post", as:      :post
 
@@ -39,6 +49,7 @@ module Backend
 
             get  '/page/:page',      to: "blog#index", as:     :posts
             get  '/',                to: "blog#index", as:     :blog
+
 
           end
         end

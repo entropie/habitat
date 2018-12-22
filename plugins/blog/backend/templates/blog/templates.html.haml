@@ -1,0 +1,16 @@
+#templates-blog-menu.side-menu
+  %ul
+    %li
+      %a{:href => routes.templateCreate_path}
+        %span.glyphicon.glyphicon-plus
+
+.backend-page-header
+  %h1= t("template-page-topic-index")
+
+
+#templates-blog-list
+  %ul.main-listing.main-content-block
+    - pager.each do |template|
+      = render template: "blog/_template", locals: {template: template}
+
+  = pager.navigation

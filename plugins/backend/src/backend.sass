@@ -118,11 +118,8 @@ body
   background-color: $nav-bgcolor
 
 
-.CodeMirror-scroll
-  background-color: #efefef
 
 .main-content
-
   background-color: $content-bgcolor
   .backend-page-header
     width: 100%
@@ -135,6 +132,11 @@ body
       line-height: 50px
       font-family: $ff2
       text-transform: uppercase
+
+.info
+  background-color: $color5
+  margin: 10px
+  padding: 20px
 
 ul.main-listing
   @include clean()
@@ -162,15 +164,30 @@ ul.main-listing
   &.single
     li
       width: 100%
+
+
 .top-seperator
   margin-top: 40px
 
 .CodeMirror
-  height: auto
+  height: auto !important
+
+.CodeMirror-scroll
+  background-color: #efefef
+
+.side-menu
+  background-color: $nav-bgcolor
+  text-align: right
+  padding: 10px
+  float: right
+  height: 50px;
+  padding-top: 15px;
+  ul
+    @include clean()
+
 
 #db-navigation
   height: 100%
-  letter-spacing: 2px
   font-variant: capitalized
   padding-right: 20px
   ul
@@ -185,7 +202,7 @@ ul.main-listing
     width: 100%
     padding: 10px
     border-bottom: 3px solid transparent
-
+    letter-spacing: 1px
     &.active
       border-bottom-color: $color5
       background-color: lighten($nav-bgcolor, 3)
@@ -206,12 +223,34 @@ ul.main-listing
   height: 100vh
   ul.sub
     @include clean()
+    font-size: 10px
 
+#db-template-edit
+  textarea
+    width: 100%
+    height: 70vh
+  iframe
+    height: 80vh
+    width: 100%
 
 #db-snippets-form
   .CodeMirror
     border: 1px solid silver
     font-size: 12px
 
+
 #db-snippet-content
   border: 1px solid silver
+
+
+.tabs
+  ul
+    li
+      a
+        color: red
+        display: block
+        width: 100%
+
+      &.ui-state-active
+        border-bottom: 1px solid silver
+

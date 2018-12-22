@@ -25,6 +25,10 @@ module Blog
         end
         self
       end
+
+      def [](obj)
+        super(obj.to_sym)
+      end
     end
 
 
@@ -68,6 +72,14 @@ module Blog
         Redcarpet::Render::HTML
       end
 
+      def render_preview(user)
+        post = Habitat.adapter(:blog).with_user(user) do |blog|
+          blog.by_slug("preview")
+        end
+        #template = params[:t] || @post.template || C[:default_template]
+        post.with_template(identifier).compile({})
+      end
+
       def content
         @content ||=
           begin
@@ -79,27 +91,20 @@ module Blog
         File.join(path, *args)
       end
 
-      def get_css
-        get_files_from_glob("css") do |cssfile|
-          File.readlines(cssfile).join << "\n"          
-        end
+      def get_sass
+        File.readlines(root("screen.sass")).join
       end
 
-      def get_sass
-        get_files_from_glob("sass") do |cssfile|
-          Sass::Engine.new(File.readlines(cssfile).join, OPTIONS[:sass]).render
-        end
+      def get_css
+        styles
       end
 
       def styles
-        get_css + get_sass 
+        Sass::Engine.new(get_sass, OPTIONS[:sass]).render
       end
 
       def javascript
-        root("javascript")
-        get_files_from_glob("js") do |scriptfile|
-          File.readlines(scriptfile).join << "\n"
-        end
+        File.readlines(root("javascript.js")).join
       end
 
       def images
@@ -107,7 +112,7 @@ module Blog
       end
 
       def ruby
-        root("#{identifier}.rb")
+        File.readlines(root("template.rb")).join
       end
 
       def compile(params)
@@ -115,7 +120,7 @@ module Blog
 
         @javascript = javascript
         @styles     = styles
-        a = eval(File.readlines(ruby).join, binding)
+        a = eval(ruby, binding)
         self
       end
 
@@ -129,7 +134,61 @@ module Blog
       end
       private :get_files_from_glob
 
+      def with_operator
+        wo = self.extend(TemplateOperations)
+        yield wo if block_given?
+        wo
+      end
     end
+
+
+
+    module TemplateOperations
+      include Habitat::Mixins::FU
+
+      def valid?(hash)
+        valid = true
+        hash.each_pair do |h,k|
+          valid = false if h.nil? or k.nil?
+        end
+        valid
+      end
+
+      def update(ruby:, javascript:, sass:)
+        hsh = {"template.rb" => ruby,
+               "javascript.js" => javascript,
+               "screen.sass" => sass}
+        
+        raise "invalid #{PP.pp(hsh, "")}" unless valid?(hsh)
+        hsh.each_pair do |file, cnts|
+          write(root(file), cnts)
+        end
+        self
+      end
+
+      def update_or_create(ruby:, javascript:, sass:)
+        mkdir_p(root)
+        update(ruby: ruby, javascript: javascript, sass: sass)
+        self
+      end
+
+      def rename(newident)
+      end
+
+      def duplicate(newident)
+      end
+    end
+    
+    class TemplateDummy < Template
+      include TemplateOperations
+
+      def initialize(ident)
+        @identifier = ident.to_sym
+        @path = Blog.template_path(ident)
+      end
+
+    end
+
 
   end
   

@@ -1,0 +1,41 @@
+#db-template-edit.mt-2
+  %form{:action => routes.templateCreateOrEdit_path, :method => :post, enctype: 'multipart/form-data'}
+    %input.at{:type => :hidden, :name => :at, :value => ""}
+    .container
+      .columns
+        .column.col-8
+          .form-group
+            %input{:type => :text, :hidden => :hidden, :value => (blemplate && blemplate.identifier || ""), :name => :oident }
+            %input.form-input{:type => :text, :value => (blemplate && blemplate.identifier || ""), :name => :identifier}
+        .column.text-right
+          %button.btn.btn-primary Absenden
+      .columns
+        .column.col-12
+          .tabs
+            %ul.tab.tab-block
+              %li.tab-item
+                %a{:href => "#tab-ruby"} Ruby
+              %li.tab-item
+                %a{:href => "#tab-styles"} Styles
+              %li.tab-item
+                %a{:href => "#tab-javascript"} Javascript
+
+              %li.tab-item
+                %a{:href => "#tab-preview"} Vorschau
+
+
+
+            #tab-ruby.tab-content
+              %textarea.cm-form{:name => "ruby", :id => "ruby", "data-codemirror-mode" => "text/x-ruby"}
+                = blemplate && blemplate.ruby
+            #tab-styles.tab-content
+              %textarea.cm-form{:name => "styles",          :id => "styles",  "data-codemirror-mode" => "text/x-sass"}
+                = blemplate && blemplate.get_sass
+            #tab-javascript.tab-content
+              %textarea.cm-form{:name => "javascript",      :id => "javascript",  "data-codemirror-mode" => "text/javascript"}
+                = blemplate && blemplate.javascript
+            #tab-preview.tab-content
+              - if blemplate
+                %iframe{:src => "/testberichte/preview?t=#{blemplate.identifier}"}
+
+

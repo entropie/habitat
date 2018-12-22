@@ -8,7 +8,7 @@
         %h3.post-title.text-ellipsis
           %a{:href => routes.post_path(post.slug)}= post.title
           .post-info
-            //= module_info(post)
+            = backend_module_info(post)
   .post-controls
     .published
       %a{:href => routes.postPublish_path(post.slug)}

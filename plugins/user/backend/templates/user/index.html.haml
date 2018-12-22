@@ -1,1 +1,8 @@
-= user.size
+.backend-page-header
+  %h1= t("user-page-topic-index")
+
+.main-content-block
+  %ul.main-listing
+    - pager.each do |user|
+      = render template: "user/_user_preview", locals: {user: user}
+  = pager.navigation

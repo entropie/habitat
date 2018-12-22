@@ -1,0 +1,6 @@
+.backend-page-header
+  %h1= t("user-page-topic-index")
+
+
+%ul.main-listing
+  = render template: "user/_user_preview", locals: {user: user}

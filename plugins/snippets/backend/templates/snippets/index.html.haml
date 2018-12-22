@@ -7,3 +7,7 @@
       = render template: "snippets/_snippet", locals: {snippet: snippet}
 
 
+  - if snippets.empty?
+    .info= t("common-nothing-here-yet")
+  - else
+    = pager.navigation

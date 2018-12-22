@@ -1,0 +1,8 @@
+%li.user-preview
+  .container
+    .columns
+      .column.col-12
+        %a{:href => routes.userpage_path(user.name)}= user.name
+      .column.col-12
+        %span.glyphicon.glyphicon-envelope
+        %a{:href => "mailto:#{user.email}"}= user.email
