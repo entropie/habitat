@@ -86,7 +86,8 @@ module Blog
       :updated_at  => Time,
       :tags        => Array,
       :image       => Image,
-      :template    => String
+      :template    => String,
+      :user_id     => String
     }
 
     OptionalAttributes = [:image, :template]
