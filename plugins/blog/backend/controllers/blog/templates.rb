@@ -1,6 +1,7 @@
 module Backend::Controllers::Blog
   class Templates
     include Api::Action
+    include Blog:: BlogControllerMethods
 
     expose :templates, :pager
 
@@ -8,7 +9,6 @@ module Backend::Controllers::Blog
       @templates = Blog.templates.map{|_, tmpl| tmpl}
       @pager = Pager.paginate(params, @templates, 14)
       @pager.link_proc = -> (n) { routes.template_path(n) }
-
     end
   end
 end

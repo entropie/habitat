@@ -7,7 +7,7 @@
           .form-group
             %input{:type => :text, :hidden => :hidden, :value => (blemplate && blemplate.identifier || ""), :name => :oident }
             %input.form-input{:type => :text, :value => (blemplate && blemplate.identifier || ""), :name => :identifier}
-        .column.text-right
+        .column.col-4.text-right
           %button.btn.btn-primary Absenden
       .columns
         .column.col-12
@@ -22,8 +22,6 @@
 
               %li.tab-item
                 %a{:href => "#tab-preview"} Vorschau
-
-
 
             #tab-ruby.tab-content
               %textarea.cm-form{:name => "ruby", :id => "ruby", "data-codemirror-mode" => "text/x-ruby"}

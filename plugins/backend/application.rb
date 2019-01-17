@@ -37,6 +37,8 @@ module Backend
 
             get '/templates/:slug',       to: "blog#template",         as: :template
             get '/templates/:slug/edit',  to: "blog#template",         as: :templateEdit
+            get '/templates/:slug/delete',to: "blog#template_delete",  as: :templateDelete
+            get '/templates/:slug/duplicate',to: "blog#template_duplicate",  as: :templateDuplicate
 
             get  '/:slug',           to: "blog#post", as:      :post
 
@@ -74,6 +76,7 @@ module Backend
             get  '/:slug/edit',   to: "snippets#edit", as:     :snippetEdit
             post '/:slug/edit',   to: "snippets#edit"
             get  '/',             to: "snippets#index", as:    :snippets
+            get  '/page/:page',   to: "snippets#index", as:    :snippetsPager
           end
         end
 

@@ -61,6 +61,10 @@ module Blog
         target.title
       end
 
+      def to_sym
+        identifier
+      end
+      
       def ==(obj)
         if obj.kind_of?(Template)
           return identifier == obj.identifier
@@ -76,7 +80,6 @@ module Blog
         post = Habitat.adapter(:blog).with_user(user) do |blog|
           blog.by_slug("preview")
         end
-        #template = params[:t] || @post.template || C[:default_template]
         post.with_template(identifier).compile({})
       end
 

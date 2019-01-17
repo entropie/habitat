@@ -28,6 +28,8 @@ $content-bgcolor: rgb(252, 252, 252)
 
 $nav-bgcolor: rgb(91, 91, 91)
 
+$disabledBG: rgba(255, 141, 61, .3)
+
 $pagerBackground: rgba(white, .5)
 $pagerBorder: 1px solid silver
 $pagerBorderDisabled: $pagerBorder
@@ -161,6 +163,8 @@ ul.main-listing
       height: 100%
       right: 0
       width: 20px
+    &.post-draft, &.draft
+      background-color: $disabledBG
   &.single
     li
       width: 100%

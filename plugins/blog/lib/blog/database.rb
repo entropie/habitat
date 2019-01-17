@@ -69,6 +69,10 @@ module Blog
           posts.dup.select{|p| p.slug == slug }.first
         end
 
+        def by_template(tmpl)
+          posts.dup.select{|p| p.template && p.template.to_sym == tmpl.to_sym }
+        end
+
         def by_tags(tag)
           posts.dup.reject{|p| !p.tags.include?(tag) }
         end

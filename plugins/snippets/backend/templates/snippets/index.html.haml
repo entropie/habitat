@@ -3,7 +3,7 @@
 
 #db-snippets.main-content-block
   %ul.main-listing
-    - snippets.each do |snippet|
+    - pager.each do |snippet|
       = render template: "snippets/_snippet", locals: {snippet: snippet}
 
 

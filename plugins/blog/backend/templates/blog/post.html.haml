@@ -1,6 +1,7 @@
 .backend-page-header
   %h1= t("blog-page-topic-show")
 
-#db-post
-  = render template: "blog/_preview", locals: {post: post}
+.main-content
+  %ul.main-listing
+    = render template: "blog/_preview", locals: {post: post}
 
