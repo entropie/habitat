@@ -15,10 +15,10 @@ module Backend::Controllers::Felle
       else
         @fell = felle.find(params[:slug])
 
-        pimg = params[:image]
-
-        
         if request.post?
+
+          pimg = params[:panorama_image]
+
           @fell = update_fell_from_params(@fell, params)
 
           if pimg

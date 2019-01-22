@@ -19,7 +19,7 @@
                   - Felle::Fell::STATES.each_pair do |state, sv|
                     %option{:value => state}= sv
           .columns.top-seperator
-            .column.col-8
+            .column.col-6
               .form-group
                 %label.form-label.form-inline{:for => :title} Gender
                 %label.form-radio.form-inline
@@ -30,6 +30,9 @@
                   %input{checked(fell && fell.gender == "0").merge(:type => :radio, :value => 0, :name => :gender)}
                   %i.form-icon
                   Male
+            .column.col-6
+              .form-label{:for => :panorama_image} Header Image
+              %input.form-input{ :type => :file, :name => :panorama_image}
           .columns.top-seperator
             .column.col-6
               .input-group
