@@ -65,14 +65,27 @@ module Snippets
           Dir.glob(toglob)
         end
 
+        def grep(obj)
+          str = obj.to_s
+          snippets.select{|s| s.ident.to_s.include?(str) }
+        end
+        
         def select(obj, env = nil)
           ident = obj.to_sym
           ret = snippets[ident]
           unless ret
-            return NotExistingSnippet.new(obj)
+            return NotExistingSnippet.new(ident)
           end
           ret.env = env
           ret
+        end
+
+        def page(obj, sub = [], env = nil)
+          subpages = ""
+          subpages = sub.map{|sp| "---#{sp}" unless sp.to_s.empty? } 
+          ident = "page---#{obj}#{subpages.join}"
+          r = select(ident, env)
+          r
         end
 
         def exist?(obj)

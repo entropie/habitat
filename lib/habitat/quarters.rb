@@ -44,6 +44,14 @@ module Habitat::Quarters
       @secret = obj
     end
 
+    def default_application=(const)
+      @default_application = const
+    end
+
+    def default_application
+      @default_application || Web
+    end
+
     def secret
       @secret
     end

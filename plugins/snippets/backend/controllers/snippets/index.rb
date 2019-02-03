@@ -4,7 +4,13 @@ module Backend::Controllers::Snippets
 
     expose :snippets, :pager
     def call(params)
-      @snippets = adapter(:snippets).snippets.sort_by{|s| s.ident.to_s }
+      @snippets = adapter(:snippets).snippets.select{|s|
+        if s.respond_to?(:parent?)
+          s.parent?
+        else
+          true
+        end
+      }.sort_by{|s| s.ident.to_s }
       @pager = Pager.paginate(params, @snippets, 10)
       @pager.link_proc = -> (n) { routes.snippetsPager_path(n) } 
     end

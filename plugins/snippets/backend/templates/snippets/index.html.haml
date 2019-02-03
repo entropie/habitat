@@ -4,9 +4,7 @@
 #db-snippets.main-content-block
   %ul.main-listing
     - pager.each do |snippet|
-      = render template: "snippets/_snippet", locals: {snippet: snippet}
-
-
+      = render template: "snippets/_snippet_preview", locals: {snippet: snippet}
   - if snippets.empty?
     .info= t("common-nothing-here-yet")
   - else

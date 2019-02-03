@@ -3,9 +3,16 @@ module Snippets
 
   DEFAULT_ADAPTER = :File
 
+
   module SnippetsViewMethods
     def Snip(arg, env = nil)
       Habitat.adapter(:snippets).select(arg, env || locals[:params])
+    end
+  end
+
+  module SnippetsControllerMethods
+    def snippet_page(arg, lparams = [], env = nil)
+      Habitat.adapter(:snippets).page(arg, lparams, env)      
     end
   end
 
@@ -52,7 +59,9 @@ module Snippets
     def self.for(snippet_full_path)
       snippet_filename = File.basename(snippet_full_path)
       clz =
-        if snippet_filename =~ /\.haml$/
+        if snippet_filename =~ /---/
+          PageSnippet
+        elsif snippet_filename =~ /\.haml$/
           HAMLSnippet
         else
           MarkdownSnippet
@@ -78,7 +87,13 @@ module Snippets
       true
     end
 
+    def css_class
+      self.class.to_s.split("::").last.downcase
+    end
   end
+
+  
+  
 
   class Env
     attr_reader :locals
@@ -96,16 +111,26 @@ module Snippets
     end
 
     def routes
-      Blog.routes
+      Habitat.quart.default_application.routes
     end
 
     def Snip(arg)
       Habitat.adapter(:snippets).snippets[arg.to_sym]
     end
 
-    def active_path_li(path, desc)
-      "<li class='%s'><a href='%s'>%s</a></li>" % [active_path(path) ? "active" : "", path, desc, desc]
+    def P(*args)
+      routes.page_path(*args)
     end
+
+    def LINK(path, desc)
+      "<a class='%s' href='%s'>%s</a>" % [active_path(path) ? "active" : "", path, desc]
+    end
+
+    def active_path_li(path, desc)
+      "<li class='%s'>#{LINK(path, desc)}</li>" % [active_path(path) ? "active" : ""]
+    end
+
+    alias :al :active_path_li
   end
 
 
@@ -121,7 +146,7 @@ module Snippets
       false
     end
   end
-
+    
   class MarkdownSnippet < Snippet
     def filename
       super("markdown")
@@ -129,7 +154,7 @@ module Snippets
 
     def render
       markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true, footnotes: false)
-      markdown.render(to_s)
+      r = markdown.render(to_s)
     end
   end
 
@@ -143,8 +168,23 @@ module Snippets
       if env
         locals[:request_path] = env.env['REQUEST_PATH']
       end
-      "%s" % Haml::Engine.new(to_s).render(Env.new(locals), locals)
+      ret = "%s" % Haml::Engine.new(to_s).render(Env.new(locals), locals)
+      ret
+    end
+  end
+
+  class PageSnippet < HAMLSnippet
+    def parent?
+      ident.to_s.split("---").size == 2
+    end
+
+    def children
+      if parent?
+        @children ||= Habitat.adapter(:snippets).grep("#{ident}---")
+      end
     end
   end
 
 end
+
+

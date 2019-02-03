@@ -1,0 +1,14 @@
+%li.snippet
+  %span{:class => snippet.css_class}
+        
+  %a{:href => routes.snippetEdit_path(snippet.ident)}
+    %span{:class => "glyphicon glyphicon-pencil"}
+
+  %a{:href => routes.snippet_path(snippet.ident)}
+    = snippet.ident
+  - if snippet.class == Snippets::PageSnippet
+    - if snippet.parent? && snippet.children.size
+      %ul.main-listing
+        - snippet.children.each do |subsnippet|
+          = render template: "snippets/_snippet_preview", locals: {snippet: subsnippet}
+
