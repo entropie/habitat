@@ -1,0 +1,12 @@
+%form.gallery-add-form.form-horizontal{:action => routes.galleryUpload_path(gallery.ident), :method => :post, :enctype => 'multipart/form-data'}
+  .container
+    .columns
+      .column.col-12
+        .form-group
+          .col-2
+            %label.form-label{:for => :file}= t("galleries-page-label-upload")
+          .col-7
+            %input.form-input{:type => :file, :name => "file[]"}
+          .col-1
+          .col-2
+            %input.form-input.btn{:type => :submit}

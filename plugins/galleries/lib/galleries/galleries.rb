@@ -1,6 +1,12 @@
 
 module Galleries
 
+  def IMG(gal, ident)
+    img = Habitat.adapter(:galleries).find_or_create(gal).images(ident)
+    "<img class='gi g-#{gal}' src='#{img.url}' />"
+  end
+
+
   module ControllerMethods
     def galleries
       Habitat.adapter(:galleries)
@@ -53,11 +59,27 @@ module Galleries
       end
 
       def hash
-        File.basename(filename).split(".").first
+        @hash ||= File.basename(filename).split(".").first
       end
 
       def self.hash_filename(file)
         ret = Digest::SHA1.hexdigest(File.new(file).read) + File.extname(file).downcase
+      end
+
+      def url
+        File.join(Habitat.quart.default_application.routes.gallery_path, filename)
+      end
+
+      def ident
+        @ident || hash
+      end
+
+      def ident=(obj)
+        @ident = obj.to_s
+      end
+
+      def ==(hsh)
+        ident == hsh
       end
     end
 
@@ -114,12 +136,25 @@ module Galleries
       path("gallery.yaml")
     end
 
-    def images
+    def images(imgh = nil)
       if metadata[:images]
-        metadata[:images]
+        ims = metadata[:images].values
+        if imgh
+          single_image = ims.select{|i| i == imgh}.first
+          if single_image
+            return single_image
+          end
+        else
+          ims
+        end
       else
         []
       end
+    end
+
+    def set_ident(img, ident)
+      pp metadata.images[img.hash].ident = ident
+
     end
 
     def add(imagepaths)

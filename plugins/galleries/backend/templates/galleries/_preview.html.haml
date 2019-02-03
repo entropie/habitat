@@ -4,4 +4,8 @@
     %code= gallery.images.size
   .gallery-images
     - gallery.images.each do |img|
-      = img.hash
+      .item
+        .gi{:style => "background-image: url(#{img.url})", "data-hash" => img.hash}
+          .cntrls
+            %form{:action => routes.galleryCntrl_path(gallery.ident, img.hash), :method => :post}
+              %input.form-control{:type => "text", :value => img.ident, :name => :ident}

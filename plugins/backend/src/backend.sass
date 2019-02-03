@@ -169,7 +169,6 @@ ul.main-listing
     li
       width: 100%
 
-
 .top-seperator
   margin-top: 40px
 
@@ -245,6 +244,42 @@ ul.main-listing
 
 #db-snippet-content
   border: 1px solid silver
+
+.gallery-add-form
+  background-color: $color3
+
+.gallery-preview
+  .gallery-images
+    display: flex
+    justify-content: space-between
+    flex-wrap: wrap
+    .item
+      flex: 1
+      min-width: 256px
+      margin-bottom: 5px
+    .gi
+      background-color: silver
+      max-width: 100%
+      object-fit: scale-down;
+      min-height: 128px
+      background-size: cover
+      background-position: center
+      color: red
+      position: relative
+      .cntrls
+        display: none
+      input
+        opacity: .7
+        position: absolute
+        bottom: 0
+        right: 0
+        width: 100%
+        font-family: monospace
+        white-space: pre
+      &:hover
+        .cntrls
+          display: block
+    
 
 
 .tabs

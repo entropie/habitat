@@ -36,8 +36,20 @@ function betterTab(cm) {
   }
 }
 
+function setupGalleryImage(gi) {
+    let cntrls = '<div class="cntrls"><ul><li><a href="foo">lala</a></li></ul></div>'
+}
+
 $(document).ready(function() {
     console.log("backend deine mama");
+
+    if($(".gallery-images").length) {
+        $(".gallery-images .item .gi").each(function() {
+            setupGalleryImage($(this));
+        })
+    }
+
+
 
     if($("#db-template-edit").length) {
         var hsh = window.location.hash;

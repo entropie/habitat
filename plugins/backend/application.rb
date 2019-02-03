@@ -64,6 +64,10 @@ module Backend
             get  '/show/:slug',      to: "galleries#show", as:   :gallery
             post '/edit/:slug',      to: "galleries#edit", as:   :galleryEdit
 
+            post '/upload/:slug',    to: "galleries#upload", as: :galleryUpload
+
+            post '/control/:slug/:hash', to: "galleries#control", as: :galleryCntrl
+
           end
         end
 

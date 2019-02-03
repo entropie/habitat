@@ -104,6 +104,10 @@ module Snippets
       if Habitat.quart.plugins.activated?(:flickr)
         extend(Flickr)
       end
+
+      if Habitat.quart.plugins.activated?(:galleries)
+        extend(Galleries)
+      end
     end
 
     def active_path(path)
@@ -123,11 +127,11 @@ module Snippets
     end
 
     def LINK(path, desc)
-      "<a class='%s' href='%s'>%s</a>" % [active_path(path) ? "active" : "", path, desc]
+      "<a class='#{active_path(path) ? "active" : ""}' href='#{path}'>#{desc}</a>"
     end
 
     def active_path_li(path, desc)
-      "<li class='%s'>#{LINK(path, desc)}</li>" % [active_path(path) ? "active" : ""]
+      "<li class='#{(active_path(path) ? "active" : "")}'>#{LINK(path, desc)}</li>"
     end
 
     alias :al :active_path_li
