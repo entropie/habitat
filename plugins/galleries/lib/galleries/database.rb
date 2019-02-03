@@ -26,6 +26,12 @@ module Galleries
           gallery
         end
 
+        def all(user = nil)
+          Dir.glob("%s/*/metadata.yaml" % repository_path).map do |md|
+            find_or_create(md.split("/")[-2], user)
+          end
+        end
+
         def transaction(gallery, &blk)
           log :info, "gallery:#{gallery.ident} transaction starting..."
           g = yield gallery

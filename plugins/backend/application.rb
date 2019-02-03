@@ -60,6 +60,10 @@ module Backend
           namespace :galleries do
             get  '/',                to: "galleries#index", as:    :galleries
             get  '/create',          to: "galleries#create", as:   :galleriesCreate
+            post '/create',          to: "galleries#create"
+            get  '/show/:slug',      to: "galleries#show", as:   :gallery
+            post '/edit/:slug',      to: "galleries#edit", as:   :galleryEdit
+
           end
         end
 

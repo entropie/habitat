@@ -1,0 +1,7 @@
+%li.gallery-preview
+  .gallery-head
+    %a{:href => routes.gallery_path(gallery.ident)}= gallery.ident
+    %code= gallery.images.size
+  .gallery-images
+    - gallery.images.each do |img|
+      = img.hash

@@ -1,1 +1,5 @@
-create
+.backend-page-header
+  %h1= t("galleries-page-topic-create")
+
+- action = routes.galleriesCreate_path
+= render template: "galleries/_form", locals: { action: action }

@@ -1,12 +1,8 @@
 module Backend::Controllers::Galleries
-  class Index
+  class Show
     include Api::Action
-    include Galleries::ControllerMethods
-
-    expose :all
 
     def call(params)
-      @all = galleries.all
     end
   end
 end

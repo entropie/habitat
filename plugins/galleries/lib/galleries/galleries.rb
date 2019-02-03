@@ -1,6 +1,13 @@
 
 module Galleries
 
+  module ControllerMethods
+    def galleries
+      Habitat.adapter(:galleries)
+    end
+  end
+
+
   DEFAULT_ADAPTER = :File
 
   class Galleries < Array
@@ -34,6 +41,7 @@ module Galleries
 
 
   class Gallery
+    include ::Galleries
 
     class Image
       attr_reader :filename
@@ -78,10 +86,14 @@ module Galleries
       else
         @metadata = Metadata.create(self)
       end
+      @metadata
     end
 
     def write_metadata
       file = path("metadata.yaml")
+      FileUtils.mkdir_p(path, :verbose => true)
+
+      metadata
       File.open(file, "w+") do |fp|
         fp.puts(YAML::dump(metadata))
       end

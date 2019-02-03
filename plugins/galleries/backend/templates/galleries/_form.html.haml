@@ -1,0 +1,13 @@
+#db-galleries-edit
+  .container
+    .columns
+      .column.col-12
+        %form{:action => action, :method => :post, enctype: 'multipart/form-data'}
+          .columns
+            .column.col-12
+              .form-group
+                .form-label{:for => :title} Title
+                %input.form-input{:type => :text, :id => :name, :value => (gallery && gallery.title), :name => :name}
+
+      
+              %input.btn.btn-primary{:type => :submit, :value => "Absenden"}

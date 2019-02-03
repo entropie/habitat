@@ -15,5 +15,5 @@ end
 
 
 if Habitat.quart
-  Habitat.add_adapter(:galleries, Snippets::Database.with_adapter.new(Habitat.quart.media_path))  
+  Habitat.add_adapter(:galleries, Galleries::Database.with_adapter.new(Habitat.quart.media_path))  
 end
