@@ -56,6 +56,13 @@ module Backend
           end
         end
 
+        Habitat.plugin_enabled?(:galleries) do
+          namespace :galleries do
+            get  '/',                to: "galleries#index", as:    :galleries
+            get  '/create',          to: "galleries#create", as:   :galleriesCreate
+          end
+        end
+
         Habitat.plugin_enabled?(:felle) do
           namespace :felle do
             get  '/',                to: "felle#index", as:    :felle
