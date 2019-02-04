@@ -111,7 +111,13 @@ module Snippets
     end
 
     def active_path(path)
-      path == locals[:request_path]
+      rp = locals[:request_path]
+
+      if rp.include?("/s/") and path.include?("/s/") and rp.include?(path)
+        true
+      else
+        path == rp
+      end
     end
 
     def routes
