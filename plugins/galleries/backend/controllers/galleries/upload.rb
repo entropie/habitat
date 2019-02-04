@@ -13,6 +13,7 @@ module Backend::Controllers::Galleries
           galleries.transaction(@gallery) do |g|
             g.add(filesarr)
           end
+          redirect_to routes.gallery_path(@gallery.ident)
         end
       end
     end

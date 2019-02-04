@@ -32,6 +32,11 @@ module Galleries
       self
     end
 
+    def remove_image(image)
+      self[:images] = self[:images].dup.delete_if{|h, img| img == image }
+      self
+    end
+
     def images
       self[:images]
     end
@@ -62,6 +67,14 @@ module Galleries
         @hash ||= File.basename(filename).split(".").first
       end
 
+      def delete
+        FileUtils.rm_rf(path, :verbose => true)
+      end
+
+      def path
+        @gallery.path(".." ,@filename)
+      end
+
       def self.hash_filename(file)
         ret = Digest::SHA1.hexdigest(File.new(file).read) + File.extname(file).downcase
       end
@@ -78,8 +91,12 @@ module Galleries
         @ident = obj.to_s
       end
 
-      def ==(hsh)
-        ident == hsh
+      def ==(obj)
+        if obj.kind_of?(Image)
+          self == obj.hash
+        else
+          ident == obj or @hash == obj
+        end
       end
     end
 
@@ -153,8 +170,7 @@ module Galleries
     end
 
     def set_ident(img, ident)
-      pp metadata.images[img.hash].ident = ident
-
+      metadata.images[img.hash].ident = ident
     end
 
     def add(imagepaths)
@@ -169,6 +185,17 @@ module Galleries
 
         metadata.add_image(Image.new(relative_path, self))
       end
+    end
+
+    def remove(img_or_imghash)
+      hash = img_or_imghash
+      if img_or_imghash.kind_of?(Image)
+        hash = img_or_imghash.hash
+      end
+      img = images(hash)
+      metadata.remove_image(img)
+      img.delete
+      self
     end
     
   end

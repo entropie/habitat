@@ -251,35 +251,51 @@ ul.main-listing
 .gallery-preview
   .gallery-images
     display: flex
-    justify-content: space-between
     flex-wrap: wrap
     .item
       flex: 1
-      min-width: 256px
+      min-width: 33%
       margin-bottom: 5px
     .gi
-      background-color: silver
-      max-width: 100%
-      object-fit: scale-down;
-      min-height: 128px
+      width: 100%
+      height: 40px
+      object-fit: scale-down
       background-size: cover
       background-position: center
       color: red
       position: relative
+      border: 1px solid transparent
+      .links
+        background-color: $color3
+        text-align: right
+        line-height: 33px
+        a
+          display: inline-block
+          color: $color1
+          padding-left: 10px
+          padding-right: 10px
       .cntrls
-        display: none
-      input
-        opacity: .7
         position: absolute
-        bottom: 0
-        right: 0
+        bottom: -30px
+        left: 0
         width: 100%
+        height: 30px
+        z-index: 50
+        display: none
+        justify-content: center
+      input
         font-family: monospace
         white-space: pre
+        background-color: $color3
       &:hover
+        border-color: $color3
         .cntrls
-          display: block
+          display: flex
     
+#db-galleries-list
+  .item
+    min-width: 20%
+
 
 .gi
   max-width: 100%

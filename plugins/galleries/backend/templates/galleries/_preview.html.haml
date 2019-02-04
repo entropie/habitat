@@ -1,11 +1,16 @@
 %li.gallery-preview
   .gallery-head
-    %a{:href => routes.gallery_path(gallery.ident)}= gallery.ident
-    %code= gallery.images.size
+    %h2
+      %a{:href => routes.gallery_path(gallery.ident)}
+        %strong= gallery.ident
+        %code= gallery.images.size
   .gallery-images
     - gallery.images.each do |img|
       .item
         .gi{:style => "background-image: url(#{img.url})", "data-hash" => img.hash}
           .cntrls
+            .links
+              %a{:href => routes.galleryRemoveImage_path(gallery.ident, img.hash), :onclick => "return confirm('Are you sure?')"}
+                %span.glyphicon.glyphicon-remove
             %form{:action => routes.galleryCntrl_path(gallery.ident, img.hash), :method => :post}
               %input.form-control{:type => "text", :value => img.ident, :name => :ident}

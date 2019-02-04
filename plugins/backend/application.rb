@@ -58,16 +58,20 @@ module Backend
 
         Habitat.plugin_enabled?(:galleries) do
           namespace :galleries do
-            get  '/',                to: "galleries#index", as:    :galleries
+
             get  '/create',          to: "galleries#create", as:   :galleriesCreate
             post '/create',          to: "galleries#create"
             get  '/show/:slug',      to: "galleries#show", as:   :gallery
             post '/edit/:slug',      to: "galleries#edit", as:   :galleryEdit
 
             post '/upload/:slug',    to: "galleries#upload", as: :galleryUpload
-
             post '/control/:slug/:hash', to: "galleries#control", as: :galleryCntrl
 
+            get  '/remove/:slug/:hash', to: "galleries#remove", as: :galleryRemoveImage
+
+
+            get  '/',                to: "galleries#index", as:    :galleries
+            get  '/page/:page',      to: "galleries#index", as:    :galleriesPager
           end
         end
 

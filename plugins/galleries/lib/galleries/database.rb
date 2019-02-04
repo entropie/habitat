@@ -26,6 +26,10 @@ module Galleries
           gallery
         end
 
+        def find(gallery_ident, user = nil)
+          find_or_create(gallery_ident, user)
+        end
+
         def all(user = nil)
           Dir.glob("%s/*/metadata.yaml" % repository_path).map do |md|
             find_or_create(md.split("/")[-2], user)

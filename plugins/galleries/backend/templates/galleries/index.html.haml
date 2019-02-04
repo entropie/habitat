@@ -3,5 +3,6 @@
 
 #db-galleries-list
   %ul.main-listing.main-content-block
-    - all.each do |gal|
+    - pager.each do |gal|
       = render template: "galleries/_preview", locals: {gallery: gal}
+  = pager.navigation
