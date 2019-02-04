@@ -27,7 +27,9 @@ module Galleries
         end
 
         def find(gallery_ident, user = nil)
-          find_or_create(gallery_ident, user)
+          gallery = find_or_create(gallery_ident, user)
+          raise Habitat::Database::EntryNotValid, "gallery not existing" unless gallery.exist?
+          gallery
         end
 
         def all(user = nil)

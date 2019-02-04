@@ -118,6 +118,8 @@ module Snippets
       else
         path == rp
       end
+    rescue
+      false
     end
 
     def routes
