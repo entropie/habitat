@@ -35,10 +35,8 @@ module Galleries
 
       filtered = select_images(except, only)
       
-      html.div(:class => "gallery #{gallery_dom_id}}") do 
+      html.div(:class => "gallery #{gallery_dom_id}") do 
         filtered.each do |img|
-
-          
           div(:class => "gallery-img-container") do
             a(:href => img.url) do
               img(:src => img.url)
