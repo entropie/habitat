@@ -1,0 +1,65 @@
+.sy-box.sy-loading
+  background: url("/assets/img/sy-loader.gif") 50% 50% no-repeat !important
+
+.sy-controls li a:after
+  background-image: url("/assets/img/arrows.svg") !important
+
+
+
+$gColor1: #111
+$gColor2: silver
+
+
+@mixin img-container()
+  display: inline-block
+  width: 100%
+  min-height: 60vh
+  background-repeat: no-repeat
+  background-position: center center
+  background-size: cover
+  border-radius: 10px
+
+.gallery-slider
+  .gallery-thumbnails
+    img
+      max-height: 90vh
+      object-fit: scale-down
+    a
+      background-color: #000
+      @include img-container()
+
+.habitat-gallery
+  display: flex
+  align-items: center
+  background-color: $gColor2
+  text-align: center
+  flex-wrap: wrap
+
+.gallery-image-container
+  img
+    max-width: 100%
+  a
+    @include img-container()
+
+
+.gallery-thumbnail-box
+  ul.thumbs
+    text-align: center
+    display: flex
+    align-items: center
+    flex-wrap: nowrap
+    list-style-type: none
+    justify-content: center
+    li
+      flex-grow: 1
+      flex-basis: auto
+      padding: 5px
+      a
+        @include img-container()
+        min-width: 64px
+        min-height: 32px
+        border-bottom: 3px solid transparent
+        border-radius: 3px
+        &.active
+          border-bottom: 3px solid red
+

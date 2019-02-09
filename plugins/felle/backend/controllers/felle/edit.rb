@@ -6,7 +6,7 @@ module Backend::Controllers::Felle
     expose :fell
 
     def call(params)
-      p 1
+
       if params[:create]
         @fell = create_fell_from_params(params)
         felle do |f|
@@ -16,15 +16,11 @@ module Backend::Controllers::Felle
         @fell = felle.find(params[:slug])
 
         if request.post?
-
           pimg = params[:panorama_image]
-
           @fell = update_fell_from_params(@fell, params)
-
           if pimg
             felle.upload_header(@fell, pimg[:tempfile])
           end
-
           felle do |f|
             f.store(@fell)
           end

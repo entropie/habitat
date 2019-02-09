@@ -26,52 +26,70 @@ module Galleries
           ret = ret.delete_if{|i| i == ei}
         end
       end
-
       ret      
     end
 
+    def to_slider(except: [], only: [], images: nil)
+      filtered = images || select_images(except, only)
 
-    def to_html(except: [], only: [])
-
-      filtered = select_images(except, only)
-      
-      html.div(:class => "gallery #{gallery_dom_id}") do 
-        filtered.each do |img|
-          div(:class => "gallery-img-container") do
-            a(:href => img.url) do
-              img(:src => img.url)
+      html.div(:class => "gallery-slider") do
+        ul(:class => "gallery-thumbnails") do
+          filtered.each_with_index do |img, index|
+            li do
+              a(:href => img.url, :style => "background-image: url(#{img.url}", :class => "popupImg")
             end
           end
         end
-        
+
+        div(:class => "gallery-thumbnail-box") do
+          ul(:class => "thumbs") do
+            filtered.each_with_index do |img, index|
+              li do
+                a(:href => "##{index+1}", "data-slide" => index+1, :style => "background-image: url(#{img.url}")
+              end
+            end
+          end
+        end
       end
     end
   end
 
+  module GalleriesAccessMethods
 
-  def IMG(gal, ident)
-    gallery = Habitat.adapter(:galleries).find(gal)
-    img = gallery.images(ident)
+    def IMG(gal, ident)
+      gallery = Habitat.adapter(:galleries).find(gal)
+      img = gallery.images(ident)
 
-    msg = ""
-    if !gallery
-      msg = "gallery <i>#{gal}</i> not existing"
-    elsif !img
-      msg = "image <i>#{ident}</i> not existing in gallery <i>#{gal}</i>."
-    else
-      return "<img class='gi g-#{gal}' src='#{img.url}' />"      
+      msg = ""
+      if !gallery
+        msg = "gallery <i>#{gal}</i> not existing"
+      elsif !img
+        msg = "image <i>#{ident}</i> not existing in gallery <i>#{gal}</i>."
+      else
+        return "<div class='gallery-image-container'><a href='#{img.url}' class='popupImg' style='background-image: url(#{img.url})'></a></div>"
+      end
+
+      return "<div class='error-msg'>#{msg}</div>"
     end
 
-    return "<div class='error-msg'>#{msg}</div>"
+    def SliderGallery(name, except: [], only: [], &blk)
+      gallery = Habitat.adapter(:galleries).find(name.to_s)
+      gallery = gallery.extend(GalleryPresenter)
+
+
+      # if there is only a single image in gallery, we dont need to show the entire gallery
+      # but the single img (dispatch to #IMG)
+      if (imgs = gallery.select_images(except, only)).size == 1
+        return IMG(name.to_s, imgs.first.hash)
+      end
+
+      gallery.to_slider(except: except, only: only, images: imgs)
+    rescue Habitat::Database::EntryNotValid
+      return "<div class='error-msg'>Gallery: <i>#{name}</i> not existing</div>."
+    end
+
   end
 
-  def GALLERY(name, except: [], only: [])
-    gallery = Habitat.adapter(:galleries).find(name.to_s)
-    gallery = gallery.extend(GalleryPresenter)
-    gallery.to_html(except: except, only: only)
-  rescue Habitat::Database::EntryNotValid
-    return "<div class='error-msg'>Gallery: <i>#{name}</i> not existing</div>."
-  end
 
 
   module ControllerMethods
@@ -238,6 +256,10 @@ module Galleries
     end
 
     def set_ident(img, ident)
+      if existing_image = images(ident)
+        raise Habitat::Database::DataBaseError,
+              "ident '#{ident}' already set for #{existing_image.hash} : #{existing_image.filename}"
+      end
       metadata.images[img.hash].ident = ident
     end
 

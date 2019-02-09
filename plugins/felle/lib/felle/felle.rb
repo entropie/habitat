@@ -19,9 +19,9 @@ module Felle
                           origin: params[:origin],
                           gender: params[:gender],
                           birthday: (ts && te ? ts .. te : ts),
-                          state: params[:state].to_i)
+                          state: params[:state].to_i,
+                          text: params[:text])
       unless fell.valid?
-        p fell.missing_fields
         raise "invalid dataset, probably due to missing fields"
       end
       fell
@@ -94,6 +94,15 @@ module Felle
 
     Attributes = [:neutered, :hd, :ailments, :medication, :pedigree]
 
+    AttributeTranslation = {
+      :neutered => "kastriert",
+      :hd       => "hüftdysplasie",
+      :ailments => "krankheiten",
+      :medication => "unter medikation",
+      :pedigree => "reinrassig"
+    }
+
+
     Male   = 0
     Female = 1
 
@@ -130,6 +139,17 @@ module Felle
     attr_accessor :breed, :origin, :attributes
     attr_accessor :panorama_image, :scoville
     attr_accessor :adapter
+
+    def facts_html
+      extend(Hanami::Helpers::HtmlHelper)
+      html do
+        ul(:class => "fell-facts") do
+          attributes.each_pair do |attribute, value|
+            li("%s" % [AttributeTranslation[attribute]], :class => value.to_i == 0 ? "unset" : "set" )
+          end
+        end
+      end
+    end
 
     def gender_human
       @gender == 0 ? "Männlich" : "Weiblich"
@@ -320,7 +340,7 @@ module Felle
     end
 
     def text
-      @text ||= File.readlines(text_file).join rescue "default text"
+      @text ||= File.readlines(text_file).join rescue nil
     end
 
     def text=(obj)

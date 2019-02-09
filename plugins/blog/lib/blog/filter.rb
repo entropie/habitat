@@ -56,6 +56,22 @@ module Blog
     end
 
 
+    class GalleryProcessor < Filter
+      def filter(str)
+        return str unless Habitat.quart.plugins.activated?(:galleries) 
+
+        str.lines.map do |line|
+          if line =~ /^\s?\#\{(.*)\}\s?$/
+            ret = dup.extend(Galleries::GalleriesAccessMethods).send(:eval, $1)
+            Habitat.log :debug, "#{self.class}: #{$1}"
+            "\n#\n%s\n\n" % ret.to_s 
+          else
+            line
+          end
+        end.join
+      end
+    end
+
     class Markdown < Filter
       def filter(str)
         TO_HTML.call(str)
@@ -112,12 +128,15 @@ module Blog
       def filter(str)
         ret = nokogiri(str)
         ret.css("p, ul, ol").each_with_index do |node, index|
-          node["class"] = "post-text-block"
+          next if node.children.map{|c| c["class"].include?("ignore-paragraphing") rescue false}.any?
+          unless node["class"]
+            node["class"] = "post-text-block"
+          end
         end
         ret.to_html
       end
     end
-    
+
   end
 
 

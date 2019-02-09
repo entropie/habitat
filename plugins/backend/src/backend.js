@@ -10,7 +10,11 @@ import 'webpack-jquery-ui/tabs'
 
 
 import '../../../plugins/backend/src/backend.sass'
+
 import "../../../plugins/backend/src/fa.css.sass"
+
+
+
 
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/theme/monokai.css'
@@ -27,6 +31,7 @@ import 'codemirror/addon/fold/markdown-fold.js'
 import 'codemirror/addon/fold/comment-fold.js'
 import 'codemirror/addon/display/autorefresh.js'
 
+
 function betterTab(cm) {
   if (cm.somethingSelected()) {
     cm.indentSelection("add");
@@ -36,19 +41,8 @@ function betterTab(cm) {
   }
 }
 
-function setupGalleryImage(gi) {
-    let cntrls = '<div class="cntrls"><ul><li><a href="foo">lala</a></li></ul></div>'
-}
-
 $(document).ready(function() {
-    console.log("backend deine mama");
-
-    if($(".gallery-images").length) {
-        $(".gallery-images .item .gi").each(function() {
-            setupGalleryImage($(this));
-        })
-    }
-
+    console.log("backend");
 
 
     if($("#db-template-edit").length) {
@@ -102,4 +96,5 @@ $(document).ready(function() {
         })
     }
 });
+
 

@@ -106,14 +106,15 @@ module Snippets
       end
 
       if Habitat.quart.plugins.activated?(:galleries)
-        extend(Galleries)
+        extend(Galleries::GalleriesAccessMethods)
       end
     end
 
     def active_path(path)
       rp = locals[:request_path]
-
       if rp.include?("/s/") and path.include?("/s/") and rp.include?(path)
+        true
+      elsif rp =~ /^#{path}\//
         true
       else
         path == rp

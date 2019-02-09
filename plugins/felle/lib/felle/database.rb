@@ -80,8 +80,8 @@ module Felle
           fell.upload(obj, "header")
         end
 
-        def create(ident, attributes: {}, type: :Hund, state: 0, gender:, birthday:, origin:, breed: "crossbreed")
-          clz = fellclass(type).new(ident) #, attributes: attributes)
+        def create(ident, attributes: {}, type: :Hund, state: 0, gender:, birthday:, origin:, breed: "crossbreed", text:)
+          clz = fellclass(type).new(ident)
           clz.adapter = self
 
           clz.attributes = attributes
@@ -90,6 +90,7 @@ module Felle
           clz.origin   = origin
           clz.breed    = breed
           clz.state    = state
+          clz.text     = text
 
           clz.root = clz.root
           clz.datadir = clz.datadir
@@ -105,7 +106,7 @@ module Felle
 
           clz = fell
             
-          [:attributes, :gender, :birthday, :origin, :breed, :state].each do |t|
+          [:attributes, :gender, :birthday, :origin, :breed, :state, :text].each do |t|
             if r = params[t]
               clz.send("#{t}=", params[t])
             end
@@ -121,11 +122,19 @@ module Felle
 
         def store(fell)
           log :info, "felle:STORE:#{fell.slug}"
-          
+
+
+          text = fell.text
+          fell.remove_instance_variable("@text")
           content = fell.to_yaml
 
           file = fell.yaml_file
-          FileUtils.mkdir_p(::File.dirname(file), :verbose => true) 
+
+          [::File.dirname(file), fell.datadir].each do |ndir|
+            FileUtils.mkdir_p(ndir, :verbose => true)             
+          end
+
+          write(fell.text_file, text)
           write(file, content)
         end
 

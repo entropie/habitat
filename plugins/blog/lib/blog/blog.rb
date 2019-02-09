@@ -27,9 +27,15 @@ module Blog
   end
 
   module BlogControllerMethods
+
     def blog(*args, &blk)
       adapter(:blog).with_user(session_user, &blk)
     end
+
+    def posts_sorted(*args, sort_by: -> (post) { post.created_at }, &blk)
+      blog.posts(*args, blk).sort_by(&sort_by).reverse
+    end
+
   end
 
 
