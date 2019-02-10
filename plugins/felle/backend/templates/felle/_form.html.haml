@@ -60,12 +60,12 @@
                     .input-group
                       .input-group-addon
                         BDay Start
-                      %input.form-input.input-tagline{:type => :date, :value => date_value(fell && fell.birthday.value_start), :name => :datestart}
+                      %input.form-input.input-tagline{:type => :date, :value => date_value(fell && fell.birthday.start_date), :name => :datestart}
                   .column.col-6
                     .input-group
                       .input-group-addon
                         BDay End
-                      %input.form-input.input-tagline{:type => :date, :value => date_value(fell && fell.birthday.value_end), :name => :dateend}
+                      %input.form-input.input-tagline{:type => :date, :value => date_value(fell && fell.birthday.end_date), :name => :dateend}
             
                 .columns.top-seperator
                   .column.col-6
@@ -88,5 +88,5 @@
 
             #tab-text.tab-content
               .column.col-12
-                %textarea#fell-text-form.form-input.cm-form{:name => :text, :Rows => 15, "data-codemirror-mode" => "text/x-markdown"}= (fell && fell.text)
+                %textarea#fell-text-form.form-input.cm-form{:name => :text, :Rows => 15, "data-codemirror-mode" => "text/x-markdown"}= (fell && fell.text || "")
             

@@ -9,16 +9,12 @@ module Felle
     end
 
     def create_fell_from_params(params)
-      mktime = -> (s) { Time.parse(s) rescue nil }
-
-      ts, te = mktime.call(params[:datestart]), mktime.call(params[:dateend])
-
       fell = felle.create(params[:name],
                           attributes: params[:attributes],
                           breed: params[:breed],
                           origin: params[:origin],
                           gender: params[:gender],
-                          birthday: (ts && te ? ts .. te : ts),
+                          birthday: Fell::FellBday.make_birthday_from_params(params),
                           state: params[:state].to_i,
                           text: params[:text])
       unless fell.valid?
@@ -29,10 +25,11 @@ module Felle
 
 
     def update_fell_from_params(fell, params)
-      felle.update(fell, params)
+      new_params = params.to_hash.merge(:birthday => Fell::FellBday.make_birthday_from_params(params))
+      felle.update(fell, new_params)
       fell
     end
-    
+
   end
   
   class Fell
@@ -42,7 +39,6 @@ module Felle
         @date_or_range = date_or_range
       end
 
-
       def age(dob)
         now = Time.now.utc.to_date
         now.year - dob.year - ((now.month > dob.month || (now.month == dob.month && now.day >= dob.day)) ? 0 : 1)
@@ -51,8 +47,8 @@ module Felle
       def to_age
         tfmt = "%Y-%m"
         if @date_or_range.kind_of?(Range)
-          la = age(@date_or_range.last)
-          fa = age(@date_or_range.first)
+          la = age(end_date)
+          fa = age(start_date)
           if la != fa
             "%s bis %s" % [la, fa]
           else
@@ -61,23 +57,24 @@ module Felle
         else
           age(@date_or_range)
         end
+      rescue
+        "#{$!}"
       end
 
-      def value_end
-        if @date_or_range.kind_of?(Range)
-          @date_or_range.last
-        else
-          nil
-        end
+      def start_date
+        @date_or_range.min
       end
 
-      def value_start
-        if @date_or_range.kind_of?(Range)
-          @date_or_range.first
-        else
-          @date_or_range
-        end
+      def end_date
+        @date_or_range.max
       end
+
+      def self.make_birthday_from_params(params)
+        mktime = -> (s) { Time.parse(s) rescue nil }
+        ts, te = mktime.call(params[:datestart]), mktime.call(params[:dateend])
+        (ts..te)
+      end
+      
     end
 
     class ChangeMessage
@@ -333,7 +330,7 @@ module Felle
     end
 
     def age
-      birthday.to_age
+      "%s Jahre alt" % birthday.to_age
     end
 
     def draft?

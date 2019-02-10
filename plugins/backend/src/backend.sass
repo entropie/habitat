@@ -260,9 +260,15 @@ ul.main-listing
     min-width: 20%
 
 .fell-preview
-  span.state, span.age
+  .state, .age
+    display: inline-block
     color: silver
     font-size: .8em
+    padding-left: 3px
+    padding-right: 3px
+  .state
+    background-color: rgba($color2, .1)
+    color: $color1
 
 .gallery-add-form
   background-color: $color3
