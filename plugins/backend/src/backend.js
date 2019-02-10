@@ -72,7 +72,32 @@ $(document).ready(function() {
         });
     }
 
+    if($("#db-fell-edit").length) {
+        var hsh = window.location.hash;
+        $("#db-fell-edit .tabs").tabs();
 
+        // $("#db-template-edit .tabs li").each(function() {
+        //     var href = $(this).find("a").attr("href");
+        // });
+
+        var setTabActive = function(tbhsh) {
+            var scrollmem = $('body').scrollTop();
+            window.location.hash = tbhsh;
+            $('html,body').scrollTop(scrollmem);
+            $("#db-fell-edit input.at").attr("value", tbhsh);
+        }
+        
+        if(hsh.length > 0) {
+            console.log("yo");
+            setTabActive(hsh);
+        };
+        
+        $("#db-fell-edit .tabs li a").click(function() {
+            setTabActive(this.hash);
+            
+            return true;
+        });
+    }
 
     if($(".cm-form").length) {
         $(".cm-form").each(function() {

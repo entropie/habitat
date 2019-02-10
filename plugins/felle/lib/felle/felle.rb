@@ -171,7 +171,7 @@ module Felle
     end
     
     def human_state
-      Fell.human_state(self)
+      STATES[state.to_i]
     end
 
     def update
@@ -189,10 +189,11 @@ module Felle
       root("assets", *args)
     end
 
-    def images
+    def images(wo_header = false)
       Dir.glob(datadir("images") + "/" + "*.*").map {|imgfile|
+        next if wo_header and File.basename(imgfile) =~ /^header/
         Image.from_datadir(self, imgfile)
-      }
+      }.compact
     end
 
     def header_image

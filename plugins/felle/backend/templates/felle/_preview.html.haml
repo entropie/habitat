@@ -1,13 +1,19 @@
 %li.fell-preview
   .container
     .columns
-      .column.col-3<
-        - if fell.header_image
-          %img.img-responsive{:src => fell.images.first.url}
-      .column.col-8<
+      .column.col-12
         %h3.text-elipsis<
-          %a{:href => routes.felleEdit_path(fell.slug)}= fell.name
-
-        %p<
-          -# %a{:href => Web.routes.fell_path(fell.stateslug, fell.slug)} #
           %a{:href => Web.routes.fell_path(fell.slug)} #
+          %a{:href => routes.felleEdit_path(fell.slug)}= fell.name
+          %small
+            %span.state= fell.human_state
+            %span.age= fell.age
+      .column.col-4<
+        - if fell.header_image
+          .with-background-image{:style => "background-image: url(#{fell.header_image.url})"}
+      .column.col-8<
+        .img-box
+          - if fell.images.size > 0
+            - fell.images(true).each do |img|
+              .with-background-image{:style => "background-image: url(#{img.url})"}
+

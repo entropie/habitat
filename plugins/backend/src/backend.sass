@@ -245,6 +245,25 @@ ul.main-listing
 #db-snippet-content
   border: 1px solid silver
 
+.with-background-image
+  background-size: cover
+  background-repeat: no-repeat
+  background-position: center center
+  min-height: 94px
+
+.img-box
+  height: 94px
+  flex-wrap: wrap
+  display: flex
+  .with-background-image
+    flex: 1
+    min-width: 20%
+
+.fell-preview
+  span.state, span.age
+    color: silver
+    font-size: .8em
+
 .gallery-add-form
   background-color: $color3
 

@@ -2,68 +2,91 @@
   %form{:action => action, :method => :post, enctype: 'multipart/form-data'}
     - unless fell
       %input{:type => :hidden, :name => :create, :value => 1}
-    .container.top-seperator
+    .container
       .columns
-        .column.col-8
-          .columns
-            .column.col-8
-              .input-group
-                %span.input-group-addon
-                  Name
-                %input.form-input{:type => :text, :name => :name, :value => (fell && fell.name), :name => :name}
-            .column.col-4
-              .input-group
-                %span.input-group-addon
-                  State
-                %select.form-select{:name => :state}
-                  - Felle::Fell::STATES.each_pair do |state, sv|
-                    %option{:value => state}= sv
-          .columns.top-seperator
-            .column.col-6
-              .form-group
-                %label.form-label.form-inline{:for => :title} Gender
-                %label.form-radio.form-inline
-                  %input{checked(fell && fell.gender == "1").merge(:type => :radio, :value => 1, :name => :gender)}
-                  %i.form-icon
-                  Female
-                %label.form-radio.form-inline
-                  %input{checked(fell && fell.gender == "0").merge(:type => :radio, :value => 0, :name => :gender)}
-                  %i.form-icon
-                  Male
-            .column.col-6
-              .form-label{:for => :panorama_image} Header Image
-              %input.form-input{ :type => :file, :name => :panorama_image}
-          .columns.top-seperator
-            .column.col-6
-              .input-group
-                %span.input-group-addon
-                  Breed
-                %input.form-input{:type => :text, :value => (fell && fell.breed), :name => :breed}
-            .column.col-6
-              .input-group
-                %span.input-group-addon                
-                  Origin
-                %input.form-input.form-inline{:type => :text, :value => (fell && fell.origin), :name => :origin}
+        .column.col-12
+          .tabs
+            %ul.tab.tab-block
+              %li.tab-item
+                %a{:href => "#tab-attributes"} Attributes
+              %li.tab-item
+                %a{:href => "#tab-text"} Text
+              %li.tab-item
+                %input.btn.btn-primary{:type => :submit, :value => "Absenden"}
+            #tab-attributes.tab-content
+              .column.col-12
+                .columns
+                  .column.col-6
+                    .input-group
+                      %span.input-group-addon
+                        Name
+                      %input.form-input{disabled(!!fell), :type => :text, :name => :name, :value => (fell && fell.name), :name => :name}
+                  .column.col-6
+                    .input-group
+                      %span.input-group-addon
+                        State
+                      %select.form-select{:name => :state}
+                        - Felle::Fell::STATES.each_pair do |state, sv|
+                          %option{:value => state}= sv
+            
+                .columns.top-seperator
+                  .column.col-6
+                    .input-group
+                      %span.input-group-addon
+                        Gender
+                      %select.form-input{:name => :gender, :id => :gender}
+                        %option{selected(fell && fell.gender == 0)} Female
+                        %option{selected(fell && fell.gender == 1)} Male
+            
+                    .input-group.top-seperator
+                      %span.input-group-addon
+                        Breed
+                      %input.form-input{:type => :text, :value => (fell && fell.breed), :name => :breed}
+            
+                    .input-group.top-seperator
+                      %span.input-group-addon                
+                        Origin
+                      %input.form-input.form-inline{:type => :text, :value => (fell && fell.origin), :name => :origin}
+                  .column.col-1
+                  .column.col-5
+                    - Felle::Fell::Attributes.each do |attr|
+                      %label.form-switch
+                        %input{checkbox(fell, attr, fell && fell.attributes[attr] || 1)}
+                        %i.form-icon
+                        = attr
+            
+                .columns.top-seperator
+                  .column.col-6
+                    .input-group
+                      .input-group-addon
+                        BDay Start
+                      %input.form-input.input-tagline{:type => :date, :value => date_value(fell && fell.birthday.value_start), :name => :datestart}
+                  .column.col-6
+                    .input-group
+                      .input-group-addon
+                        BDay End
+                      %input.form-input.input-tagline{:type => :date, :value => date_value(fell && fell.birthday.value_end), :name => :dateend}
+            
+                .columns.top-seperator
+                  .column.col-6
+                    .input-group
+                      %span.input-group-addon
+                        Header Image
+                      %input.form-input{ :type => :file, :name => :panorama_image}
+                    - if fell && fell.header_image
+                      .with-background-image{:style => "background-image: url(#{fell.header_image.url})"}
+            
+                  .column.col-6
+                    .input-group
+                      %span.input-group-addon
+                        Gallery
+                      %input.form-input{ :type => :file, :name => "gallery_images[]"}
+                    - if fell && fell.images && fell.images.size > 0
+                      .img-box
+                        - fell.images(true).each do |fimg|
+                          .with-background-image{:style => "background-image: url(#{fimg.url})"}
 
-          .columns.top-seperator
-            .column.col-6
-              .input-group
-                .input-group-addon
-                  BDay Start
-                %input.form-input.input-tagline{:type => :date, :value => date_value(fell && fell.birthday.value_start), :name => :datestart}
-            .column.col-6
-              .input-group
-                .input-group-addon
-                  BDay End
-                %input.form-input.input-tagline{:type => :date, :value => date_value(fell && fell.birthday.value_end), :name => :dateend}
-
-        .column.col-4
-          - Felle::Fell::Attributes.each do |attr|
-            %label.form-switch
-              %input{checkbox(fell, attr, fell && fell.attributes[attr] || 1)}
-              %i.form-icon
-              = attr
-      .columns.top-seperator
-        .column.col-8.text-right
-          %input.btn.btn-primary{:type => :submit, :value => "Absenden"}
+            #tab-text.tab-content
+              .column.col-12
+                %textarea#fell-text-form.form-input.cm-form{:name => :text, :Rows => 15, "data-codemirror-mode" => "text/x-markdown"}= (fell && fell.text)
             

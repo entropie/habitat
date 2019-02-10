@@ -10,6 +10,23 @@ module Backend::Views::Felle
       end
     end
 
+    def disabled(cond)
+      if cond
+        { :disabled => :disabled }
+      else
+        {}
+      end
+      
+    end
+
+    def selected(cond)
+      if cond
+        { :selected => :selected }
+      else
+        {}
+      end
+    end
+
     def date_value(o)
       if o
         o.strftime("%F")
