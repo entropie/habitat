@@ -150,6 +150,7 @@ module Pager
   
   class Pager
     attr_reader :params, :list, :link_proc
+    attr_reader :pager
     attr_accessor :max
 
     MAX = 10
