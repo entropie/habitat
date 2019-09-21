@@ -1,83 +1,6 @@
 
 module Pager
 
-
-  # https://github.com/Ramaze/ramaze/blob/master/lib/ramaze/gestalt.rb
-  class Gestalt
-    attr_accessor :out
-    def self.build(&block)
-      self.new(&block).to_s
-    end
-
-    def initialize(&block)
-      @out = []
-      instance_eval(&block) if block_given?
-    end
-
-    def method_missing(meth, *args, &block)
-      _gestalt_call_tag meth, args, &block
-    end
-
-
-    def p(*args, &block)
-      _gestalt_call_tag :p, args, &block
-    end
-
-
-    def select(*args, &block)
-      _gestalt_call_tag(:select, args, &block)
-    end
-
-    def _gestalt_call_tag(name, args, &block)
-      if args.size == 1 and args[0].kind_of? Hash
-        # args are just attributes, children in block...
-        _gestalt_build_tag name, args[0], &block
-      elsif args[1].kind_of? Hash
-        # args are text and attributes ie. a('mylink', :href => '/mylink')
-        _gestalt_build_tag(name, args[1], args[0], &block)
-      else
-        # no attributes, but text
-        _gestalt_build_tag name, {}, args, &block
-      end
-    end
-
-    def _gestalt_build_tag(name, attr = {}, text = [])
-      @out << "<#{name}"
-      @out << attr.map{|(k,v)| %[ #{k}="#{_gestalt_escape_entities(v)}"] }.join
-      if text != [] or block_given?
-        @out << ">"
-        @out << _gestalt_escape_entities([text].join)
-        if block_given?
-          text = yield
-          @out << text.to_str if text != @out and text.respond_to?(:to_str)
-        end
-        @out << "</#{name}>"
-      else
-        @out << ' />'
-      end
-    end
-
-    def _gestalt_escape_entities(s)
-      s.to_s.gsub(/&/, '&amp;').
-        gsub(/"/, '&quot;').
-        gsub(/'/, '&apos;').
-        gsub(/</, '&lt;').
-        gsub(/>/, '&gt;')
-    end
-
-    def tag(name, *args, &block)
-      _gestalt_call_tag(name.to_s, args, &block)
-    end
-
-
-    def to_s
-      @out.join
-    end
-    alias to_str to_s
-  end # Gestalt
-
-
-
   class ArrayPager
     def initialize(array, page, limit)
       @array, @page, @limit = array, page, limit
@@ -149,6 +72,8 @@ module Pager
   end
   
   class Pager
+    include Hanami::Helpers::HtmlHelper
+
     attr_reader :params, :list, :link_proc
     attr_reader :pager
     attr_accessor :max
@@ -175,48 +100,47 @@ module Pager
       @link_proc = obj
     end
 
-
     def navigation(limit = 8)
-      g = Gestalt.new
-      g.ul :class => :pager do
-            
+      html.ul(:class => :pager) do
         if first_page?
-          g.li(:class => "page-item disabled") {
-            g.span(:class => 'first grey'){
-              g.span(:class => "glyphicon glyphicon-fast-backward") {""}
+          li(:class => "page-item disabled") {
+            span(:class => 'first grey'){
+              span(:class => "glyphicon glyphicon-fast-backward") {""}
             } }
-          g.li(:class => "page-item disabled") {
-            g.span(:class => 'previous grey'){ g.span(:class => "glyphicon glyphicon-backward") {""} } } 
+          li(:class => "page-item disabled") {
+            span(:class => 'previous grey'){ span(:class => "glyphicon glyphicon-backward") {""} } } 
         else
-          g.li(:class => "page-item") { link(g, 1, '<span class="glyphicon glyphicon-fast-backward"></span>', :class => "page-item hl first") }
-          g.li(:class => "page-item ") { link(g, prev_page, '<span class="glyphicon glyphicon-backward"></span>', :class => "page-item hl previous") }              
+          li(:class => "page-item") { a(:href => 1){ span(:class => "glyphicon glyphicon-fast-backward hl first")}}
+          li(:class => "page-item") { a(:href => prev_page){ span(:class => "glyphicon glyphicon-backward hl previous")}}
         end
 
         lower = limit ? (current_page - limit) : 1
         lower = lower < 1 ? 1 : lower
 
         (lower...current_page).each do |n|
-          g.li(:class => "page-item") { link(g, n) }
+          li(:class => "page-item") { a(:href => n){ n } }
         end
 
-        g.li(:class => "page-item active disabled") { g.span current_page }
+        li(:class => "page-item active disabled") { span current_page }
         
         if last_page?
-          g.li(:class => "page-item disabled") {
-            g.span(:class => 'next grey'){ g.span(:class => "glyphicon glyphicon-fast-forward") {""} } }
-          g.li(:class => "page-item disabled") {
-            g.span(:class => 'next grey'){ g.span(:class => "glyphicon glyphicon-forward") {""} } } 
+          li(:class => "page-item disabled") {
+            span(:class => 'next grey'){ span(:class => "glyphicon glyphicon-fast-forward") {""} } }
+          li(:class => "page-item disabled") {
+            span(:class => 'next grey'){ span(:class => "glyphicon glyphicon-forward") {""} } } 
         elsif next_page
           higher = limit ? (next_page + limit) : page_count
           higher = [higher, page_count].min
           (next_page..higher).each do |n|
-            g.li(:class => "page-item") { link(g, n) }
+            li(:class => "page-item") {
+              a(:href => link_proc.call(n)){ n }
+            }
           end
-          g.li(:class => "page-item") { link(g, next_page,  '<span class="glyphicon glyphicon-forward"></span>', :class => "hl next") }
-          g.li(:class => "page-item") { link(g, page_count, '<span class="glyphicon glyphicon-fast-forward"></span>', :class => "hl last") }              
+
+          li(:class => "page-item") { a(:href => next_page){ span(:class => "glyphicon glyphicon-forward hl next")}}
+          li(:class => "page-item") { a(:href => page_count){ span(:class => "glyphicon glyphicon-fast-forward hl last")}}
         end
       end
-      g.to_s
     end
 
 

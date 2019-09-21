@@ -157,7 +157,7 @@ module Galleries
       end
 
       def path
-        @gallery.path(".." ,@filename)
+        @gallery.path("..", @filename)
       end
 
       def self.hash_filename(file)

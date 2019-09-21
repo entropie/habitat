@@ -6,8 +6,8 @@ Encoding.default_external = Encoding::UTF_8
 Encoding.default_internal = Encoding::UTF_8
 
 gem 'rake'
-gem 'hanami',       '~> 1.1'
-gem 'hanami-model', '~> 1.1'
+gem 'hanami',       '1.3.2'
+gem 'hanami-model', '1.3.2'
 
 gem "subcommand"
 gem "sqlite3"
@@ -18,7 +18,7 @@ gem "bootstrap", '~> 4.0.0'
 
 gem 'haml'
 
-gem 'sass'
+gem 'sassc'
 
 gem 'jwt'
 gem "rack", ">= 2.0.6"
@@ -37,7 +37,7 @@ gem "flickraw", github: 'hanklords/flickraw'
 gem "builder"
 
 gem "capistrano", "= 3.11.0", require: false
-gem "capistrano-bundler", '~> 1.3'
+gem "capistrano-bundler" #, '~> 1.3'
 gem "capistrano-rvm"
 
 gem "multi_json"
