@@ -199,7 +199,7 @@ module VGWort
     end
 
     def write(url, code, id)
-      img = "<img src='%s' alt='vgwort zaehlmarke' />" % url
+      img = "<img src='%s' alt='' />" % url
 
       str = [img, code, id].join("\n")
 
