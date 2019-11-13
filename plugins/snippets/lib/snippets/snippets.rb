@@ -176,12 +176,12 @@ module Snippets
       super("haml")
     end
 
-    def render
+    def render(lcs = {})
       locals = {}
       if env
         locals[:request_path] = env.env['REQUEST_PATH']
       end
-      ret = "%s" % Haml::Engine.new(to_s).render(Env.new(locals), locals)
+      ret = "%s" % Haml::Engine.new(to_s).render(Env.new(locals.merge(lcs)), locals)
       ret
     end
   end
