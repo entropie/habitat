@@ -56,6 +56,22 @@ module Galleries
 
   module GalleriesAccessMethods
 
+    def IMGSRC(gal, ident)
+      gallery = Habitat.adapter(:galleries).find(gal)
+      img = gallery.images(ident)
+
+      msg = ""
+      if !gallery
+        msg = "gallery <i>#{gal}</i> not existing"
+      elsif !img
+        msg = "image <i>#{ident}</i> not existing in gallery <i>#{gal}</i>."
+      else
+        return img.url
+      end
+
+      return "<div class='error-msg'>#{msg}</div>"
+    end
+
     def IMG(gal, ident)
       gallery = Habitat.adapter(:galleries).find(gal)
       img = gallery.images(ident)
