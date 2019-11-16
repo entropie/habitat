@@ -38,11 +38,17 @@ $gColor2: silver
   text-align: center
   flex-wrap: wrap
 
-.gallery-image-container
+.img-container
+  height: 100%
   width: 100%
 
+.gallery-image-container
+  width: 100%
+  height: 100%
+  position: relative
   img
     max-width: 100%
+    min-width: 50px
 
   a
     @include img-container()
