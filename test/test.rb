@@ -18,8 +18,8 @@ module Habitat
           Habitat.log :info, "running suite [#{ident}] for #{Habitat.S(file)}"
           Habitat.log :info, "#{ident}:prepare"
           prepare!
-
-          puts %x"ruby -r 'minitest/autorun' #{file}"
+          # -r 'minitest/autorun'
+          puts %x"ruby  #{file}"
           Habitat.log :info, "#{ident}:teardown"
           teardown!
         end

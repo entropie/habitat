@@ -109,6 +109,18 @@ module Backend
         end
 
 
+        Habitat.plugin_enabled?(:booking) do
+          namespace :booking do
+            get  '/create',       to: "booking#create", as:   :bookingCreate
+            post '/create',       to: "booking#create"
+            get  '/:slug',        to: "booking#snippet", as:  :bookin
+            get  '/:slug/edit',   to: "booking#edit", as:     :bookingEdit
+            post '/:slug/edit',   to: "booking#edit"
+            get  '/',             to: "booking#index", as:    :booking
+            #get  '/page/:page',   to: "booking#index", as:    :bookingPager
+          end
+        end
+
       end
 
       security.x_frame_options 'DENY'
