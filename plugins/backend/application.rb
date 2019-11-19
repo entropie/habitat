@@ -99,6 +99,16 @@ module Backend
           end
         end
 
+        Habitat.plugin_enabled?(:t) do
+          namespace :t do
+            get  '/create',       to: "t#create", as:   :tCreate
+            post '/create',       to: "t#create"
+            get  '/',             to: "t#index",  as:      :t
+          end
+
+        end
+
+
       end
 
       security.x_frame_options 'DENY'

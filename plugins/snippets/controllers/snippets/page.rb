@@ -9,7 +9,11 @@ module Web::Controllers::Snippets
       slug = params[:slug]
       lparams = params.env["router.request"].path
       @snippet = snippet_page(slug, lparams, params)
-      @page_title = t("pagetitle-#{snippet.ident}")
+
+      trans_string = "pagetitle-#{snippet.ident}"
+      if T.included?(trans_string)
+        @page_title = t(trans_string)
+      end
       
       halt 404 unless snippet
     end

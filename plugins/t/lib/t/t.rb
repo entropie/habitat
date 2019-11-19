@@ -7,6 +7,7 @@ module T
 
     loaded = YAML::load_file(file_to_read)
 
+    Habitat.log :info, "reading translation file #{file_to_read}"
     if not File.exist?(file_to_read) or !loaded
       puts "yaml file not existing #{file_to_read}\nremove #{self.class.to_s} from plugins or create one"
       sleep 5
@@ -26,11 +27,16 @@ module T
 
   class THash < Hash
   end
+
+  def self.included?(arg)
+    not T.to_hash[arg.to_sym].nil?
+  end
   
 end
 
 
 def t(arg)
+
   if ret = T.to_hash[arg.to_sym]
     return ret
   end
