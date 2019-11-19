@@ -2,6 +2,15 @@ module T
 
   DEFAULT_YAML_FILENAME = "t.yaml".freeze
 
+  BACKEND_TS = {
+                :"galleries-page-topic-index" => "Gallerien und Bilder",
+                :"blog-page-topic-index" => "Blogposts",
+                :"snippets-page-topic-index" => "Textausschnitte und Seiten",
+                :"user-page-topic-index" => "Benutzer und Admins"
+
+  }
+
+
   def self.read
     file_to_read = Habitat.quart.media_path(DEFAULT_YAML_FILENAME)
 
@@ -13,7 +22,7 @@ module T
       sleep 5
     end
 
-    @thash = THash.new.merge(loaded)
+    @thash = THash.new.merge(loaded).merge(BACKEND_TS)
   end
 
   def self.clear
