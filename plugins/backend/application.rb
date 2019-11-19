@@ -141,10 +141,6 @@ module Backend
           include ::Blog::BlogViewMethods
         end
 
-        def t(str)
-          "#{str}"
-        end
-        
         def Snip(arg)
           Habitat.adapter(:snippets).render(arg, locals[:params])
         end
