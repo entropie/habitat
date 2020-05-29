@@ -7,7 +7,8 @@
   .gallery-images
     - gallery.images.each do |img|
       .item
-        .gi{:style => "background-image: url(#{img.url})", "data-hash" => img.hash}
+        .gi
+          %img{src: img.url}
           .cntrls
             .links
               %a{:href => routes.galleryRemoveImage_path(gallery.ident, img.hash), :onclick => "return confirm('Are you sure?')"}

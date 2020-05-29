@@ -1,10 +1,11 @@
 .backend-page-header
-  %h1= t("galleries-page-topic-show")
+  %h1
+    = t("galleries-page-topic-show", "yoyoyo")
 
 .main-content
   = render template: "galleries/_add_form", locals: { gallery: gallery }
   %ul.main-listing.single
     = render template: "galleries/_preview", locals: { gallery: gallery, :images => gallery.images}
 
-
+    
 

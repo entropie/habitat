@@ -135,6 +135,10 @@ module Snippets
       routes.page_path(*args)
     end
 
+    # def accept_cookies?
+    #   locals.accept_cookies
+    # end
+
     def LINK(path, desc)
       "<a class='#{active_path(path) ? "active" : ""}' href='#{path}'>#{desc}</a>"
     end
@@ -177,7 +181,7 @@ module Snippets
     end
 
     def render(lcs = {})
-      locals = {}
+      locals = lcs
       if env
         locals[:request_path] = env.env['REQUEST_PATH']
       end
