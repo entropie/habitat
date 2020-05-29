@@ -110,8 +110,8 @@ module Pager
           li(:class => "page-item disabled") {
             span(:class => 'previous grey'){ span(:class => "glyphicon glyphicon-backward") {""} } } 
         else
-          li(:class => "page-item") { a(:href => 1){ span(:class => "glyphicon glyphicon-fast-backward hl first")}}
-          li(:class => "page-item") { a(:href => prev_page){ span(:class => "glyphicon glyphicon-backward hl previous")}}
+          li(:class => "page-item") { a(:href => link_proc.call(1)){ span(:class => "glyphicon glyphicon-fast-backward hl first")}}
+          li(:class => "page-item") { a(:href => link_proc.call(prev_page||1)){ span(:class => "glyphicon glyphicon-backward hl previous")}}
         end
 
         lower = limit ? (current_page - limit) : 1
@@ -137,8 +137,8 @@ module Pager
             }
           end
 
-          li(:class => "page-item") { a(:href => next_page){ span(:class => "glyphicon glyphicon-forward hl next")}}
-          li(:class => "page-item") { a(:href => page_count){ span(:class => "glyphicon glyphicon-fast-forward hl last")}}
+          li(:class => "page-item") { a(:href => link_proc.call(next_page)){ span(:class => "glyphicon glyphicon-forward hl next")}}
+          li(:class => "page-item") { a(:href => link_proc.call(page_count)){ span(:class => "glyphicon glyphicon-fast-forward hl last")}}
         end
       end
     end
