@@ -99,7 +99,14 @@ module Blog
     def self.make_slug(str)
       str.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')
     end
- 
+
+    def backend_display_information
+      [
+        [:created, to_human],
+      ]
+    end
+
+    
     def initialize(adapter)
       @adapter = adapter
     end

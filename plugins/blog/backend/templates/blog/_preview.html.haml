@@ -8,6 +8,10 @@
         %h3.post-title.text-ellipsis
           %a{:href => routes.post_path(post.slug)}= post.title
           .post-info
+            - post.backend_display_information.each do |bik,biv|
+              .modinfo{:class => "modinfo-#{bik}"}
+                %strong= bik
+                = biv
             = backend_module_info(post)
   .post-controls
     .published
