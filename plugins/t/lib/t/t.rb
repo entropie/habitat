@@ -1,9 +1,12 @@
+# coding: utf-8
 module T
 
   DEFAULT_YAML_FILENAME = "t.yaml".freeze
 
   BACKEND_TS = {
                 :"galleries-page-topic-index" => "Gallerien und Bilder",
+                :"galleries-page-topic-show" => "%s Gallerien und Bilder",
+                :"galleries-page-label-upload" => "Hinzufügen",
                 :"blog-page-topic-index" => "Blogposts",
                 :"snippets-page-topic-index" => "Textausschnitte und Seiten",
                 :"user-page-topic-index" => "Benutzer und Admins"
@@ -44,12 +47,15 @@ module T
 end
 
 
-def t(arg)
+def t(arg, args = [])
+  ret = T.to_hash[arg.to_sym]
 
-  if ret = T.to_hash[arg.to_sym]
-    return ret
+  ret = ret % args if args.size > 0
+  
+  if ret
+    return self.respond_to?(:_raw) ? _raw(ret) : ret
   end
-  return "<span style='color:red'>#{arg}</span>"
+  return self.respond_to?(:_raw) ? _raw("<span style='color:red'>#{arg}</span>") : arg
 end
 
 T.read
