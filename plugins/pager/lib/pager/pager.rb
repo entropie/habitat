@@ -118,7 +118,7 @@ module Pager
         lower = lower < 1 ? 1 : lower
 
         (lower...current_page).each do |n|
-          li(:class => "page-item") { a(:href => n){ n } }
+          li(:class => "page-item") { a(:href => link_proc.call(n)){ n } }
         end
 
         li(:class => "page-item active disabled") { span current_page }
