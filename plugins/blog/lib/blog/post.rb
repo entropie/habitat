@@ -101,7 +101,7 @@ module Blog
     end
 
     def backend_display_information
-      [
+      bdi = [
         [:created, to_human],
       ]
     end
