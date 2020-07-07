@@ -146,34 +146,59 @@ module Tumblog
       end
 
 
+      # class GFYcat < Handler
+      #   def self.match
+      #     [/gfycat\.com/]
+      #   end
+
+      #   def process!
+      #     FileUtils.mkdir_p(post.datadir)
+          
+      #     target_file = post.datadir(post.id + ".mp4")
+
+      #     srcurl, thumbnail = "", ""
+      #     open(post.content) do |uri|
+      #       html = Nokogiri::HTML(uri.read)
+      #       srcurl = html.xpath('//source[@id="mp4Source"]').first[:src]
+      #       thumbnail = html.xpath('//video[@class="share-video-noscript"]').first[:poster]
+      #     end
+      #     ret = nil
+
+      #     ret = download(srcurl, target_file)
+      #     download(thumbnail, thumbnail_file)
+      #     ret
+      #   end
+
+
+      #   def to_html(logged_in = false)
+      #     super % post.http_data_dir(post.id + ".mp4")
+      #   end
+      # end
+
       class GFYcat < Handler
+        include YoutubeDLMixin
+
         def self.match
           [/gfycat\.com/]
         end
 
+
         def process!
           FileUtils.mkdir_p(post.datadir)
-          
-          target_file = post.datadir(post.id + ".mp4")
 
-          srcurl, thumbnail = "", ""
-          open(post.content) do |uri|
-            html = Nokogiri::HTML(uri.read)
-            srcurl = html.xpath('//source[@id="mp4Source"]').first[:src]
-            thumbnail = html.xpath('//video[@class="share-video-noscript"]').first[:poster]
-          end
-          ret = nil
-
-          ret = download(srcurl, target_file)
-          download(thumbnail, thumbnail_file)
-          ret
+          target_file = post.datadir(post.id)
+          ydl = YoutubeDL.download(post.content, output: target_file)
+          post.title = ""
+          true
         end
 
 
         def to_html(logged_in = false)
-          super % post.http_data_dir(post.id + ".mp4")
+          %Q|<img class='preview' src='%s'/>| % post.http_data_dir("#{post.id}")
         end
+
       end
+      
 
 
       class Img < Handler
