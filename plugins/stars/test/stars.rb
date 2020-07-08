@@ -21,7 +21,7 @@ def img
 end
 
 def create_michis
-  adapter.create("michi trommer", 5, "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", img)
+  star = adapter.create("michi trommer", 5, "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", :image => img)
 end
 
 

@@ -113,6 +113,7 @@ module Backend
             get  '/create',       to: "stars#create", as:   :starsCreate
             post '/create',       to: "stars#create"
             get  '/',             to: "stars#index",  as:   :stars
+            get  '/page/:page',   to: "stars#index",  as:   :starsPager
           end
         end
 

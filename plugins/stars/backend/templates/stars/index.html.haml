@@ -1,1 +1,12 @@
-index
+.backend-page-header
+  %h1= t("stars-page-topic-index")
+
+#db-stars.main-content-block
+  %ul.main-listing
+    - pager.each do |star|
+      = render template: "stars/_star_preview", locals: {star: star}
+  - if stars.empty?
+    .info= t("common-nothing-here-yet")
+  - else
+    = pager.navigation
+

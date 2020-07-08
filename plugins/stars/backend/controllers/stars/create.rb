@@ -5,13 +5,24 @@ module Backend::Controllers::Stars
 
     def call(params)
       adapter = Habitat.adapter(:stars)
-      if request.post?
 
-        hparams = params.to_h
-        pimg = hparams.delete(:image)
+      errors = {}
+      fs = [:ident, :content, :stars].map do |f|
+        fc = params[f]
+        if fc.to_s.strip.empty?
+          errors[f] = "empty"
+          nil
+        else
+          [f, fc]
+        end
+      end
+      fs = Hash[*fs.compact.flatten]
 
-        hparams[:image] = pimg[:tempfile]
-        star = adapter.update_or_create(hparams)
+      hparams = params.to_h
+      imgh = hparams.delete(:image)
+      fs[:image] = imgh[:tempfile] if imgh
+      if fs.size >= 3
+        star = adapter.update_or_create(fs)
       end
     end
   end

@@ -42,15 +42,30 @@ module Stars
     attr_accessor :image
     attr_accessor :stars
 
-    def initialize(ident, stars, content, image)
+    def initialize(ident, stars, content)
       @ident = ident
       @stars = stars
       @content = content
-      @image = image
+      @image = nil
     end
 
     def filename
       "%s.star.%s" % [ident, "yaml"]
+    end
+
+    def self.image2base64(path)
+      if ::File.exist?(path)
+        ::File.open(path, 'rb') do |img|
+          return 'data:image/jpeg;base64,' + Base64.strict_encode64(img.read)
+        end
+      else
+        path
+      end
+    end
+
+    def image=(imgfile_or_base64str)
+      @image = Star.image2base64(imgfile_or_base64str)
+      self
     end
 
     def self.for(filename)

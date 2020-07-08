@@ -42,10 +42,6 @@ module Stars
           ::File.exist?(post_filename(post))
         end
 
-        def datadir(*args)
-          ::File.expand_path(repository_path("../data", *args))
-        end
-
         def stars_files
           toglob = repository_path + "/*" + STAR_EXTENSION + "*"
           Dir.glob(toglob)
@@ -74,42 +70,35 @@ module Stars
           YAML::load_file(yamlfile)
         end
 
-        def image2base64(path)
-          if ::File.exist?(path)
-            ::File.open(path, 'rb') do |img|
-              return 'data:image/jpeg;base64,' + Base64.strict_encode64(img.read)
-            end
-          else
-            path
-          end
-        end
-
-        def create(ident, n, content, img)
+        def create(ident, n, content, ohash = {})
           slug_ident = ::Habitat::Database::make_slug(ident)
-          image = image2base64(img)
-          star = Star.new(slug_ident, n.to_i, content, image)
+          star = Star.new(slug_ident, n.to_i, content)
           raise StarAlreadyExist, "star already existing" if star.exist?
+
+          star.image = img if img = ohash[:image]
+
           store(star)
           star
         end
 
         def update_or_create(hsh)
-          i, n, content, img = hsh.fetch_values(:ident, :stars, :content, :image)
+          i, n, content = hsh.fetch_values(:ident, :stars, :content)
           slug_ident = ::Habitat::Database::make_slug(i)
           n = n.to_i
-          image = image2base64(img)
 
           star = stars[slug_ident]
 
           if not star
-            star = create(slug_ident, n, content, image)
+            star = create(slug_ident, n, content)
           else
             star.stars = n
-            star.image = image
             star.content = content
             log :info, "stars:UPDAT:#{star.ident}"
-            store(star)
           end
+
+          star.image = hsh[:image] if hsh[:image]
+
+          store(star)
           star
         end
 
