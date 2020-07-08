@@ -3,7 +3,6 @@ module Stars
 
   DEFAULT_ADAPTER = :File
 
-
   class StarAlreadyExist < RuntimeError
   end
 
@@ -67,7 +66,7 @@ module Stars
     end
 
     def exist?
-      File.exist?(adapter.repository_path(filename))
+      File.exist?(Habitat.adapter(:stars).repository_path(filename))
     end
   end
 

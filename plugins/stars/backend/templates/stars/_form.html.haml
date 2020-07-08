@@ -1,5 +1,5 @@
 #db-stars-form
-  %form{:method => :post, :action => action}
+  %form{method: :post, action: action, enctype: 'multipart/form-data'}
     .container
       .columns
         .column.col-6
@@ -10,12 +10,20 @@
               - if star
                 %input.form-input{:value => star.ident, :disabled => :disabled, :style => "width:100%"}
               - else
-                %input.form-input{:value => "", :name => :ident, :style => "width:100%"}
+                %input.form-input{:value => "michis test", :name => :ident, :style => "width:100%"}
         .column.col-6
           = t("star-help-ident")
+
+        .column.col-6.top-seperator
+          %input.form-input{:type => :file, :name => :image, :name => :image}
+        .column.col-6.top-seperator
+          %select.form-input{:name => :stars}
+            - (1..5).each do |n|
+              %option{:value => n}= n
+
         .column.col-12.top-seperator
           .form-group
-            %textarea#star-form.form-input.cm-form{:rows => 15, :name => :content, "data-codemirror-mode" => "text/x-markdown"}= (star && star.content)
+            %textarea#star-form.form-input.cm-form{:rows => 15, :name => :content, "data-codemirror-mode" => "text/x-markdown"}= (star && star.content || "foobar")
 
         .column.col-12.text-center.top-seperator
           %input.btn.btn-primary{:type => :submit, :value => "Absenden"}    

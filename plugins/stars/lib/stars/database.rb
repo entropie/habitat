@@ -64,21 +64,53 @@ module Stars
           ::Stars::Stars.new(stars_files.map{|sf| ::Stars::Star.for(sf) })
         end
 
-        def [](ident)
-          slug_ident = ::Habitat::Database::make_slug(ident)
-          stars.select{|star| star.ident == slug_ident}
-        end
+        # def [](ident)
+        #   slug_ident = ::Habitat::Database::make_slug(ident)
+        #   stars.select{|star| star.ident == slug_ident}
+        # end
 
         def load_file(yamlfile)
           log :debug, "loading #{Habitat.S(yamlfile)}"
           YAML::load_file(yamlfile)
         end
 
+        def image2base64(path)
+          if ::File.exist?(path)
+            ::File.open(path, 'rb') do |img|
+              return 'data:image/jpeg;base64,' + Base64.strict_encode64(img.read)
+            end
+          else
+            path
+          end
+        end
+
         def create(ident, n, content, img)
           slug_ident = ::Habitat::Database::make_slug(ident)
-          star = Star.new(slug_ident, n, content, img)
+          image = image2base64(img)
+          star = Star.new(slug_ident, n.to_i, content, image)
           raise StarAlreadyExist, "star already existing" if star.exist?
           store(star)
+          star
+        end
+
+        def update_or_create(hsh)
+          i, n, content, img = hsh.fetch_values(:ident, :stars, :content, :image)
+          slug_ident = ::Habitat::Database::make_slug(i)
+          n = n.to_i
+          image = image2base64(img)
+
+          star = stars[slug_ident]
+
+          if not star
+            star = create(slug_ident, n, content, image)
+          else
+            star.stars = n
+            star.image = image
+            star.content = content
+            log :info, "stars:UPDAT:#{star.ident}"
+            store(star)
+          end
+          star
         end
 
         def store(star)

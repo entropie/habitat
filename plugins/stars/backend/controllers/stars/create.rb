@@ -6,8 +6,14 @@ module Backend::Controllers::Stars
     def call(params)
       adapter = Habitat.adapter(:stars)
       if request.post?
-        star = adapter.create(1,2,3,4)
+
+        hparams = params.to_h
+        pimg = hparams.delete(:image)
+
+        hparams[:image] = pimg[:tempfile]
+        star = adapter.update_or_create(hparams)
       end
     end
   end
 end
+
