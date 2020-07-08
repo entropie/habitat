@@ -1,0 +1,5 @@
+.backend-page-header.main-content-block
+  %h1= t("stars-page-topic-create")
+#db-snippets.main-content-block.top-seperator
+  = render template: "stars/_form", locals: { star: star, action: star ? routes.starsEdit_path(snippet.ident) : routes.starsCreate_path() }
+

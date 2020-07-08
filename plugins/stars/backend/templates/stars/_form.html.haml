@@ -1,0 +1,21 @@
+#db-stars-form
+  %form{:method => :post, :action => action}
+    .container
+      .columns
+        .column.col-6
+          .form-group
+            .input-group
+              %span.input-group-addon
+                Ident
+              - if star
+                %input.form-input{:value => star.ident, :disabled => :disabled, :style => "width:100%"}
+              - else
+                %input.form-input{:value => "", :name => :ident, :style => "width:100%"}
+        .column.col-6
+          = t("star-help-ident")
+        .column.col-12.top-seperator
+          .form-group
+            %textarea#star-form.form-input.cm-form{:rows => 15, :name => :content, "data-codemirror-mode" => "text/x-markdown"}= (star && star.content)
+
+        .column.col-12.text-center.top-seperator
+          %input.btn.btn-primary{:type => :submit, :value => "Absenden"}    
