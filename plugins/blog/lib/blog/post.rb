@@ -96,8 +96,9 @@ module Blog
 
     attr_accessor :filename, :datadir, :user_id, :created_at, :updated_at
 
-    def self.make_slug(str)
-      str.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')
+    def self.make_slug(str) #
+      #str.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')
+      ::Habitat::Database::make_slug(str)
     end
 
     def backend_display_information
