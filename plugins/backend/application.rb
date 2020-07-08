@@ -89,24 +89,33 @@ module Backend
 
         Habitat.plugin_enabled?(:snippets) do
           namespace :snippets do
-            get  '/create',       to: "snippets#create", as:   :snippetsCreate
+            get  '/create',       to: "snippets#create",  as:   :snippetsCreate
             post '/create',       to: "snippets#create"
             get  '/:slug',        to: "snippets#snippet", as:  :snippet
-            get  '/:slug/edit',   to: "snippets#edit", as:     :snippetEdit
+            get  '/:slug/edit',   to: "snippets#edit",    as:     :snippetEdit
             post '/:slug/edit',   to: "snippets#edit"
-            get  '/',             to: "snippets#index", as:    :snippets
-            get  '/page/:page',   to: "snippets#index", as:    :snippetsPager
+            get  '/',             to: "snippets#index",   as:    :snippets
+            get  '/page/:page',   to: "snippets#index",   as:    :snippetsPager
           end
         end
 
         Habitat.plugin_enabled?(:t) do
           namespace :t do
-            get  '/create',       to: "t#create", as:   :tCreate
+            get  '/create',       to: "t#create",         as:   :tCreate
             post '/create',       to: "t#create"
-            get  '/',             to: "t#index",  as:      :t
+            get  '/',             to: "t#index",          as:   :t
           end
 
         end
+
+        Habitat.plugin_enabled?(:stars) do
+          namespace :stars do
+            get  '/create',       to: "stars#create", as:   :starsCreate
+            post '/create',       to: "stars#create"
+            get  '/',             to: "stars#index",  as:   :stars
+          end
+        end
+
 
 
         Habitat.plugin_enabled?(:booking) do
