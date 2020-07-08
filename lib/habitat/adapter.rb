@@ -18,6 +18,10 @@ module Habitat
       enum.next.join
     end
 
+    def self.make_slug(str)
+      str.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')
+    end
+
     def adapter
       @adapter ||= const_get(self.to_s.split("::").first).const_get(:DEFAULT_ADAPTER)
     end
