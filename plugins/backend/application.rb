@@ -110,15 +110,13 @@ module Backend
 
         Habitat.plugin_enabled?(:stars) do
           namespace :stars do
-            get  '/create',       to: "stars#create", as:   :starsCreate
-            post '/create',       to: "stars#create"
-            get  '/',             to: "stars#index",  as:   :stars
-            get  '/page/:page',   to: "stars#index",  as:   :starsPager
-
-            get  '/:slug/edit',   to: "stars#edit",   as:   :starEdit
-            post '/:slug/edit',   to: "stars#edit"
-            get  '/:slug/remove', to: "stars#destroy",as:   :starDestroy
-            get  '/:slug/',       to: "stars#show",   as:   :starShow
+            get  '/create',       to: "stars#create_or_edit", as:   :starsCreate
+            post '/create',       to: "stars#create_or_edit"
+            get  '/',             to: "stars#index",          as:   :stars
+            get  '/page/:page',   to: "stars#index",          as:   :starsPager
+            get  '/:ident/edit',  to: "stars#create_or_edit", as:   :starEdit
+            post '/:ident/edit',  to: "stars#create_or_edit"
+            get  '/:ident/remove',to: "stars#destroy",        as:   :starDestroy
           end
         end
 

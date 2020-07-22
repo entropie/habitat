@@ -1,5 +1,11 @@
 %li.star
-  %h3= star.ident
-  %p
-    %img{:src => star.image}
+  .topline.star-topline
+    %h3
+      %a{href: routes.starEdit_path(star.ident)}= star.ident
+      = "★"*star.stars
+  .body.star-body
+    .image.star-image
+      %img{:src => star.image}
+    .text.star-text
+      = star.content
   
