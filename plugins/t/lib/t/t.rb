@@ -17,12 +17,13 @@ module T
   def self.read
     file_to_read = Habitat.quart.media_path(DEFAULT_YAML_FILENAME)
 
-    loaded = YAML::load_file(file_to_read)
 
-    Habitat.log :info, "reading translation file #{file_to_read}"
-    if not File.exist?(file_to_read) or !loaded
-      puts "yaml file not existing #{file_to_read}\nremove #{self.class.to_s} from plugins or create one"
-      sleep 5
+    loaded = {}
+    unless File.exist?(file_to_read)
+      Habitat.log :warn, "yaml file not existing #{file_to_read}\nremove 'T' from plugins or create one"
+    else
+      Habitat.log :info, "reading translation file #{file_to_read}"
+      loaded = YAML::load_file(file_to_read)      
     end
 
     @thash = THash.new.merge(loaded).merge(BACKEND_TS)
