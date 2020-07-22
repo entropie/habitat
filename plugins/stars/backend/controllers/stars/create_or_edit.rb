@@ -22,6 +22,10 @@ module Backend::Controllers::Stars
         end
         fs = Hash[*fs.compact.flatten]
 
+        if params[:url]
+          fs[:url] = params[:url]
+        end
+
         hparams = params.to_h
         imgh = hparams.delete(:image)
         fs[:image] = imgh[:tempfile] if imgh

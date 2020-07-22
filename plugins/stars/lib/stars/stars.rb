@@ -41,6 +41,7 @@ module Stars
     attr_accessor :content
     attr_accessor :image
     attr_accessor :stars
+    attr_accessor :url
 
     def initialize(ident, stars, content)
       @ident = ident

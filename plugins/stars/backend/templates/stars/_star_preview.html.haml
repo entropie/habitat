@@ -2,7 +2,10 @@
   .topline.star-topline
     %h3
       %a{href: routes.starEdit_path(star.ident)}= star.ident
-      = "★"*star.stars
+      %small
+        = "★"*star.stars
+        %br
+        %a{:href => star.url}= star.url
   .body.star-body
     .image.star-image
       %img{:src => star.image}

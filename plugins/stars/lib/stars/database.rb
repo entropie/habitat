@@ -76,6 +76,7 @@ module Stars
           raise StarAlreadyExist, "star already existing" if star.exist?
 
           star.image = img if img = ohash[:image]
+          star.url = url if url = ohash[:url]
 
           store(star)
           star
@@ -97,6 +98,7 @@ module Stars
           end
 
           star.image = hsh[:image] if hsh[:image]
+          star.url = hsh[:url] if hsh[:url]
 
           store(star)
           star
