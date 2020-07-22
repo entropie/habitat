@@ -158,12 +158,19 @@ module Habitat
 
       add_content = ""
 
-      if icon = opts[:icon]
+      if icon = opts.delete(:icon)
         add_content << "<span class='glyphicon glyphicon-#{icon}'></span>"
       end
+
+      html_add = ""
+      attributes = opts.delete(:attributes)
+      if attributes
+        html_add = attributes.inject(""){|m, hkp| " %s='%s' " % hkp}
+      end
+      
       clz = path == href ? "active" : ""
 
-      ret = "<a href='%s' class='%s'>%s</a>" % [href, "#{clz} #{opts[:class] || "alink"}", text + add_content]
+      ret = "<a href='%s' #{html_add}class='%s'>%s</a>" % [href, "#{clz} #{opts[:class] || "alink"}", text + add_content]
       _raw(ret)
     end
     def adapter(ident)
