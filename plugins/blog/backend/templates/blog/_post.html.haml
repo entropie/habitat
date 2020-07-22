@@ -1,0 +1,12 @@
+.preview-box
+  %h1
+    = post.title
+    %small
+      %time.timeago{:datetime => post.created_at.iso8601, :title => post.to_human}= post.to_human
+  
+  .preview-box-body
+    = post.with_filter
+
+  %ul.tags
+    - post.tags.each do |tag|
+      = tag
