@@ -2,6 +2,7 @@
   %h1= t("blog-page-topic-show")
 
 .main-content
-  %ul.main-listing
+  %ul.main-listing.single
     = render template: "blog/_preview", locals: {post: post}
 
+= render template: "blog/_post", locals: {post: post}

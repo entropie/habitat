@@ -33,9 +33,10 @@ module Blog
       frt.each do |fc|
         begin
           Habitat.log :debug, "filter: #{fc} for #{post.id}"
-          res = fc.new(post).filter(res)
-        # rescue NameError
-        #   Habitat.log :warn, "something went wrong with #{fc}"
+          filtered = fc.new(post).filter(res)
+          res = filtered
+        rescue NameError
+          Habitat.log :warn, "something went wrong with #{fc}"
         end
       end
       res
