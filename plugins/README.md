@@ -1,5 +1,3 @@
-= Plugins
-
 * **api** dummy
 * **backend** plugin to have the backend actually enabled and accessible
 * **blog** simple blog engine. Supporting tags, multiple languages (alpha), api & feeds
