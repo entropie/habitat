@@ -114,6 +114,11 @@ module Backend
             post '/create',       to: "stars#create"
             get  '/',             to: "stars#index",  as:   :stars
             get  '/page/:page',   to: "stars#index",  as:   :starsPager
+
+            get  '/:slug/edit',   to: "stars#edit",   as:   :starEdit
+            post '/:slug/edit',   to: "stars#edit"
+            get  '/:slug/remove', to: "stars#destroy",as:   :starDestroy
+            get  '/:slug/',       to: "stars#show",   as:   :starShow
           end
         end
 
