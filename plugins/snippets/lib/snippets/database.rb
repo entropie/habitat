@@ -105,6 +105,7 @@ module Snippets
         def create(ident, content, kind = DEFAULT_SNIPPET_TYPE)
           snippet = adapter_class(kind).new(ident).extend(SnippetCreater)
           store(snippet, content)
+          snippet
         end
 
         # def update_or_create(ident, param_hash)

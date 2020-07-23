@@ -191,6 +191,10 @@ module Snippets
   end
 
   class PageSnippet < HAMLSnippet
+    def filename
+      super("haml")
+    end
+
     def parent?
       ident.to_s.split("---").size == 2
     end

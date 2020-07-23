@@ -4,7 +4,7 @@ module Backend::Controllers::Snippets
     expose :snippet
 
     def call(params)
-      pp params
+
 
       errors = {}
       fs = [:ident, :content].map do |f|
@@ -21,10 +21,10 @@ module Backend::Controllers::Snippets
       if fs.size == 2
         ext = params[:extension].to_sym != :haml ? :markdown : :haml
         adapter = Habitat.adapter(:snippets)
-        pp fs
-        snippet = adapter.create(fs[:ident], fs[:content])
-        pp snippet
+        snippet = adapter.create(fs[:ident], fs[:content], ext)
       end
+
+      return false
       
     end
   end
