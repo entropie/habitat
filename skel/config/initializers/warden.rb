@@ -13,6 +13,23 @@ Warden::Strategies.add(:password) do
   end
 end
 
+Warden::Strategies.add(:token) do
+  def valid?
+    params["token"]
+  end
+  
+  def authenticate!
+    tkn = params["token"]
+    u = Habitat.adapter(:user).by_token(tkn)
+    u.nil? ? fail!("Could not log in") : success!(u)
+    false
+  rescue
+    p $!
+    false
+  end
+end
+
+
 
 Warden::Manager.serialize_into_session do |user|
   user.id
