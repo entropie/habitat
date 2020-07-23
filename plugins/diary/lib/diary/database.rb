@@ -62,8 +62,13 @@ module Diary
 
         def with_user(user, &blk)
           @user, @sheets = user, nil
-          ret = yield self
-          @user, @sheets = nil, nil
+
+          if block_given?
+            ret = yield self
+            @user, @sheets = nil, nil
+          else
+            return self
+          end
           ret
         end
 
@@ -85,19 +90,46 @@ module Diary
           return ret
         end
 
+        def find(phash)
+          ret = Sheets.new(@user)
+          sheets(@user).each{|s|
+            candidate = s
+            phash.each do |k,v|
+              ret.push(candidate) if candidate.send(k) == v
+            end
+          }
+          ret
+        end
+
         def load_file(sfile)
           YAML.load_file(sfile)
         end
 
+        def update_or_create(hash)
+          sheet = nil
+          if id = hash[:id]
+            sheet = find(:id => id).first.extend(SheetFileExtension)
+          end
+          sheet = create(hash) unless sheet
+
+          sheet.populate(hash)
+          return sheet
+        end
+
         def create(content)
           now = Time.now
+          ncontent = content.kind_of?(String) ? content : content.delete(:content)
           hash = {
             :id         => Habitat::Database.get_random_id,
-            :content    => content,
+            :content    => ncontent,
             :created_at => now,
             :updated_at => now,
             :user_id    => @user.id
           }
+          if content.kind_of?(Hash)
+            hash.merge!(content)
+          end
+          
           super(hash)
         end
 
@@ -110,6 +142,7 @@ module Diary
             mkdir_p(dirname(sheet.file))
           end
 
+          sheet.updated_at = Time.now
           write(sheet.file, YAML.dump(sheet))
           sheet
         end

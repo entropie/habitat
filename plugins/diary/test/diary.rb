@@ -110,6 +110,7 @@ class TestSheets < Minitest::Test
       @adapter.store(sheet)
       assert_equal 1, @adapter.sheets.size
     end
+
     _clr
   end
 

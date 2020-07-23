@@ -12,6 +12,10 @@ module Diary
       result = dup.select{|sheet| sheet == pid }
       result.shift if result.size == 1
     end
+
+    def by_last_edited
+      Sheets.new(@user).push(*dup.sort_by{|s| s.updated_at }.reverse)
+    end
   end
 
   class Sheet
@@ -19,7 +23,7 @@ module Diary
       :content     => String,
       :created_at  => Time,
       :updated_at  => Time,
-      :user_id     => Fixnum
+      :user_id     => String
     }
  
     OptionalAttributes = [:title]
@@ -35,12 +39,28 @@ module Diary
       @content = content
     end
 
-    def ==(pid)
-      id == pid
+    def title
+      @title.to_s.size == 0 ? id : @title
+    end
+
+    def ==(pidorsheet)
+      if pidorsheet.kind_of?(Integer)
+        id == pidorsheet
+      elsif pidorsheet.kind_of?(Sheet)
+        id == pidorsheet.id
+      end
+    end
+
+    def =~(obj)
+      if obj.kind_of?(String)
+        title == obj or @id == obj
+      else
+        false
+      end
     end
 
     def user
-      Users[@user_id]
+      @user ||= Habitat.adapter(:user).by_id(@user_id)
     end
 
     def populate(param_hash)
@@ -84,8 +104,7 @@ module Diary
         :updated_at => @updated_at.rfc2822,
         :user_id => @user_id,
         :id => @id,
-        :references => references.references,
-        :preview => @preview || ""
+        :references => references.resolve.map{|r| r.id }
       }
       r.merge!(:title => @title) if @title
       r

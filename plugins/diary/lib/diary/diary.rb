@@ -22,7 +22,7 @@ module Diary
         before :check_token
       end
 
-      def A(*args, &blk)
+      def diary(*args, &blk)
         adapter_with_usercontext(:diary, *args, &blk)
       end
     end
@@ -31,10 +31,12 @@ module Diary
     def check_token(params)
       @return = {}
       if params[:token]
-        @token_user = Users.by_token(params[:token])
+        auth = params.env['warden'].authenticate(:token)
+        @return[:token] = logged_in?
       else
-        @return[:ok] = :nope
+        halt 404 unless logged_in?
       end
+      @return
     end
   end
 

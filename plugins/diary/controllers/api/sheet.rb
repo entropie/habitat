@@ -6,10 +6,7 @@ module Api::Controllers::Sheets
     include Diary::ApiControllerMethods 
 
     def call(params)
-      #sleep 2
-      sheet = A(@token_user) do |a|
-        a.sheets[ params[:id] ]
-      end
+      sheet = diary.find(:id => params[:id]).first
       @return.merge!(sheet.to_hash) if sheet
 
       self.status = 200
