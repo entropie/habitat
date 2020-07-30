@@ -50,6 +50,10 @@ module Stars
       @image = nil
     end
 
+    def to_hash
+      { :ident => @ident, :path => @path, :content => content, :stars => stars, :url => url, :image => image}
+    end
+
     def filename
       "%s.star.%s" % [ident, "yaml"]
     end
