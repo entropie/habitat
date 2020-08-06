@@ -30,7 +30,7 @@ module Stars
       ident = ::Habitat::Database::make_slug(obj.to_s)
       ret = select{|s| s.ident == ident}
       return ret.first if ret && ret.first
-      return NotExistingStar.new(obj)
+      return NotExistingStar.new(obj) if obj
     end
   end
 

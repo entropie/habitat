@@ -22,6 +22,11 @@
               %option{:value => n}= n
 
         .column.col-6.top-seperator
+          %input.form-input{:name => :name, :name => :name, :value => (star and star.name ? star.name : "") }
+        .column.col-6.top-seperator
+          = t("star-help-name")
+
+        .column.col-6.top-seperator
           %input.form-input{:name => :url, :name => :url, :value => (star and star.url ? star.url : "") }
         .column.col-6.top-seperator
           = t("star-help-url")
