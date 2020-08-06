@@ -131,8 +131,12 @@ quarters.each do |quart|
       end
 
       if q.plugins.activated?(:tumblog)
-        
-        token = File.readlines(File.expand_path("~/.tumbldog.token")).join.strip or raise "no token provided in ~/.tumbldog.token"
+        token = begin
+          File.readlines(File.expand_path("~/.tumbldog.token")).join.strip
+        rescue
+          "no token provided in ~/.tumbldog.token"
+        end
+
         Tumblog.token = token
         sopts.on("-A", "--submit value", "post") do |val|
 
