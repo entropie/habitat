@@ -59,6 +59,8 @@ module Blog
     def webp_url
       to_webp
       File.join("/attachments", dirname, basename.split(".").first + ".webp")
+    rescue
+      ""
     end
 
     def dimensions
