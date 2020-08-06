@@ -102,4 +102,14 @@ class TestStars < Minitest::Test
     adapter.store(star)
     assert_equal adapter.stars["michi trommer"].url, "foo.bar"
   end
+
+  def test_getset_michis_name
+    create_michis
+    star = adapter.stars["michi trommer"]
+    assert_nil star.url
+    star.name = "foobarbaz"
+    adapter.store(star)
+    assert_equal adapter.stars["michi trommer"].name, "foobarbaz"
+  end
+
 end
