@@ -4,7 +4,8 @@
       %a{href: routes.starEdit_path(star.ident)}= star.ident
       %small
         = "★"*star.stars
-        %br
+    - if star.url?
+      .url
         %a{:href => star.url}= star.url
   .body.star-body
     .image.star-image

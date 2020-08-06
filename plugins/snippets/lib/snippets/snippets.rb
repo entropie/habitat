@@ -129,7 +129,9 @@ module Snippets
 
     # FIXME:
     def Snip(arg)
-      Habitat.adapter(:snippets).snippets[arg.to_sym]
+      ret = Habitat.adapter(:snippets).snippets[arg.to_sym]
+      ret = NotExistingSnippet.new(arg) unless ret
+      ret
     end
 
     def P(*args)
@@ -156,8 +158,9 @@ module Snippets
     def read
       ""
     end
-    def render
-      "<span class='not-existing-snippet'><code>#{ident}</code> not exist</span>"
+
+    def render(*args)
+      "<span class='be-msg not-existing-snippet'>(Error:<strong>snippet</strong>: <code>#{ident}</code> not exist)</span>"
     end
 
     def exist?

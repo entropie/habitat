@@ -69,6 +69,10 @@ module Stars
       @stars = str_or_int.to_i
     end
 
+    def url?
+      @url.to_s.strip != ""
+    end
+
     def merge(hsh)
       hsh.each_pair do |k, v|
         send("#{k}=", v)
