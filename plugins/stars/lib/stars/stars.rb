@@ -55,7 +55,14 @@ module Stars
     end
 
     def to_hash
-      { :ident => @ident, :path => @path, :content => content, :stars => stars, :url => url, :image => image}
+      { :ident => @ident,
+        :name => @name,
+        :path => @path,
+        :content => content,
+        :stars => stars,
+        :url => url,
+        :image => image
+      }
     end
 
     def stars=(str_or_int)
