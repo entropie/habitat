@@ -45,6 +45,8 @@ gem "multi_json"
 gem "roar"
 gem "uglifier"
 
+gem "webp-ffi"
+
 
 group :development do
   gem 'shotgun'

@@ -43,8 +43,22 @@ module Blog
       @post.datadir("..", dirname, basename)
     end
 
+    def to_webp
+      name, extname = basename.split(".")
+      webp_filename = File.join(File.dirname(fullpath), "%s.%s" % [name, "webp"])
+      unless File.exist?(webp_filename)
+        Habitat.log :debug, "blog:image generating webp for #{fullpath}"
+        WebP.encode(fullpath, webp_filename)
+      end
+    end
+
     def url
       File.join("/attachments", dirname, basename)
+    end
+
+    def webp_url
+      to_webp
+      File.join("/attachments", dirname, basename.split(".").first + ".webp")
     end
 
     def dimensions
