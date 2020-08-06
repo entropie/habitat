@@ -29,7 +29,8 @@ module Stars
     def [](obj)
       ident = ::Habitat::Database::make_slug(obj.to_s)
       ret = select{|s| s.ident == ident}
-      return ret.first if ret
+      return ret.first if ret && ret.first
+      return NotExistingStar.new(obj)
     end
   end
 
@@ -42,9 +43,12 @@ module Stars
     attr_accessor :image
     attr_accessor :stars
     attr_accessor :url
+    attr_accessor :name
 
-    def initialize(ident, stars, content)
-      @ident = ident
+    def initialize(name_and_ident, stars = nil, content = nil)
+      slug_ident = ::Habitat::Database::make_slug(name_and_ident)
+      @ident = slug_ident
+      @name = name_and_ident
       @stars = stars
       @content = content
       @image = nil
@@ -52,6 +56,17 @@ module Stars
 
     def to_hash
       { :ident => @ident, :path => @path, :content => content, :stars => stars, :url => url, :image => image}
+    end
+
+    def stars=(str_or_int)
+      @stars = str_or_int.to_i
+    end
+
+    def merge(hsh)
+      hsh.each_pair do |k, v|
+        send("#{k}=", v)
+      end
+      self
     end
 
     def filename
@@ -91,9 +106,17 @@ module Stars
   end
 
   class NotExistingStar < Star
-    def read
-      ""
+
+    def initialize(ident)
+      super(ident, 5, "not existing")
     end
+
+    def create(hsh)
+      ret = Star.new(ident)
+      ret.merge(hsh)
+      ret
+    end
+
     def render
       "<span class='not-existing-star'><code>#{ident}</code> not exist</span>"
     end

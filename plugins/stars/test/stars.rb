@@ -21,7 +21,7 @@ def img
 end
 
 def create_michis
-  star = adapter.create("michi trommer", 5, "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", :image => img)
+  star = adapter.create("michi trommer", :stars => 5, :content => "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", :image => img)
 end
 
 
@@ -61,6 +61,9 @@ class TestStars < Minitest::Test
     assert_equal adapter.stars.size, 0
   end
 
+  def test_not_existing
+    assert_kind_of ::Stars::NotExistingStar, adapter.stars["nono"]
+  end
 
   def test_update_or_create_new
     hsh = {
@@ -81,15 +84,22 @@ class TestStars < Minitest::Test
     adapter.update_or_create(hsh)
     assert_equal adapter.stars["michi trommer"].ident, "michi-trommer"
 
-
     hsh = {
       :ident => "michi trommer", 
       :stars => "3",
       :content => "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
       :image => img}
     adapter.update_or_create(hsh)
+
     assert_equal adapter.stars["michi trommer"].stars, 3
   end
 
-
+  def test_getset_michis_url
+    create_michis
+    star = adapter.stars["michi trommer"]
+    assert_nil star.url
+    star.url = "foo.bar"
+    adapter.store(star)
+    assert_equal adapter.stars["michi trommer"].url, "foo.bar"
+  end
 end

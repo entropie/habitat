@@ -70,35 +70,26 @@ module Stars
           YAML::load_file(yamlfile)
         end
 
-        def create(ident, n, content, ohash = {})
-          slug_ident = ::Habitat::Database::make_slug(ident)
-          star = Star.new(slug_ident, n.to_i, content)
+        def create(ident, ohash = {})
+          star = Star.new(ident)
           raise StarAlreadyExist, "star already existing" if star.exist?
 
-          star.image = img if img = ohash[:image]
-          star.url = url if url = ohash[:url]
-
+          star.merge(ohash)
           store(star)
           star
         end
 
         def update_or_create(hsh)
-          i, n, content = hsh.fetch_values(:ident, :stars, :content)
-          slug_ident = ::Habitat::Database::make_slug(i)
-          n = n.to_i
-
+          slug_ident = hsh.delete(:ident)
           star = stars[slug_ident]
 
-          if not star
-            star = create(slug_ident, n, content)
+          if star.kind_of?(NotExistingStar)
+            log :info, "stars:CREAT:#{star.ident}"
+            star = star.create(hsh)
           else
-            star.stars = n
-            star.content = content
+            star.merge(hsh)
             log :info, "stars:UPDAT:#{star.ident}"
           end
-
-          star.image = hsh[:image] if hsh[:image]
-          star.url = hsh[:url] if hsh[:url]
 
           store(star)
           star
