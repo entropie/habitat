@@ -98,7 +98,7 @@ module Stars
         def store(star)
           log :info, "stars:STORE:#{star.ident}"
           file = repository_path(star.filename)
-          FileUtils.mkdir_p(::File.dirname(file), :verbose => true) unless ::File.dirname(file)
+          FileUtils.mkdir_p(::File.dirname(file), :verbose => true) unless ::File.exist?(::File.dirname(file))
           write(file, YAML::dump(star))
         end
 
