@@ -9,6 +9,7 @@ module T
                 :"galleries-page-label-upload" => "Hinzufügen",
                 :"blog-page-topic-index" => "Blogposts",
                 :"snippets-page-topic-index" => "Textausschnitte und Seiten",
+                :"snippet-help-ident" => "einzigartiger bezeichner",
                 :"user-page-topic-index" => "Benutzer und Admins"
 
   }
