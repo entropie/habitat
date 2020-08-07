@@ -1,1 +1,5 @@
-create
+.backend-page-header
+  %h1= t("t-page-topic-index")
+
+#db-snippets.main-content-block
+  = render template: "t/_form", locals: { trans: nil, action: routes.tCreateEdit_path() }

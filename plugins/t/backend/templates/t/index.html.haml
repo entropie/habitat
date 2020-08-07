@@ -3,8 +3,6 @@
 
 .main-content-block
   %ul.main-listing
-    - T.sorted do |h,k|
-      %li
-        %a{:href => routes.tEdit_path(h)}= h
-        %em= k
-
+    - T.sorted.each do |trans|
+      - next if trans.backend_translation?
+      = render template: "t/_t", locals: {trans: trans}

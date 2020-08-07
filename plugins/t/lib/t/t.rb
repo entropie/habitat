@@ -8,57 +8,157 @@ module T
                 :"galleries-page-topic-show" => "%s Gallerien und Bilder",
                 :"galleries-page-label-upload" => "Hinzufügen",
                 :"blog-page-topic-index" => "Blogposts",
+                :"blog-page-topic-create" => "Neues Blogpost",
                 :"snippets-page-topic-index" => "Textausschnitte und Seiten",
+                :"snippets-page-topic-create" => "Snippet Anlegen",
                 :"snippet-help-ident" => "einzigartiger bezeichner",
+                :"stars-page-topic-index" => "Bewertungen",
+                :"stars-page-topic-create" => "Bewertung Anlegen",
+                :"t-page-topic-index" => "Variablen und Textschnipsel",
                 :"user-page-topic-index" => "Benutzer und Admins"
 
   }
 
+  def self.default_file
+    Habitat.quart.media_path(DEFAULT_YAML_FILENAME)
+  end
+
+
+  def self.translations
+    read
+  end
+
+  def self.clear
+    Habitat.log(:info, "clearing t")
+    @translations = nil
+  end
+
 
   def self.read
-    file_to_read = Habitat.quart.media_path(DEFAULT_YAML_FILENAME)
+    file_to_read = default_file
 
-
-    loaded = {}
     unless File.exist?(file_to_read)
       Habitat.log :warn, "yaml file not existing #{file_to_read}\nremove 'T' from plugins or create one"
     else
       Habitat.log :info, "reading translation file #{file_to_read}"
       loaded = YAML::load_file(file_to_read)      
     end
-
-    @thash = THash.new.merge(loaded).merge(BACKEND_TS)
-  end
-
-  def self.clear
-    @thash = nil
+    ret = Translations.from_hash(loaded.merge(BACKEND_TS))
+    ret
   end
 
 
-  def self.to_hash
-    @thash
+  def self.sorted(&arg)
+    Translations.new.push(*to_a.sort_by{|trans| trans.key.to_s })
   end
 
-  class THash < Hash
+  def self.to_a
+    translations
   end
 
-  def self.included?(arg)
-    not T.to_hash[arg.to_sym].nil?
+  def self.update_or_create(params)
+    params[:key] = params[:slug] if params[:slug]
+    key, value = params.values_at(:key, :value)
+
+    trans = T.translations[key]
+
+    if trans.value != value or trans.kind_of?(NotExistingTrans)
+      trans.value = value
+      # update needed
+      everything = T.translations.reject{|trans| trans.backend_translation? or trans == key}
+
+      all_new = everything.push(trans)
+      to_write = Hash[*everything.push(trans).map{|t| [t.key, t.value]}.flatten]
+      ::FileUtils.cp(default_file, default_file+".bak", :verbose => true)
+      Habitat.log(:info, "updating #{default_file}")
+      File.open(default_file, "w+"){|fp| fp.puts(YAML::dump(to_write)) }
+
+    end
+    trans
+  end
+
+  def self.[](obj)
+    translations[obj.to_sym]
+  end
+
+
+
+  class Trans
+    attr_reader :key, :value
+    def initialize(key, value)
+      @key, @value = key, value
+    end
+
+    def value=(val)
+      @value = val.to_s
+    end
+
+    def ==(obj)
+      @key == obj.to_sym
+    end
+
+    def to_s
+      (kind_of?(NotExistingTrans) ? "<span class='snippet-ne'>%s</span>" : "%s") % @value
+    end
+
+    def backend_translation?
+      BACKEND_TS.include?(@key)
+    end
+  end
+
+  class NotExistingTrans < Trans
+    def initialize(key)
+      @key = key
+      @value = "#{key}"
+    end
   end
   
+  class Translations < Array
+
+    def self.from_hash(hsh)
+      ret = Translations.new
+      hsh.each do |h,k|
+        ret.add(h, k)
+      end
+      ret
+    end
+
+    def include?(obj)
+      not select{|t| t == obj}.empty?
+    end
+
+    def add(k, v)
+      k = k.to_sym
+      self << Trans.new(k, v) unless include?(k)
+    end
+
+    def [](obj)
+      return nil unless obj
+      k = obj.to_sym
+      ret = select{|trans| trans == k }
+      if ret.size > 0
+        ret.first
+      else
+        NotExistingTrans.new(k)
+      end
+    end
+  end
+
+
 end
 
-
 def t(arg, args = [])
-  ret = T.to_hash[arg.to_sym]
+  ret = T[arg.to_sym].to_s
 
   ret = ret % args if args.size > 0
   
-  if ret
-    return self.respond_to?(:_raw) ? _raw(ret) : ret
-  end
-  return self.respond_to?(:_raw) ? _raw("<span style='color:red'>#{arg}</span>") : arg
+  return _raw(ret)
+rescue
+  ret
 end
 
-T.read
+#::TRANSLATIONS = 
+# Habitat.quart.translations = T.read
+# T.load
+
 

@@ -5,3 +5,4 @@
   %ul.main-listing.single
     = render template: "t/_t", locals: { trans: trans }
 
+  = render template: "t/_form", locals: { trans: trans, action: routes.tCreateEdit_path(trans.key) }

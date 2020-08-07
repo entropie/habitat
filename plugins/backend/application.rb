@@ -92,20 +92,21 @@ module Backend
             get  '/create',       to: "snippets#create",  as:   :snippetsCreate
             post '/create',       to: "snippets#create"
             get  '/:slug',        to: "snippets#snippet", as:  :snippet
-            get  '/:slug/edit',   to: "snippets#edit",    as:     :snippetEdit
+            get  '/:slug/edit',   to: "snippets#edit",    as:  :snippetEdit
             post '/:slug/edit',   to: "snippets#edit"
-            get  '/',             to: "snippets#index",   as:    :snippets
-            get  '/page/:page',   to: "snippets#index",   as:    :snippetsPager
+            get  '/',             to: "snippets#index",   as:  :snippets
+            get  '/page/:page',   to: "snippets#index",   as:  :snippetsPager
           end
         end
 
         Habitat.plugin_enabled?(:t) do
           namespace :t do
-            get  '/create',       to: "t#create",         as:   :tCreate
-            post '/create',       to: "t#create"
-            get  '/:slug/edit',   to: "t#edit",           as:   :tEdit
-            post '/:slug/edit',   to: "t#edit"
-            get  '/',             to: "t#index",          as:   :t
+            get  '/create',         to: "t#create",         as:   :tCreate
+
+            post '/create_or_edit/:slug', to: "t#create_or_edit", as:   :tCreateEdit
+            post '/create_or_edit', to: "t#create_or_edit", as:   :tCreateEdit
+            get  '/:slug/edit',     to: "t#edit",           as:   :tEdit
+            get  '/',               to: "t#index",          as:   :t
           end
 
         end

@@ -1,0 +1,12 @@
+#db-snippets-form
+  %form{:method => :post, :action => action}
+    .container
+      .columns
+        .column.col-2
+          - h = trans ? {:disabled => :disabled} : {}
+          %input.form-input{h, :type => :text, :value => (trans ? trans.key : ""), :name => :key}
+        .column.col-8
+          %input.form-input{:type => :text, :value => (trans ? trans.value : ""), :name => :value}
+        .column.col-2
+          %input.form-input{:type => :submit, :value => "Absenden"}
+
