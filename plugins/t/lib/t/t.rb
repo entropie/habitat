@@ -157,8 +157,5 @@ rescue
   ret
 end
 
-#::TRANSLATIONS = 
-# Habitat.quart.translations = T.read
-# T.load
 
 
