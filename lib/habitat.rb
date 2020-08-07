@@ -6,7 +6,7 @@ Bundler.require
 require "pp"
 
 module Habitat
-  Version = [0, 0, 1]
+  Version = [0, 2, 0]
 
 
   Source = File.dirname(File.dirname(File.expand_path(__FILE__)))
@@ -172,6 +172,7 @@ module Habitat
       ret = "<a href='%s' #{html_add}class='%s'>%s</a>" % [href, "#{clz} #{opts[:class] || "alink"}", text + add_content]
       _raw(ret)
     end
+
     def adapter(ident)
       ident = ident.to_sym
       Habitat.adapter(ident)
