@@ -68,6 +68,7 @@ end
 
 
 namespace :generate do
+  # rake "generate:action[snippet,snippet,index]"
   task :action, [:module, :clz, :action] do |t, args|
     mod, clz, action = args[:module], args[:clz], args[:action]
     gen(mod, clz, action)
