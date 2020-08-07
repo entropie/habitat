@@ -9,7 +9,7 @@ module Habitat
   module Plugins
 
     def self.load_from_symbols(symbol_array)
-      Habitat.log :debug, "require plugins from config"
+      Habitat.log :info, "require plugins from config"
       symbol_array.each do |sa|
         plugin_file = Habitat.plugin_path(sa, "lib", "#{sa}.rb")
         Habitat._require plugin_file
@@ -52,7 +52,7 @@ module Habitat
       end
 
       def read
-        Habitat.log :debug, "loading plugins (#{PP.pp(quarter.config.fetch(:plugins), "").strip})"
+        Habitat.log :debug, "loading plugins (#{PP.pp(quarter.config.fetch(:plugins), "").strip.gsub(/\n/, "")})"
         quarter.config.fetch(:plugins).each do |plugincls_from_config|
           full_path = Habitat.plugin_path(plugincls_from_config)
           plugin = Plugin.new(quarter, full_path)

@@ -91,8 +91,7 @@ module Habitat
     log(:debug, "::::require #{Habitat.S(file)}")
     require file
   rescue LoadError
-    p $!
-    p "!!!%s" % file
+    log(:debug, "!!! %s" % file)
   end
 
   def log(k, msg, &blk)
