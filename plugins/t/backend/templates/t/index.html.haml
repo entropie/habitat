@@ -1,1 +1,10 @@
-index
+.backend-page-header
+  %h1= t("t-page-topic-index")
+
+.main-content-block
+  %ul.main-listing
+    - T.sorted do |h,k|
+      %li
+        %a{:href => routes.tEdit_path(h)}= h
+        %em= k
+

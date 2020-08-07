@@ -103,6 +103,8 @@ module Backend
           namespace :t do
             get  '/create',       to: "t#create",         as:   :tCreate
             post '/create',       to: "t#create"
+            get  '/:slug/edit',   to: "t#edit",           as:   :tEdit
+            post '/:slug/edit',   to: "t#edit"
             get  '/',             to: "t#index",          as:   :t
           end
 
