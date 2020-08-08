@@ -8,6 +8,7 @@ module Snippets
     def Snip(arg, env = nil)
       Habitat.adapter(:snippets).select(arg, env || locals[:params])
     end
+
   end
 
   module SnippetsControllerMethods
@@ -198,7 +199,7 @@ module Snippets
 
   class PageSnippet < HAMLSnippet
     def filename
-      super("haml")
+      super
     end
 
     def parent?
