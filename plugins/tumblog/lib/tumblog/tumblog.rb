@@ -33,11 +33,10 @@ module Tumblog
     end
 
     def check_token(params)
-      @return = {}
-      if params[:token]
-        @token_user = Habitat.adapter(:user).by_token(params[:token])
+      if usr = params.env['warden'].authenticate(:token)
+        @token_user = session_user
       else
-        @return[:ok] = :nope
+        p :nope
       end
     end
 
