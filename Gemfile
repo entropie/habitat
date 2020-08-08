@@ -9,6 +9,8 @@ gem 'rake'
 gem 'hanami',       '1.3.2'
 gem 'hanami-model', '1.3.2'
 
+gem 'rack-cache'
+
 gem "subcommand"
 gem "sqlite3"
 
