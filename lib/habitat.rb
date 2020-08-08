@@ -114,7 +114,7 @@ module Habitat
 
   def self.default_application_config
     proc{
-      middleware.use Rack::Session::Cookie, secret: "asd"
+      middleware.use Rack::Session::Cookie, secret: Habitat.quart.secret
       middleware.use Warden::Manager do |manager|
         # let Hanami deal with the 401s
         #manager.intercept_401 = false
