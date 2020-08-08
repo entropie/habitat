@@ -111,7 +111,6 @@ namespace :habitat do
       within fetch(:habitat) do
         execute :npm, "install"
         execute :npm, "run production"
-        execute :bundle, "exec hanami assets precompile"
       end
     end
   end
