@@ -72,12 +72,21 @@ end
 
 namespace :habitat do
 
-  [:start, :stop, :restart].each do |action|
+  [:start, :stop].each do |action|
     task action do
       on roles(:app) do
         within fetch(:habitat) do
           execute :bundle, "exec #{fetch(:unicorn_init)} #{action}"
         end
+      end
+    end
+  end
+
+  task :restart do
+    on roles(:app) do
+      within fetch(:habitat) do
+        execute :bundle, "exec #{fetch(:unicorn_init)} stop"
+        execute :bundle, "exec #{fetch(:unicorn_init)} start"
       end
     end
   end
