@@ -238,8 +238,8 @@ module Tumblog
       :id          => String,
       :updated_at  => Time,
       :tags        => Array,
-      :user_id     => Fixnum,
-      :private     => Fixnum
+      :user_id     => Integer,
+      :private     => Integer
     }
 
     OptionalAttributes = [:image, :title, :tags]
