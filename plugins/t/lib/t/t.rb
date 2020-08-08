@@ -47,8 +47,10 @@ module T
     end
     ret = Translations.from_hash(loaded.merge(BACKEND_TS))
 
-    ret.each do |trans|
-      Cache[trans.key] = trans.value
+    if Habitat.quart.plugins.enabled?(:cache)
+      ret.each do |trans|
+        Cache[trans.key] = trans.value
+      end
     end
     ret
   end
@@ -57,7 +59,7 @@ module T
   def self.sorted(&arg)
     Translations.new.push(*to_a.sort_by{|trans| trans.key.to_s })
   end
-
+  
   def self.to_a
     translations
   end
@@ -89,10 +91,16 @@ module T
   end
   
   def self.[](obj)
-    cached = Cache[obj]
-    ret = Trans.new(obj.to_sym, cached)
-    unless cached
-      ret = NotExistingTrans.new(obj)
+    tobj = obj.to_sym
+    if Habitat.quart.plugins.enabled?(:cache)
+      cached = Cache[tobj]
+      ret = Trans.new(tobj, cached)
+      unless cached
+        ret = NotExistingTrans.new(tobj)
+      end
+    else
+      ret = read[tobj]
+      return ret.to_s
     end
     ret
   end
