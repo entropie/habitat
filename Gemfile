@@ -12,7 +12,7 @@ gem 'hanami-model', '1.3.2'
 gem "subcommand"
 gem "sqlite3"
 
-
+gem "memcached"
 gem 'hanami-webpack', github: 'entropie/hanami-webpack'
 gem "bootstrap", '~> 4.0.0'
 

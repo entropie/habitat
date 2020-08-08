@@ -3,7 +3,7 @@ module Backend::Controllers::T
     include Api::Action
     expose :trans
     def call(params)
-      @trans = T.to_a[params[:slug]]
+      @trans = T[params[:slug]]
     end
   end
 end

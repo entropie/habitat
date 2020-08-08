@@ -15,6 +15,8 @@ module T
                 :"stars-page-topic-index" => "Bewertungen",
                 :"stars-page-topic-create" => "Bewertung Anlegen",
                 :"t-page-topic-index" => "Variablen und Textschnipsel",
+                :"t-page-topic-edit" => "Bearbeiten",
+                :"t-page-topic-create" => "Erstellen",
                 :"user-page-topic-index" => "Benutzer und Admins"
 
   }
@@ -44,6 +46,10 @@ module T
       loaded = YAML::load_file(file_to_read)      
     end
     ret = Translations.from_hash(loaded.merge(BACKEND_TS))
+
+    ret.each do |trans|
+      Cache[trans.key] = trans.value
+    end
     ret
   end
 
@@ -68,19 +74,28 @@ module T
       everything = T.translations.reject{|trans| trans.backend_translation? or trans == key}
 
       all_new = everything.push(trans)
-      to_write = Hash[*everything.push(trans).map{|t| [t.key, t.value]}.flatten]
+      to_write = Hash[*all_new.map{|t| [t.key, t.value]}.flatten]
       ::FileUtils.cp(default_file, default_file+".bak", :verbose => true)
       Habitat.log(:info, "updating #{default_file}")
       File.open(default_file, "w+"){|fp| fp.puts(YAML::dump(to_write)) }
-
+      read
     end
     trans
   end
 
-  def self.[](obj)
-    translations[obj.to_sym]
+  def self.include?(obj)
+    s = obj.to_sym
+    self[s].exist?
   end
-
+  
+  def self.[](obj)
+    cached = Cache[obj]
+    ret = Trans.new(obj.to_sym, cached)
+    unless cached
+      ret = NotExistingTrans.new(obj)
+    end
+    ret
+  end
 
 
   class Trans
@@ -104,12 +119,20 @@ module T
     def backend_translation?
       BACKEND_TS.include?(@key)
     end
+
+    def exist?
+      kind_of?(NotExistingTrans) ? false : true
+    end
   end
 
   class NotExistingTrans < Trans
     def initialize(key)
       @key = key
       @value = "#{key}"
+    end
+
+    def exist?
+      false
     end
   end
   
@@ -147,15 +170,15 @@ module T
 
 end
 
-def t(arg, args = [])
-  ret = T[arg.to_sym].to_s
-
-  ret = ret % args if args.size > 0
-  
-  return _raw(ret)
-rescue
-  ret
+def translate(arg, *args)
 end
 
+def t(arg, args = [])
+  ret = T[arg]
+  ret = ret.to_s % args if args.size > 0
+  _raw(ret.to_s)
+rescue
+  ret.to_s
+end
 
-
+T.read
