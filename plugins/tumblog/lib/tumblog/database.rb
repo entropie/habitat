@@ -70,7 +70,7 @@ module Tumblog
         end
 
         def load_file(yamlfile)
-          log :debug, "loading #{Habitat.S(yamlfile)}"
+          #log :debug, "loading #{Habitat.S(yamlfile)}"
           YAML::load_file(yamlfile)
         end
 

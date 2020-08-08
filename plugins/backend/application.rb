@@ -159,12 +159,18 @@ module Backend
       controller.prepare do
         def reject_unless_authenticated
           logging_in = ["login", "logout"].include?(params.env["REQUEST_PATH"].split("/").last)
+          
           if not logged_in? and not logging_in
             redirect_to "/" 
             exit
           end
         end
 
+        def check_token
+          params.env["warden"].authenticate(:token)
+        end
+
+        before :check_token
         before :reject_unless_authenticated
 
         if Habitat.quart.plugins.enabled?(:blog)
