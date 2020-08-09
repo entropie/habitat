@@ -16,7 +16,10 @@ gem "sqlite3"
 
 gem "memcached"
 gem 'hanami-webpack', github: 'entropie/hanami-webpack'
-gem "bootstrap", '~> 4.0.0'
+
+gem "puma", ">= 4.3.5"
+gem "rack", ">= 2.1.4"
+gem "nokogiri", ">= 1.10.8"
 
 gem 'haml'
 
@@ -29,8 +32,6 @@ gem "sequel"
 gem "redcarpet"
 
 gem "rake-compiler"
-
-gem "nokogiri"
 
 gem "unicorn"
 
@@ -64,5 +65,4 @@ group :test do
 end
 
 group :production do
-  gem 'puma'
 end
