@@ -53,6 +53,9 @@ gem "webp-ffi"
 
 group :development do
   gem 'shotgun'
+  gem 'rack-mini-profiler'
+  gem 'fast_stack'
+  gem 'flamegraph'
 end
 
 group :test, :development, :production do

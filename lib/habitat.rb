@@ -17,7 +17,7 @@ module Habitat
 
   $: << Source.join("lib/habitat")
   
-  %w"mixins adapter supervisor quarters plugins configuration".each do |lib_to_load|
+  %w"mixins adapter supervisor quarters plugins configuration rack/static_cache".each do |lib_to_load|
     require lib_to_load
   end
   
