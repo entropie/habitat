@@ -25,6 +25,10 @@ module T
     Habitat.quart.media_path(DEFAULT_YAML_FILENAME)
   end
 
+  def self.cache_key(k)
+    "t-#{k}"
+  end
+
 
   def self.translations
     read
@@ -49,7 +53,7 @@ module T
 
     if Habitat.quart.plugins.enabled?(:cache)
       ret.each do |trans|
-        Cache[trans.key] = trans.value
+        Cache[cache_key(trans.key)] = trans.value
       end
     end
     ret
@@ -93,7 +97,7 @@ module T
   def self.[](obj)
     tobj = obj.to_sym
     if Habitat.quart.plugins.enabled?(:cache)
-      cached = Cache[tobj]
+      cached = Cache[cache_key(tobj)]
       ret = Trans.new(tobj, cached)
       unless cached
         ret = NotExistingTrans.new(tobj)
