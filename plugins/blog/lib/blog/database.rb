@@ -116,6 +116,10 @@ module Blog
           write(for_yaml.filename, YAML.dump(for_yaml))
           write(post_or_draft.datafile, content)
 
+          Habitat.plugin_enabled?(:cache) do
+            Cache[:blog_last_modified] = post_or_draft.updated_at
+          end
+
           post_or_draft
         end
 
