@@ -117,7 +117,7 @@ module Blog
           write(post_or_draft.datafile, content)
 
           Habitat.plugin_enabled?(:cache) do
-            Cache[:blog_last_modified] = post_or_draft.updated_at
+            Cache[:blog_last_modified] = Time.now
           end
 
           post_or_draft
