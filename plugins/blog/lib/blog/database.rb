@@ -131,13 +131,6 @@ module Blog
           for_yaml.user_id = @user.id unless for_yaml.user_id
 
           unless exist?(post_or_draft)
-
-            FileUtils.mkdir_p(::File.dirname(post_or_draft.filename), :verbose => true)
-            FileUtils.mkdir_p(post_or_draft.datadir, :verbose => true)          
-
-            # unless post_or_draft.valid?
-            #   raise Habitat::Database::EntryNotValid, "post not valid #{PP.pp(for_yaml, "")}"
-            # end
             for_yaml.filename = post_or_draft.filename
             for_yaml.datadir = post_or_draft.datadir
           end
