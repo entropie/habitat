@@ -118,6 +118,7 @@ module Blog
 
           Habitat.plugin_enabled?(:cache) do
             Cache[:blog_last_modified] = Time.now
+            Cache[post_or_draft.slug] = Time.now
           end
 
           # post_or_draft
