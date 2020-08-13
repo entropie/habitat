@@ -36,7 +36,7 @@ module Blog
 
     def languages(l = nil)
       re = /^content\-([a-zA-Z]{2})\./
-      ret = Dir.entries(datadir).select{|e| e =~ re}.map{|file| file =~ re && $1}
+      ret = Dir.entries(datapath).select{|e| e =~ re}.map{|file| file =~ re && $1}
       if l
         return ret.include?(l)
       end
@@ -70,7 +70,7 @@ module Blog
 
     def datafile
       datafileident = "content%s" % (@request_language ? "-#{@request_language}" : "")
-      datadir("#{datafileident}.markdown")
+      datapath("#{datafileident}.markdown")
     end
   end
 
@@ -172,23 +172,27 @@ module Blog
     end
 
     def filename
-      @filename || @adapter.repository_path(dirname, to_filename)
+      @filename = ::File.join(dirname, to_filename)
     end
 
+    def fullpath(*args)
+      File.join(Habitat.adapter(:blog).path, "blog", filename)
+    end
+
+    def datapath(*args)
+      File.join(File.dirname(fullpath), "../../data", slug, *args)
+    end
+    
     def intro
       content.split("\r\n\r\n").first
     end
 
     def datadir(*args)
-      if @datadir
-        File.join(@datadir, *args)
-      else
-        @adapter.datadir(slug, *args)
-      end
+      @datadir = File.join("data", slug, *args)
     end
 
     def images
-      Dir.glob(datadir("image") + "/*.*").map {|ipath| Image.from_datadir(self, ipath) }
+      Dir.glob(datapath("image") + "/*.*").map {|ipath| Image.from_datadir(self, ipath) }
     end
 
     def image

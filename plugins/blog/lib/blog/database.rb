@@ -47,7 +47,7 @@ module Blog
         end
 
         def datadir(*args)
-          ::File.expand_path(repository_path("../data", *args))
+          ::File.join("data", *args)
         end
 
         def post_files
@@ -112,15 +112,15 @@ module Blog
           for_yaml.updated_at = Time.now
 
           content = post_or_draft.content
-
-          write(for_yaml.filename, YAML.dump(for_yaml))
+          write(for_yaml.fullpath, YAML.dump(for_yaml))
           write(post_or_draft.datafile, content)
 
           Habitat.plugin_enabled?(:cache) do
             Cache[:blog_last_modified] = Time.now
           end
 
-          post_or_draft
+          # post_or_draft
+          for_yaml
         end
 
         def setup_post(post_or_draft)
@@ -149,23 +149,23 @@ module Blog
 
         def to_draft(post)
           log :info, "blog:DRAFT:#{post.title}"
-          rm(post.filename, :verbose => true)
+          rm(post.fullpath, :verbose => true)
           store(post.to_draft(self))
         end
 
         def to_post(draft)
           log :info, "blog:UNDRAFT:#{draft.title}"
-          rm(draft.filename, :verbose => true)
+          rm(draft.fullpath, :verbose => true)
           store(draft.to_post(self))
         end
 
         def destroy(post_or_draft, lang = nil)
           if not lang
             log :info, "blog:REMOVE:#{post_or_draft.title}"
-            rm(post_or_draft.filename, :verbose => true)
+            rm(post_or_draft.fullpath, :verbose => true)
           else
             log :info, "blog:LANGUAGE-REMOVE:#{post_or_draft.title}"
-            rm(post_or_draft.datafile, :verbose => true)
+            rm(post_or_draft.datapath, :verbose => true)
           end
         end
 

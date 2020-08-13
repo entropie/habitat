@@ -57,6 +57,7 @@ module Blog
     end
 
 
+    # FIXME: what?
     class GalleryProcessor < Filter
       def filter(str)
         return str unless Habitat.quart.plugins.activated?(:galleries) 

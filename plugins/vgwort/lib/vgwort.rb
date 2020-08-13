@@ -154,7 +154,7 @@ module VGWort
     end
 
     def file
-      post.datadir(".vgwort")      
+      post.datapath(".vgwort")      
     end
 
     def id_attached?
