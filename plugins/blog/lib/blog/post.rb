@@ -180,7 +180,7 @@ module Blog
     end
 
     def datapath(*args)
-      File.join(File.dirname(fullpath), "../../data", slug, *args)
+      File.join(Habitat.quart.media_path, "data", slug, *args)
     end
     
     def intro

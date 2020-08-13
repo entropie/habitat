@@ -113,6 +113,7 @@ module Blog
 
           content = post_or_draft.content
           write(for_yaml.fullpath, YAML.dump(for_yaml))
+          FileUtils.mkdir_p(post_or_draft.datapath, :verbose => true)
           write(post_or_draft.datafile, content)
 
           Habitat.plugin_enabled?(:cache) do
