@@ -169,7 +169,10 @@ module Backend
 
         def check_token
           if ::Warden::Strategies[:token]
-            params.env["warden"].authenticate(:token)
+            a = params.env["warden"].authenticate(:token)
+            if a and params[:goto]
+              redirect_to params[:goto]
+            end
           end
         end
 
