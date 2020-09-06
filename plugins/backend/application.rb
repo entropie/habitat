@@ -1,3 +1,4 @@
+# coding: utf-8
 require 'hanami/helpers'
 require 'hanami/assets'
 
@@ -167,7 +168,9 @@ module Backend
         end
 
         def check_token
-          params.env["warden"].authenticate(:token)
+          if ::Warden::Strategies[:token]
+            params.env["warden"].authenticate(:token)
+          end
         end
 
         before :check_token
