@@ -115,7 +115,7 @@ namespace :habitat do
   task :setup_assets do
     on roles(:app) do
       within fetch(:habitat) do
-        execute :npm, "install"
+        execute :npm, "install &> /dev/null"
         execute :npm, "run production"
       end
     end
