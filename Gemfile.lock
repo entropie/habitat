@@ -175,7 +175,7 @@ GEM
     rake (12.3.3)
     rake-compiler (1.1.0)
       rake
-    redcarpet (3.5.0)
+    redcarpet (3.5.1)
     regexp_parser (1.6.0)
     representable (3.0.4)
       declarative (< 0.1.0)
@@ -240,7 +240,7 @@ PLATFORMS
 DEPENDENCIES
   bcrypt
   builder
-  capistrano (= 3.11.0)
+  capistrano
   capistrano-bundler
   capistrano-rvm
   capybara
@@ -270,6 +270,7 @@ DEPENDENCIES
   sequel
   shotgun
   sqlite3
+  sshkit
   subcommand
   uglifier
   unicorn
