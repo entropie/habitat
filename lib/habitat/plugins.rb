@@ -11,6 +11,7 @@ module Habitat
     def self.load_from_symbols(symbol_array)
       Habitat.log :info, "require plugins from config"
       symbol_array.each do |sa|
+        raise "called to include non existant plugin '#{sa}; from" unless Plugin.exist?(sa)
         plugin_file = Habitat.plugin_path(sa, "lib", "#{sa}.rb")
         Habitat._require plugin_file
       end
@@ -112,6 +113,10 @@ module Habitat
     class Plugin
       attr_reader :quarter, :path
 
+      def self.exist?(name)
+        File.exist?(Habitat.plugin_path(name))
+      end
+      
       def backend?
         @backend ||= File.exist?(File.join(path, "backend"))
       end
