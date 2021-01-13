@@ -63,10 +63,11 @@ module Blog
         return str unless Habitat.quart.plugins.activated?(:galleries) 
 
         str.lines.map do |line|
-          if line =~ /^\s?\#\{(.*)\}\s?$/
+          regex = /\#\{(.*)\}\s?/
+          if line =~ regex
             ret = dup.extend(Galleries::GalleriesAccessMethods).send(:eval, $1)
             Habitat.log :debug, "#{self.class}: #{$1}"
-            "\n#\n%s\n\n" % ret.to_s 
+            newline = line.gsub(regex, ret)
           else
             line
           end
