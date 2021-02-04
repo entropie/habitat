@@ -4,6 +4,26 @@ module User
 
   DEFAULT_ADAPTER = :File
 
+  module UserControllerMethods
+    def reject_unless_authenticated
+      logging_in = ["login", "logout"].include?(params.env["REQUEST_PATH"].split("/").last)
+      if not logged_in? and not logging_in
+        redirect_to "/"
+        exit 23
+      end
+    end
+
+    def check_token
+      if ::Warden::Strategies[:token]
+        a = params.env["warden"].authenticate(:token)
+        if a and params[:goto]
+          redirect_to params[:goto]
+        end
+      end
+    end
+
+  end
+
   class User
 
     include BCrypt
@@ -37,7 +57,7 @@ module User
     end
 
     def token
-      token = JWT.encode({:password => password, :user_id => id}, Habitat.quart.secret, 'HS256')
+      token = JWT.encode({ :password => password, :user_id => id }, Habitat.quart.secret, 'HS256')
     end
 
     def populate(param_hash)
@@ -66,8 +86,6 @@ end
 
 if Habitat.quart
   Habitat.add_adapter(:user, User::Database.with_adapter.new(Habitat.quart.media_path))  
-
-  #p Habitat.adapter(:user).create(:name => "entropie", :password => "lala", :email => "mictro@gmail.com")
 end
 
 
