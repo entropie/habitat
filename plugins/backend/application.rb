@@ -155,34 +155,15 @@ module Backend
       #   include Habitat
       #   include Habitat::WebAppMethods
       # end
+
       instance_eval(&Habitat.default_application_config)
 
       controller.prepare do
-        def reject_unless_authenticated
-          logging_in = ["login", "logout"].include?(params.env["REQUEST_PATH"].split("/").last)
-          
-          if not logged_in? and not logging_in
-            redirect_to "/" 
-            exit
-          end
-        end
-
-        def check_token
-          if ::Warden::Strategies[:token]
-            a = params.env["warden"].authenticate(:token)
-            if a and params[:goto]
-              redirect_to params[:goto]
-            end
-          end
-        end
-
-        before :check_token
-        before :reject_unless_authenticated
-
         if Habitat.quart.plugins.enabled?(:blog)
           include ::Blog::BlogControllerMethods
         end
 
+        before :reject_unless_authenticated
       end
 
       view.prepare do
