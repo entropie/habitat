@@ -31,15 +31,6 @@ module Tumblog
     def tumblog(&blk)
       Habitat.adapter(:tumblog).with_user(session_user, &blk)
     end
-
-    def check_token(params)
-      if usr = params.env['warden'].authenticate(:token)
-        @token_user = session_user
-      else
-        p :nope
-      end
-    end
-
   end
 
   class HandleInput

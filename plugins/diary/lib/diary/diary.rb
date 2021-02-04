@@ -26,18 +26,6 @@ module Diary
         adapter_with_usercontext(:diary, *args, &blk)
       end
     end
-
-    private
-    def check_token(params)
-      @return = {}
-      if params[:token]
-        auth = params.env['warden'].authenticate(:token)
-        @return[:token] = logged_in?
-      else
-        halt 404 unless logged_in?
-      end
-      @return
-    end
   end
 
   
