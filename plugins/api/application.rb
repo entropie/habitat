@@ -40,14 +40,18 @@ module Api
       # middleware.use Warden::Manager do |manager|
       #   manager.intercept_401 = false
       # end
+      #instance_eval(&Habitat.default_application_config)
 
-
+      include User::UserControllerMethods
+      controller.prepare do
+        before :reject_unless_authenticated
+      end
 
       # view.prepare do
       #   include Habitat
       #   include Habitat::WebAppMethods
       # end
-      instance_eval(&Habitat.default_application_config)
+      
     end
 
     configure :development do
