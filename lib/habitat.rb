@@ -119,9 +119,18 @@ module Habitat
         # let Hanami deal with the 401s
         #manager.intercept_401 = false
       end
+
       controller.prepare do
         include Habitat
         include Habitat::WebAppMethods
+
+        # we want a better solution for this.
+        # FIXME:
+        if Habitat.quart.plugins.enabled?(:user)
+          include User::UserControllerMethods
+          before :check_token
+        end
+
       end
       view.prepare do
         include Habitat
@@ -191,14 +200,14 @@ module Habitat
 end
 
 
-Haml::Options.defaults[:format] = :html5
-# # Haml::Options.defaults[:remove_whitespace] = true
-class Hanami::View::Template
-  def initialize(t, e = Encoding::UTF_8)
-    a = Tilt.new(t, nil, default_encoding: e, remove_whitespace: false)
-    @_template = a
-  end
-end
+# Haml::Options.defaults[:format] = :html5
+# # # Haml::Options.defaults[:remove_whitespace] = true
+# class Hanami::View::Template
+#   def initialize(t, e = Encoding::UTF_8)
+#     a = Tilt.new(t, nil, default_encoding: e, remove_whitespace: false)
+#     @_template = a
+#   end
+# end
 
 
 
