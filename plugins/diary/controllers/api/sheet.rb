@@ -6,12 +6,14 @@ module Api::Controllers::Sheets
     include Diary::ApiControllerMethods 
 
     def call(params)
-      sheet = diary.find(:id => params[:id]).first
-
-      @return.merge!(sheet.to_hash) if sheet
+      sheet = diary.with_user(session_user) do |d|
+        d.find(:id => params[:id]).first
+      end
+      
+      retval.merge!(sheet.to_hash) if sheet
 
       self.status = 200
-      self.body = @return.to_json
+      self.body = retval.to_json
     end
 
   end

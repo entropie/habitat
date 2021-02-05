@@ -5,11 +5,14 @@ module Api::Controllers::Sheets
     include Diary::ApiControllerMethods 
 
     def call(params)
-      sheets = A(@token_user) do |a|
-        @return[:sheets] = a.sheets.map(&:to_hash)
+      sheets = diary.with_user(session_user) {|d| d.sheets }
+
+      sheets.each do |sheet|
+        retval[sheet.title] = sheet.to_hash
       end
+
       self.status = 200
-      self.body = @return.to_json
+      self.body = retval.to_json
     end
   end
 end

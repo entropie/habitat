@@ -6,21 +6,14 @@ module Api::Controllers::Sheets
     include Diary::ApiControllerMethods 
 
     def call(params)
-      A(@token_user) do |u|
-        cnts = "Hey #{@token_user.name}." # Erzähl mir was du heute gemacht hast. "
-
-        adds = begin
-                 ::File.readlines(Habitat.quart.media_path("default_sheet.html")).join
-               rescue
-                 ""
-        end
-        
-        sheet = u.create(cnts + "<br/>"*3 + adds)
-        u.store(sheet)
-        @return = sheet.to_hash
+      arghash = {}
+      [:title, :content].each do |target_key|
+        arghash[target_key] = params[target_key] if params[target_key]
       end
+      sheet = diary.create(arghash)
+
       self.status = 200
-      self.body = @return.merge(@return.to_hash).to_json
+      self.body = retval.merge(sheet.to_hash).to_json
     end
   end
 end

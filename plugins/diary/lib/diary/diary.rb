@@ -22,6 +22,10 @@ module Diary
         before :check_token
       end
 
+      def retval
+        @retval ||= {}
+      end
+
       def diary(*args, &blk)
         adapter_with_usercontext(:diary, *args, &blk)
       end
