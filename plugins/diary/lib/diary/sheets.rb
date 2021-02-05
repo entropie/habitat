@@ -21,6 +21,7 @@ module Diary
       ref = References.normalize_key(rfrnc)
       by_refs = by_reference(rfrnc).sort_by{|r| r.title == ref ? 0 : 1}
       ret = []
+      return [] if by_refs.empty?
       if by_refs.first.title == ref
         ret.push(by_refs.shift)
       end
