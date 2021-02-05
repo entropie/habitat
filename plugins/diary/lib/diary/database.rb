@@ -176,6 +176,7 @@ module Diary
             sheet.updated_at = Time.now
             store(sheet)
           end
+          sheet
 
         end
         
