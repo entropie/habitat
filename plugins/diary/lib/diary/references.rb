@@ -18,6 +18,10 @@ module Diary
       @sheet = sheet
     end
 
+    def size
+      resolve.size
+    end
+
     # def html
     #   @html ||= Nokogiri::HTML.fragment(@sheet.content)
     # end
@@ -29,16 +33,27 @@ module Diary
     end
 
     def resolve
-      @references = sheets.select{|s| referenced_by?(s) }
+      @references ||= sheets.select{|s| referenced_by?(s) }
+    end
+
+    def has_reference?(ref)
     end
 
     def referenced_by?(osheet)
       #p sheet, osheet
       sheet != osheet && osheet.references.keywords.include?(sheet.title)
     end
+
+    def to_s
+      "<Reference: %s [%s] << (%s)>" % [sheet.title, keywords.join(", "), resolve.map(&:title).join(", ")]
+    end
     
     def reference_sheets
-      @reference_sheets = sheets.map{|s| References.new(s) }
+      @reference_sheets ||= sheets.map{|s| References.new(s) }
+    end
+
+    def include?(ref)
+      sheet.title == ref or keywords.include?(References.normalize_key(ref))
     end
 
     def each(&blk)
@@ -56,11 +71,11 @@ module Diary
     end
 
     def keywords
-      @keywords = sheet.content.scan(/#(\w+)[ \s]?/).flatten.map{|kw| References.normalize_key(kw)}
+      @keywords ||= sheet.content.scan(/#(\w+)[ \s]?/).flatten.map{|kw| References.normalize_key(kw)}
     end
 
     def references
-      @references
+      @references||[]
     end
 
     # def keywords

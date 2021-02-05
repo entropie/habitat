@@ -16,6 +16,22 @@ module Diary
     def by_last_edited
       Sheets.new(@user).push(*dup.sort_by{|s| s.updated_at }.reverse)
     end
+
+    def by_reference_sorted(rfrnc)
+      ref = References.normalize_key(rfrnc)
+      by_refs = by_reference(rfrnc).sort_by{|r| r.title == ref ? 0 : 1}
+      ret = []
+      if by_refs.first.title == ref
+        ret.push(by_refs.shift)
+      end
+      ret.push(*by_refs.sort_by{|br| br.title })
+      ret
+    end
+
+    def by_reference(rfrnc)
+      ref = References.normalize_key(rfrnc)
+      select{|s| s.references.include?(ref) }
+    end
   end
 
   class Sheet

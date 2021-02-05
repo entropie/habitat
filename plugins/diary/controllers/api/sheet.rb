@@ -7,6 +7,7 @@ module Api::Controllers::Sheets
 
     def call(params)
       sheet = diary.find(:id => params[:id]).first
+
       @return.merge!(sheet.to_hash) if sheet
 
       self.status = 200

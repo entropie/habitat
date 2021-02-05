@@ -77,6 +77,14 @@ module Diary
           Dir.glob(user_path + "/**/**/*" + SHEET_EXTENSION)
         end
 
+        def by_reference(reference, user = nil, &blk)
+          sheets(user, &blk).by_reference(reference)
+        end
+
+        def by_reference_sorted(reference, user = nil, &blk)
+          sheets(user, &blk).by_reference_sorted(reference)
+        end
+
         def sheets(user = nil, &blk)
           raise NoUserContext, "cant read sheets without user" if user.nil? and @user.nil?
           read_sheets = []
