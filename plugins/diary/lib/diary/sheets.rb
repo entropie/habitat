@@ -19,7 +19,7 @@ module Diary
 
     def include?(other_or_id)
       tid = other_or_id.kind_of?(Sheet) ? other_or_id.id : other_or_id
-      dup.{|s| s.id != tid}.size == 1
+      dup.reject{|s| s.id != tid}.size == 1
     end
 
     def by_reference_sorted(rfrnc)
