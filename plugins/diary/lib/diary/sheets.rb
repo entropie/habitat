@@ -17,10 +17,15 @@ module Diary
       Sheets.new(@user).push(*dup.sort_by{|s| s.updated_at }.reverse)
     end
 
+    def include?(other_or_id)
+      tid = other_or_id.kind_of?(Sheet) ? other_or_id.id : other_or_id
+      dup.{|s| s.id != tid}.size == 1
+    end
+
     def by_reference_sorted(rfrnc)
       ref = References.normalize_key(rfrnc)
       by_refs = by_reference(rfrnc).sort_by{|r| r.title == ref ? 0 : 1}
-      ret = []
+      ret = Sheets.new(user)
       return [] if by_refs.empty?
       if by_refs.first.title == ref
         ret.push(by_refs.shift)

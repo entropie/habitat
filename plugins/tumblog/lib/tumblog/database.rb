@@ -75,13 +75,13 @@ module Tumblog
         end
 
         def create(param_hash)
-          raise NoUserContext, "trying to call #create without valid user context " unless @user
+          raise ::Habitat::Database::NoUserContext, "trying to call #create without valid user context " unless @user
 
           adapter_class(true).new(self).populate(param_hash)
         end
 
         def store(post)
-          raise NoUserContext, "trying to call #store without valid user context " unless @user
+          raise ::Habitat::Database::NoUserContext, "trying to call #store without valid user context " unless @user
           log :info, "tumblog:STORE:#{post.id}"
           retval = post
           post.user_id = @user.id
