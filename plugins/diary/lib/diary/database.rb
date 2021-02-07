@@ -155,13 +155,13 @@ module Diary
           sheet
         end
 
-        def upload(sheet, params)
-          file = params[:tempfile]
-          mkdir_p(sheet.data_dir)
-          filename = Digest::SHA1.hexdigest(file.read) + ::File.extname(params[:filename])
-          cp(file.path, sheet.data_dir(filename))
-          filename
-        end
+        # def upload(sheet, params)
+        #   file = params[:tempfile]
+        #   mkdir_p(sheet.data_dir)
+        #   filename = Digest::SHA1.hexdigest(file.read) + ::File.extname(params[:filename])
+        #   cp(file.path, sheet.data_dir(filename))
+        #   filename
+        # end
 
         def update_sheet(sheet, param_hash)
           sheet = sheet.extend(SheetFileExtension)
