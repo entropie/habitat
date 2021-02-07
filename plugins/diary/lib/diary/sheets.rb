@@ -135,6 +135,11 @@ module Diary
     def to_json
       to_hash.to_json
     end
+
+    def domid
+      "sheet-#{id[0..10]}" rescue "sheet-noid"
+    end
+
   end
 
 end
