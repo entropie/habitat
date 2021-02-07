@@ -124,7 +124,10 @@ namespace :habitat do
   task :checkout do
     on roles(:app) do
       within release_path.join("quarters") do
+        tdir = release_path.join("quarters", fetch(:application))
+        execute :mv, "%s %s.bak" % [tdir, tdir]
         execute :git, "clone #{fetch(:habitat_url)}"
+        execute :mv, "#{tdir}.bak/.bundle", File.join(tdir, ".bundle")
       end
     end
   end
