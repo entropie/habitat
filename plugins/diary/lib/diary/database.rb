@@ -35,20 +35,32 @@ module Diary
 
         def user_path(*args)
           raise NoUserContext, "trying to access user directory without valid user context" unless @user
-          ::File.join(::File.realpath(path), "diary", @user.id.to_s, *args)
+          ::File.join("diary", @user.id.to_s, *args)
         rescue Errno::ENOENT
           warn "does not exist: #{path("diary")}"
           path("diary", @user.id.to_s, *args)
         end
 
+        def time_to_path(time = Time.now)
+          time.strftime("%Y/%m/").split("/")
+        end
+
         def current_sheet_path(*args)
-          user_path("sheets", *Time.now.strftime("%Y/%m/").split("/"), *args)
+          user_path("sheets", time_to_path, *args)
         end
 
         def sheet_filename(sheet)
           current_sheet_path(sheet.id + SHEET_EXTENSION)
         end
 
+        def sheet_markdown_filename(sheet)
+          current_sheet_path(sheet.id + ".markdown")
+        end
+
+        def markdown_file_for(sheet)
+          sheet_markdown_filename(sheet)
+        end
+        
         def setup
           @setup = true
           log :debug, "setting up adapter directory #{path}"
@@ -72,9 +84,14 @@ module Diary
           ret
         end
 
+        def realpath(*args)
+          Habitat.quart.media_path(*args)
+        end
+        
         def sheet_files(user = nil)
           raise NoUserContext, "cant read sheets without user" if user.nil? and @user.nil?
-          Dir.glob(user_path + "/**/**/*" + SHEET_EXTENSION)
+          complete_path = realpath(user_path + "/**/**/*" + SHEET_EXTENSION)
+          Dir.glob(complete_path)
         end
 
         def by_reference(reference, user = nil, &blk)
@@ -141,17 +158,28 @@ module Diary
           super(hash)
         end
 
+        def cleaned_linebreaks(content)
+          content.gsub(/\r\n?/, "\n")
+        end
+
+        
         def store(sheet)
           raise "invalid sheet: #{PP.pp(sheet, '')}" unless sheet.valid?
-          mkdir_p(user_path) unless ::File.exist?(user_path)
 
-          unless sheet.file
-            sheet.file = sheet_filename(sheet)
-            mkdir_p(dirname(sheet.file))
-          end
+          dir = ::File.dirname(realpath(sheet.virtual_file))
+          ::FileUtils::mkdir_p(dir, :verbose => true) 
 
           sheet.updated_at = Time.now
-          write(sheet.file, YAML.dump(sheet))
+
+          
+          write(realpath(sheet.markdown_file), cleaned_linebreaks(sheet.content))
+
+          sheet.content = nil
+          sheet.markdown_file = nil
+
+          sheet.file = sheet.virtual_file
+          write(realpath(sheet.virtual_file), YAML.dump(sheet))
+
           sheet
         end
 

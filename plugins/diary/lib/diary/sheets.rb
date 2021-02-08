@@ -42,7 +42,6 @@ module Diary
 
   class Sheet
     Attributes = {
-      :content     => String,
       :created_at  => Time,
       :updated_at  => Time,
       :user_id     => String
@@ -54,6 +53,8 @@ module Diary
     attr_accessor :id
     attr_accessor :title
     attr_accessor :preview
+    attr_accessor :content
+    attr_accessor :file
 
     attr_accessor *Attributes.keys
 
@@ -92,14 +93,6 @@ module Diary
       self
     end
 
-    def data_dir(*args)
-      Habitat.quart.media_path("public", "di", id, *args)
-    end
-
-    def http_dir(*args)
-      File.join("/_", "di", id, *args)
-    end
-
     def valid?
       missing = []
       Attributes.each do |attribute, attribute_type|
@@ -119,14 +112,37 @@ module Diary
       @references ||= References.new(self)
     end
 
+    def markdown_file
+      File.join(::File.dirname(virtual_file), "%s.markdown" % id)
+    end
+
+    def markdown_file=(obj)
+      markdown_file = obj
+    end
+
+    def content
+      @content ||= File.readlines(Habitat.adapter(:diary).realpath(markdown_file)).join
+    end
+
+    def file
+      virtual_file
+    end
+
+    def virtual_file(*args)
+      datepath = Habitat.adapter(:diary).with_user(user).time_to_path(created_at)
+      ext = Database::Adapter::File::SHEET_EXTENSION
+      up = Habitat.adapter(:diary).with_user(user).user_path("sheets", datepath, "%s%s" % [id, ext])
+    end
+    
     def to_hash
       r = {
-        :content => @content,
+        :content => content,
         :created_at => @created_at.rfc2822,
         :updated_at => @updated_at.rfc2822,
         :user_id => @user_id,
         :id => @id,
-        :references => references.resolve.map{|r| r.id }
+        :references => references.resolve.map{|r| r.id },
+        :file => file
       }
       r.merge!(:title => @title) if @title
       r
