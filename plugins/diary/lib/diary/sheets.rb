@@ -14,7 +14,7 @@ module Diary
     end
 
     def by_last_edited
-      Sheets.new(@user).push(*dup.sort_by{|s| s.updated_at }.reverse)
+      Sheets.new(@user).push(*dup.sort_by{|s| s.updated_at })
     end
 
     def include?(other_or_id)
