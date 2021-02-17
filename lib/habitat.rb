@@ -121,6 +121,10 @@ module Habitat
       end
 
       controller.prepare do
+
+        expose :page_title
+        expose :accept_cookies
+
         include Habitat
         include Habitat::WebAppMethods
 
@@ -129,6 +133,13 @@ module Habitat
         if Habitat.quart.plugins.enabled?(:user)
           include User::UserControllerMethods
           before :check_token
+        end
+
+        
+        before :get_accept_cookies
+
+        def get_accept_cookies
+          @accept_cookies = cookies[:cookieconsent_status]
         end
 
       end
