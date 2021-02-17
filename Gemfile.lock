@@ -1,12 +1,12 @@
 GIT
-  remote: git://github.com/entropie/hanami-webpack.git
+  remote: https://github.com/entropie/hanami-webpack.git
   revision: 20823a0803ca3499056d4f9dd37b1605a5c0a1c8
   specs:
     hanami-webpack (0.0.1)
       hanami
 
 GIT
-  remote: git://github.com/hanklords/flickraw.git
+  remote: https://github.com/hanklords/flickraw.git
   revision: 95700877e6e396845704258b854eeee7c699f1fe
   specs:
     flickraw (1.0.0.pre.pre1)
@@ -280,4 +280,4 @@ DEPENDENCIES
   webp-ffi
 
 BUNDLED WITH
-   1.17.3
+   2.1.4
