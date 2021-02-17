@@ -11,6 +11,8 @@ module Backend
       templates 'templates'
       layout :application
 
+      cookies true
+
       routes do
         get     '/', to: "dashboard#index", as: :dashboard
 
