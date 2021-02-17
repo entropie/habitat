@@ -95,6 +95,15 @@ quarters.each do |quart|
 
         user_adapter.create(opts)
       end
+
+      sopts.on("--make-bookmarklet USER", "bookmarklet") do |usr|
+        opts = {}
+        bmuser = user_adapter.user.select {|u|
+          u.name == usr || u.email == u
+        }.first
+
+        sh "ruby %s %s" % [Source.join("scripts/mkbookmarklet.rb"), bmuser.token]
+      end
     end
 
 
