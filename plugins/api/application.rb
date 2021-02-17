@@ -5,8 +5,10 @@ module Api
   class Application < Hanami::Application
     configure do
       root __dir__
-      routes do
 
+      cookies true
+
+      routes do
         Habitat.plugin_enabled?(:blog) do
           resources :post, only: [:create, :update, :destroy]
           get '/post/',            to: "post#index", as: :posts
@@ -42,15 +44,16 @@ module Api
       # end
       #instance_eval(&Habitat.default_application_config)
 
-      include User::UserControllerMethods
+      #include User::UserControllerMethods
       controller.prepare do
-        before :reject_unless_authenticated
       end
 
       # view.prepare do
       #   include Habitat
       #   include Habitat::WebAppMethods
       # end
+
+      instance_eval(&Habitat.default_application_config)
       
     end
 
