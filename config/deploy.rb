@@ -63,7 +63,7 @@ def remote_file_exists?(full_path)
 end
 
 def remote_link_exists?(full_path)
-    'true' ==  capture("if test -L #{full_path}; then echo 'true'; fi").strip
+  'true' ==  capture("if test -L #{full_path}; then echo 'true'; fi").strip
 end
 
 
