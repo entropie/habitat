@@ -17,7 +17,7 @@ module Cache
     unless ret
       Habitat.log :debug, "cached key not found; #{cache_key(obj)} reading again"
       T.read
-      ret = cache.get(cache_key(obj))
+      ret = cache.get(cache_key(obj)) rescue nil
     end
     ret
   end
