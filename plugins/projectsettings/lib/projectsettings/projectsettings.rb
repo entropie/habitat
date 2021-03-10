@@ -23,11 +23,11 @@ module ProjectSettings
     def read
       Habitat.log :info, "reading projectsettings"
       merge! YAML::load_file(Habitat.quart.app_root(SETTINGSFILE))
-      Habitat.plugin_enabled?(:cache) do
-        each_pair do |k, v|
-          Cache[Settings.cache_key(k)] = v
-        end
-      end
+      # Habitat.plugin_enabled?(:cache) do
+      #   each_pair do |k, v|
+      #     Cache[Settings.cache_key(k)] = v
+      #   end
+      # end
     end
     
     def write(target = nil)
@@ -52,12 +52,12 @@ module ProjectSettings
   end
 
   def self.[](obj)
-    Habitat.plugin_enabled?(:cache) do
-      cached_settings = Cache[Settings.cache_key(obj)]
-      if cached_settings
-        return cached_settings
-      end
-    end
+    # Habitat.plugin_enabled?(:cache) do
+    #   cached_settings = Cache[Settings.cache_key(obj)]
+    #   if cached_settings
+    #     return cached_settings
+    #   end
+    # end
     settings[obj]
   end
 
@@ -73,4 +73,9 @@ module ProjectSettings
     settings.write(target)
   end
 end
+
+
+
 C = ProjectSettings
+
+LOADED_SETTINGS = C.settings
