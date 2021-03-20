@@ -125,9 +125,17 @@ namespace :habitat do
     on roles(:app) do
       within release_path.join("quarters") do
         tdir = release_path.join("quarters", fetch(:application))
-        execute :mv, "%s %s.bak" % [tdir, tdir]
+
+        if remote_file_exists?(tdir)
+          execute :mv, "%s %s.bak" % [tdir, tdir]
+        end
+        
         execute :git, "clone #{fetch(:habitat_url)}"
-        execute :mv, "#{tdir}.bak/.bundle", File.join(tdir, ".bundle")
+
+        if remote_file_exists?("%s.bak" % tdir)        
+          execute :mv, "#{tdir}.bak/.bundle", File.join(tdir, ".bundle")
+        end
+        
       end
     end
   end

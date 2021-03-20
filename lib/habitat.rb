@@ -139,7 +139,7 @@ module Habitat
         before :get_accept_cookies
 
         def get_accept_cookies
-          @accept_cookies = cookies[:cookieconsent_status]
+          @accept_cookies = cookies[:cookieconsent_status] rescue false
         end
 
       end
