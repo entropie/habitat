@@ -105,7 +105,7 @@ module Diary
         def sheets(user = nil, &blk)
           raise NoUserContext, "cant read sheets without user" if user.nil? and @user.nil?
           read_sheets = []
-          sheet_files.each do |sfile|
+          sheet_files(user).each do |sfile|
             read_sheets << load_file(sfile)
           end
           ret = Sheets.new(user || @user).push(*read_sheets)
@@ -162,6 +162,15 @@ module Diary
           content.gsub(/\r\n?/, "\n")
         end
 
+        def cleaned_sheet_object(sheet)
+          stw = sheet.dup
+          [:content, :user, :markdown_file].each do |iv|
+            stw.remove_instance_variable("@#{iv}") if stw.instance_variable_get("@#{iv}")
+          end
+          stw.file = sheet.virtual_file
+          stw
+        end
+
         
         def store(sheet)
           raise "invalid sheet: #{PP.pp(sheet, '')}" unless sheet.valid?
@@ -171,14 +180,10 @@ module Diary
 
           sheet.updated_at = Time.now
 
-          
           write(realpath(sheet.markdown_file), cleaned_linebreaks(sheet.content))
 
-          sheet.content = nil
-          sheet.markdown_file = nil
-
-          sheet.file = sheet.virtual_file
-          write(realpath(sheet.virtual_file), YAML.dump(sheet))
+          sheet_to_write = cleaned_sheet_object(sheet)
+          write(realpath(sheet.virtual_file), YAML.dump(sheet_to_write))
 
           sheet
         end
