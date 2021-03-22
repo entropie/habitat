@@ -71,7 +71,7 @@ module Diary
     end
 
     def keywords
-      @keywords ||= sheet.content.scan(/#(\w+)[ \s]?/).flatten.map{|kw| References.normalize_key(kw)}
+      @keywords ||= sheet.content.scan(/#([\w+\-]+)[ \s]?/).flatten.map{|kw| References.normalize_key(kw)}
     end
 
     def references
