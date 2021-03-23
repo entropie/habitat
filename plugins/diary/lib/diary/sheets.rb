@@ -88,7 +88,11 @@ module Diary
 
     def populate(param_hash)
       param_hash.each do |attribute, value|
-        instance_variable_set("@#{attribute}", value)
+        if respond_to?("#{attribute}=")
+          instance_variable_set("@#{attribute}", value)
+        else
+          warn "#{attribute} ignored"
+        end
       end
       self
     end
