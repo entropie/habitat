@@ -169,10 +169,9 @@ module Diary
 
         def cleaned_sheet_object(sheet)
           stw = sheet.dup
-          [:content, :user, :markdown_file].each do |iv|
+          [:content, :user, :markdown_file, :file].each do |iv|
             stw.remove_instance_variable("@#{iv}") if stw.instance_variable_get("@#{iv}")
           end
-          stw.file = sheet.virtual_file
           stw
         end
 
@@ -188,7 +187,7 @@ module Diary
           write(realpath(sheet.markdown_file), cleaned_linebreaks(sheet.content))
 
           sheet_to_write = cleaned_sheet_object(sheet)
-          write(realpath(sheet.virtual_file), YAML.dump(sheet_to_write))
+          write(realpath(sheet.virtual_file("metadata")), YAML.dump(sheet_to_write))
 
           sheet
         end

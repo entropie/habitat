@@ -89,8 +89,14 @@ module Diary
 
     attr_accessor *Attributes.keys
 
+    def filter_uploads(upload_files)
+      filtered = upload_files.dup.reject{|uf| [".markdown", ".yaml"].include?(::File.extname(uf))}
+      filtered
+    end
+
     def uploads
       files = Dir.glob("%s*.*" % File.join(data_dir, "/"))
+      files = filter_uploads(files)
       files.map{|f| DMedia.new(self, File.basename(f))}
     end
 
@@ -153,7 +159,7 @@ module Diary
     end
 
     def markdown_file
-      File.join(::File.dirname(virtual_path), "%s.markdown" % id)
+      File.join(::File.dirname(virtual_path), id, "sheet.markdown")
     end
 
     def markdown_file=(obj)

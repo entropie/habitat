@@ -21,4 +21,6 @@ JAVASCRIPT
 
 puts
 puts "javascript:(function(){%s}());" % Uglifier.compile(str, :mangle => false)
-                      
+
+puts
+puts File.join(ENDPOINT, "?token=#{TKN}&s=#{ENDPOINT}")
