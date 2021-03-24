@@ -194,12 +194,13 @@ module Diary
         end
 
         def upload(sheet, params)
-          ret = {}
+          ret = []
           params.each do |input_hash|
-            target_dir = sheet.data_dir(input_hash[:filename])
+            fn = input_hash[:filename]
+            target = sheet.data_dir(fn)
             ::FileUtils.mkdir_p(sheet.data_dir)
-            ::FileUtils.copy(input_hash[:tempfile].path, target_dir, :verbose => true)
-            ret[input_hash[:filename]] = target_dir
+            ::FileUtils.copy(input_hash[:tempfile].path, target, :verbose => true)
+            ret.push({fn => sheet.http_path(fn)})
           end
           ret 
         end
