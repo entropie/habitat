@@ -67,7 +67,7 @@ module Diary
     # end
 
     def to_html
-      '<span class="" data-filename="%s" data-url="%s">' % [filename, http_path]
+      '<span data-filename="%s" data-url="%s">%s</span>' % [filename, http_path, "<img src='#{http_path}'/>"]
     end
   end
 
