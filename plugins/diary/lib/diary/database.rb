@@ -115,6 +115,11 @@ module Diary
           return ret
         end
 
+        def by_id(sid)
+          rethash = find(:id => sid)
+          rethash.shift || nil # fixme
+        end
+
         def find(phash)
           ret = Sheets.new(@user)
           sheets(@user).each{|s|
@@ -188,13 +193,16 @@ module Diary
           sheet
         end
 
-        # def upload(sheet, params)
-        #   file = params[:tempfile]
-        #   mkdir_p(sheet.data_dir)
-        #   filename = Digest::SHA1.hexdigest(file.read) + ::File.extname(params[:filename])
-        #   cp(file.path, sheet.data_dir(filename))
-        #   filename
-        # end
+        def upload(sheet, params)
+          ret = {}
+          params.each do |input_hash|
+            target_dir = sheet.data_dir(input_hash[:filename])
+            ::FileUtils.mkdir_p(sheet.data_dir)
+            ::FileUtils.copy(input_hash[:tempfile].path, target_dir, :verbose => true)
+            ret[input_hash[:filename]] = target_dir
+          end
+          ret 
+        end
 
         def update_sheet(sheet, param_hash)
           sheet = sheet.extend(SheetFileExtension)

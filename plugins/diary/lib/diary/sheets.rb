@@ -40,6 +40,37 @@ module Diary
     end
   end
 
+  class DMedia
+    attr_accessor :sheet
+    attr_accessor :user
+    attr_accessor :filename
+
+    def initialize(sheet, filename)
+      @filename = filename
+      @sheet = sheet
+    end
+
+    def http_path
+      @sheet.http_path(filename)
+    end
+
+    def virtual_path
+      @sheet.virtual_path(filename)
+    end
+
+    def path
+      @sheet.data_dir(filename)
+    end
+
+    # def to_html
+    #   '<img src="%s" />' % http_path
+    # end
+
+    def to_html
+      '<span class="" data-filename="%s" data-url="%s">' % [filename, http_path]
+    end
+  end
+
   class Sheet
     Attributes = {
       :created_at  => Time,
@@ -57,6 +88,11 @@ module Diary
     attr_accessor :file
 
     attr_accessor *Attributes.keys
+
+    def uploads
+      files = Dir.glob("%s*.*" % File.join(data_dir, "/"))
+      files.map{|f| DMedia.new(self, File.basename(f))}
+    end
 
     def initialize(content = nil)
       @content = content
@@ -117,7 +153,7 @@ module Diary
     end
 
     def markdown_file
-      File.join(::File.dirname(virtual_file), "%s.markdown" % id)
+      File.join(::File.dirname(virtual_path), "%s.markdown" % id)
     end
 
     def markdown_file=(obj)
@@ -132,10 +168,36 @@ module Diary
       virtual_file
     end
 
+    def allowed_directory?(path)
+      allowed_directories = [Habitat.quart.media_path("diary")]
+      full_path = File.expand_path(path)
+      allowed_directories.any? { |dir| dir == full_path[0..dir.size-1] }
+    end
+
+    def virtual_path(*args)
+      wu = Habitat.adapter(:diary).with_user(user)
+      ret = wu.user_path("sheets", wu.time_to_path(created_at), id, *args)
+      ret
+    end
+
     def virtual_file(*args)
       datepath = Habitat.adapter(:diary).with_user(user).time_to_path(created_at)
       ext = Database::Adapter::File::SHEET_EXTENSION
-      up = Habitat.adapter(:diary).with_user(user).user_path("sheets", datepath, "%s%s" % [id, ext])
+      virtual_path(args) + ext
+    end
+
+    def http_path(*args)
+      wu = Habitat.adapter(:diary).with_user(user)
+      File.join("/d/data/sheet", user.id, id, *args)
+    end
+
+    def relative_data_dir(*args)
+      virtual_path(*args)
+    end
+
+    def data_dir(*args)
+      ret = Habitat.quart.media_path(relative_data_dir(args))
+      allowed_directory?(ret) and ret or raise "#{ret} not allowed"
     end
     
     def to_hash
