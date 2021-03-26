@@ -76,3 +76,32 @@ class TestUserCreate < Minitest::Test
   end
 
 end
+
+
+class TestUserCreateGroup < Minitest::Test
+  def setup
+    @adapter = Habitat.adapter(:user)
+  end
+
+  def test_group_list
+    group_classes = User::Groups.groups
+    assert_includes(group_classes, User::Groups::DefaultGroup)
+    assert_includes(group_classes, User::Groups::AdminGroup)
+  end
+  
+  def test_default_group
+    usr = @adapter.create(:name => "grouptest-def", :email => "test@testor.com", :password => "test")
+    assert_includes(usr.groups, User::Groups::DefaultGroup)
+  end
+
+  def test_admin_group
+    usr = @adapter.create(:name => "grouptest-admin", :email => "test@testor.com", :password => "test")
+
+    usr.add_to_group(User::Groups::AdminGroup)
+    @adapter.store(usr)
+
+    assert_includes(usr.groups, User::Groups::AdminGroup)
+    assert_includes(usr.groups, User::Groups::DefaultGroup)
+  end
+
+end

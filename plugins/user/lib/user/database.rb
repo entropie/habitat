@@ -66,7 +66,9 @@ module User
         end
 
         def create(param_hash)
-          store( User.new.populate(param_hash) )
+          usr = User.new.populate(param_hash)
+          store(usr)
+          usr
         end
 
         def store(usr)

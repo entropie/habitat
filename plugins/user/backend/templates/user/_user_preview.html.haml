@@ -1,8 +1,16 @@
 %li.user-preview
-  .container
-    .columns
-      .column.col-12
-        %a{:href => routes.userpage_path(user.name)}= user.name
-      .column.col-12
-        %span.glyphicon.glyphicon-envelope
-        %a{:href => "mailto:#{user.email}"}= user.email
+  %form{:action => routes.useredit_path(user.id), :method => :POST}
+    .topic
+      %a{:href => routes.userpage_path(user.name)}= user.name
+      &lt;
+      %span.glyphicon.glyphicon-envelope
+      %a{:href => "mailto:#{user.email}"}= user.email
+      &gt;
+    .groups{:class => user.is_grouped? ? "grouped" : ""}
+      - ::User::Groups.to_a.map{|grp| grp.to_s }.each do |ug|
+        %line
+          %input{:type => :checkbox, :name => "groups[#{ug}]", :checked => session_user.part_of?(ug)}
+          = ug
+
+    .submit{:style => "float:right"}
+      %input{:type => :submit, :value => "Update"}

@@ -23,6 +23,7 @@ module Backend
 
           namespace :user do
             get   '/',               to: "user#index", as:     :user
+            post  '/edit/:user_id',  to: "user#edit",  as:     :useredit
             get   '/:name',          to: "user#user",  as:     :userpage
           end
         end
