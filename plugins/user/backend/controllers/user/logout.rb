@@ -7,7 +7,7 @@ module Backend::Controllers::User
       if logged_in?
         params.env['warden'].logout
       end
-      redirect_to routes.dashboard_path
+      redirect_to "/"
     end
   end
 end
