@@ -1,6 +1,9 @@
 .backend-page-header
   %h1= t("user-page-topic-index")
 
+.main-content-block
+  %ul.main-listing.single
+    = render template: "user/_user_preview", locals: {user: user}
 
-%ul.main-listing
-  = render template: "user/_user_preview", locals: {user: user}
+  = render template: "user/_form", locals: {user: user, action: routes.useredit_path(user.id)}
+

@@ -8,12 +8,12 @@ module User
     def reject_unless_authenticated
       logging_in = ["login", "logout"].include?(params.env["REQUEST_PATH"].split("/").last)
 
-      if logged_in?
-        if session_user.is_grouped? and not session_user.part_of?(:admin)
+      if  logging_in
+      elsif logged_in?
+        if session_user.is_grouped? and not session_user.part_of?(:admin) 
           redirect_to "/"
           exit 23
         end
-
       elsif logging_in
       else
         halt 404
@@ -91,6 +91,7 @@ module User
     }
 
     attr_reader *Attributes.keys
+    attr_accessor :password
 
     OptionalAttributes = []
 
@@ -119,7 +120,7 @@ module User
     def part_of?(grp)
       grp = Groups.const_get(grp.to_s.capitalize) if grp.kind_of?(String) or grp.kind_of?(Symbol)
       
-      is_grouped? and groups =~ grp
+      is_grouped? and groups =~ grp and true
     end
 
     def id

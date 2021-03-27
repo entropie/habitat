@@ -22,9 +22,11 @@ module Backend
           get   'logout',            to: "user#logout", as:    :logout
 
           namespace :user do
-            get   '/',               to: "user#index", as:     :user
-            post  '/edit/:user_id',  to: "user#edit",  as:     :useredit
-            get   '/:name',          to: "user#user",  as:     :userpage
+            get   '/create',         to: "user#create",  as:     :usercreate
+            post  '/create',         to: "user#create",  as:     :usercreate
+            get   '/:name',          to: "user#user",    as:     :userpage
+            post  '/edit/:user_id',  to: "user#edit",    as:     :useredit
+            get   '/',               to: "user#index",   as:     :user
           end
         end
 

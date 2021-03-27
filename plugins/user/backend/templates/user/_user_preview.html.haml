@@ -9,7 +9,7 @@
     .groups{:class => user.is_grouped? ? "grouped" : ""}
       - ::User::Groups.to_a.map{|grp| grp.to_s }.each do |ug|
         %line
-          %input{:type => :checkbox, :name => "groups[#{ug}]", :checked => session_user.part_of?(ug)}
+          %input{:type => :checkbox, :name => "groups[#{ug}]", :checked => user.part_of?(ug)}
           = ug
 
     .submit{:style => "float:right"}

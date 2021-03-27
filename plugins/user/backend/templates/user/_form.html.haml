@@ -1,0 +1,37 @@
+#db-snippets-form
+  %form.form-horizontal{:method => :post, :action => action}
+    .container
+      .columns
+        .column.col-3
+        .column.col-6
+          - h = true ? {:disabled => :disabled} : {}
+          %form-group
+            %label.form-label ID
+            %input.form-input{h, :type => :text, :value => (user.id rescue ""), :name => :user_id}
+          %form-group
+            %label.form-label EMail
+            %input.form-input{:type => :text, :value => (user.email rescue ""), :name => :email}
+      .columns
+        .column.col-3
+        .column.col-6
+          %form-group
+            %label.form-label Name
+            %input.form-input{:type => :text, :value => (user.name rescue ""), :name => :name}
+      .columns
+        .column.col-3
+        .column.col-6
+          %form-group
+            %label.form-label Password
+            %input.form-input{:type => :password, :value => (user.password rescue ""), :name => :password}
+      .columns
+        .column.col-3
+        .column.col-6
+          %form-group
+            %label.form-label Password²
+            %input.form-input{:type => :password, :value => (user.password rescue ""), :name => :password1}
+
+      .columns
+        .column.col-3
+        .column.col-6
+          %form-group
+            %input.form-input{:type => :submit, :value => "Absenden"}
