@@ -179,7 +179,7 @@ module Diary
         def store(sheet)
           raise "invalid sheet: #{PP.pp(sheet, '')}" unless sheet.valid?
 
-          dir = ::File.dirname(realpath(sheet.virtual_file))
+          dir = realpath(sheet.virtual_path)
           ::FileUtils::mkdir_p(dir, :verbose => true) 
 
           sheet.updated_at = Time.now

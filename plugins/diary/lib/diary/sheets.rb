@@ -159,11 +159,7 @@ module Diary
     end
 
     def markdown_file
-      File.join(::File.dirname(virtual_path), id, "sheet.markdown")
-    end
-
-    def markdown_file=(obj)
-      markdown_file = obj
+      virtual_path("sheet.markdown")
     end
 
     def content
@@ -189,7 +185,7 @@ module Diary
     def virtual_file(*args)
       datepath = Habitat.adapter(:diary).with_user(user).time_to_path(created_at)
       ext = Database::Adapter::File::SHEET_EXTENSION
-      virtual_path(args) + ext
+      virtual_path(*args) + ext
     end
 
     def http_path(*args)
