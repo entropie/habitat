@@ -110,6 +110,7 @@ module Habitat::Quarters
       Dir.chdir(app_root) do
         Hanami.boot
       end
+      Habitat.calculate_version_hash!
       Plugins.load_from_symbols(config.fetch(:plugins))
     end
 
