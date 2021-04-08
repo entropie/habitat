@@ -166,6 +166,15 @@ module Diary
       @content ||= File.readlines(Habitat.adapter(:diary).realpath(markdown_file)).join
     end
 
+    def to_html
+      html =  CommonMarker.render_html(content)
+      string = "<html><meta charset='UTF-8'><head><title>%s</title></head><body>%s</body></html>" % [title, html]
+    end
+
+    def to_s
+      content
+    end
+
     def file
       virtual_file
     end
