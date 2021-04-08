@@ -167,7 +167,9 @@ module Diary
     end
 
     def to_html
-      html =  CommonMarker.render_html(content)
+      doc = CommonMarker.render_doc(content, [:STRIKETHROUGH_DOUBLE_TILDE, :FOOTNOTES, :UNSAFE])
+      renderer = CommonMarker::HtmlRenderer.new(options: [:UNSAFE])
+      html = renderer.render(doc)
       string = "<html><meta charset='UTF-8'><head><title>%s</title></head><body>%s</body></html>" % [title, html]
     end
 
