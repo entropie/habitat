@@ -26,8 +26,13 @@ module Habitat::Mixins
       File.dirname(s)
     end
 
+    def cleaned_content(str)
+      str.gsub(/\r/, "")
+    end
+    private :cleaned_content
+    
     def overwrite(file, cnts)
-      cnts = cnts.to_s
+      cnts = cleaned_content(cnts)
       r=File.open(file, "w+") do |fp|
         fp.puts(cnts)
       end
@@ -35,7 +40,7 @@ module Habitat::Mixins
     end
 
     def write(file, cnts)
-      cnts = cnts.to_s
+      cnts = cleaned_content(cnts)
       r=File.open(file, "w+") do |fp|
         fp.puts(cnts)
       end
