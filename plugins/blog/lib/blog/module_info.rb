@@ -82,5 +82,12 @@ module Blog
       end
     end
 
+    class CharCounterInfo < Info
+      def to_html
+        text = @post.content.size
+        super % text.to_s
+      end
+    end
+
   end
 end
