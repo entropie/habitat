@@ -27,7 +27,7 @@ module Feed::Controllers::Feed
     def call(params)
       self.status = 200
       self.body = to_xml do |xml|
-        blog.posts.each do |post|
+        blog.posts.sort_by {|p| p.created_at }.reverse.each do |post|
           begin
             post_to_xml(xml, post)
           rescue
