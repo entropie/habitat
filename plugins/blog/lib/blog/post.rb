@@ -184,7 +184,12 @@ module Blog
     end
     
     def intro
-      content.split("\r\n\r\n").first
+      if content.include?("\r\n")
+        content.split("\r\n\r\n").first
+      else
+        content.split("\n\n").first
+      end
+
     end
 
     def datadir(*args)
