@@ -29,7 +29,7 @@ module Booking
         def repository_path(*args)
           ::File.join(::File.realpath(path), "booking", *args.compact.map(&:to_s))
         rescue Errno::ENOENT
-          warn "does not exist: #{path("blog")}"
+          warn "does not exist: #{path("booking")}"
           path("booking", *args)
         end
 
