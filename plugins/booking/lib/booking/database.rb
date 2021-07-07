@@ -21,17 +21,6 @@ module Booking
           ::File.join(@path, *args)
         end
 
-        def class_for(kind)
-          case kind.to_sym
-          when :markdown then MarkdownSnippet
-          when :haml then HAMLSnippet
-          end
-        end
-
-        def adapter_class(kind = DEFAULT_SNIPPET_TYPE)
-          class_for(kind)
-        end
-
         def setup
           @setup = true
           log :debug, "setting up adapter directory #{path}"
@@ -40,59 +29,31 @@ module Booking
         end
 
         def repository_path(*args)
-          ::File.join(::File.realpath(path), "snippets", *args)
+          ::File.join(::File.realpath(path), "booking", *args.compact.map(&:to_s))
         rescue Errno::ENOENT
           warn "does not exist: #{path("blog")}"
-          path("snippets", *args)
+          path("booking", *args)
         end
 
-        def snippet_filename(ident = nil)
-          repository_path("%s%s" % [ident || ident, SNIPPET_EXTENSION])
-        end
+        # def snippet_filename(ident = nil)
+        #   repository_path("%s%s" % [ident || ident, SNIPPET_EXTENSION])
+        # End
 
-        def exist?(post)
-          ::File.exist?(post_filename(post))
-        end
 
-        def datadir(*args)
-          ::File.expand_path(repository_path("../data", *args))
+        def events(year: Time.now.strftime("%y"), month: Time.now.strftime("%m"), day: Time.now.strftime("%m"))
+          evs = ::Booking::Events.new(self, year: year, month: month, day: day)
         end
-
-        def snippet_files
-          toglob = repository_path + "/*" + SNIPPET_EXTENSION + "*"
-          Dir.glob(toglob)
-        end
-
-        def grep(obj)
-          str = obj.to_s
-          snippets.select{|s| s.ident.to_s.include?(str) }
-        end
-        
-        def select(obj, env = nil)
-          ident = obj.to_sym
-          ret = snippets[ident]
-          unless ret
-            return NotExistingSnippet.new(ident)
-          end
-          ret.env = env
-          ret
-        end
-
-        def exist?(obj)
-          not select(obj).kind_of?(NotExistingSnippet)
-        end
-
-        # def snippets
-        #   ::Snippets::Snippets.new(snippet_files.map{|sf| ::Snippets::Snippet.for(sf) })
-        # end
-
 
         def load_file(yamlfile)
           # log :debug, "loading #{Habitat.S(yamlfile)}"
           # YAML::load_file(yamlfile)
         end
 
-        def create(ident, content, kind = DEFAULT_SNIPPET_TYPE)
+        def create(what, params)
+          ret = case what
+                when :event
+                  ::Booking::Events::Event.create(params)
+                end
           # snippet = adapter_class(kind).new(ident).extend(SnippetCreater)
           # store(snippet, content)
         end
