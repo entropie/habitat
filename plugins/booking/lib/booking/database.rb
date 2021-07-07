@@ -33,7 +33,7 @@ module Booking
           path("booking", *args)
         end
 
-        def events(year: Time.now.strftime("%y"), month: Time.now.strftime("%m"), day: Time.now.strftime("%m"))
+        def events(year: Time.now.strftime("%y"), month: Time.now.strftime("%m"), day: Time.now.strftime("%d"))
           evs = ::Booking::Events.new(self, year: year, month: month, day: day)
         end
 
@@ -44,6 +44,7 @@ module Booking
                    end
           to_create = tclazz.create(params)
           store(to_create)
+          to_create
         end
 
         def update_or_create(ident, param_hash)

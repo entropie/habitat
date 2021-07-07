@@ -36,7 +36,7 @@ class TestEventPath < Minitest::Test
 
   def test_create_event
     ev = adapter.create(:event, TestEvents.first)
-    ev
+    assert ev.exist?
   end
 
   def test_event_files

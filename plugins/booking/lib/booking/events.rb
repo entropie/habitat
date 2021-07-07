@@ -1,4 +1,5 @@
 module Booking
+
   class Events
 
     class Event
@@ -60,7 +61,7 @@ module Booking
 
 
 
-    def initialize(adapter, year: Time.now.strftime("%y"), month: Time.now.strftime("%m"), day: Time.now.strftime("%m"))
+    def initialize(adapter, year: Time.now.strftime("%y"), month: Time.now.strftime("%m"), day: Time.now.strftime("%d"))
       @adapter = adapter
       @year = year
       @month = month
