@@ -33,8 +33,8 @@ module Booking
           path("booking", *args)
         end
 
-        def events(year: Time.now.strftime("%y"), month: Time.now.strftime("%m"), day: Time.now.strftime("%d"))
-          evs = ::Booking::Events.new(self, year: year, month: month, day: day)
+        def events(year: Time.now.strftime("%y"), month: Time.now.strftime("%m"))
+          evs = ::Booking::Events.new(self, year: year, month: month)
         end
 
         def create(what, params)
@@ -47,12 +47,13 @@ module Booking
           to_create
         end
 
-        def update_or_create(ident, param_hash)
+        def update_or_create(slug, param_hash)
           raise "not implemented"
         end
 
         def store(what)
           raise NoUserContext, "trying to call #store without valid user context " unless @user
+          log :info, "booking:store:#{what.slug}"
 
           target_file = repository_path(what.filename)
           mkdir_p(::File.dirname(target_file))
@@ -67,7 +68,7 @@ module Booking
         end
 
         def destroy(what)
-          log :info, "booking:REMOVE:#{what.ident}"
+          log :info, "booking:REMOVE:#{what.slug}"
           rm(repository_path(what.filename), :verbose => true)
         end
 

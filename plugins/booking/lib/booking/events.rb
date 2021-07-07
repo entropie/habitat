@@ -59,17 +59,23 @@ module Booking
       end
     end
 
+    def padzero(i)
+      i.to_s.rjust(2, "0") if i
+    end
 
-
-    def initialize(adapter, year: Time.now.strftime("%y"), month: Time.now.strftime("%m"), day: Time.now.strftime("%d"))
+    def initialize(adapter, year: Time.now.strftime("%y"), month: Time.now.strftime("%m"))
       @adapter = adapter
       @year = year
-      @month = month
-      @day = day
+      @month = padzero(month)
+    end
+
+    def read
+      @result = directory_files.map{|df| YAML::load(File.readlines(df).join)}
     end
 
     def to_a
-      []
+      read unless @result
+      @result
     end
 
     def empty?
@@ -77,7 +83,7 @@ module Booking
     end
 
     def directory
-      adapter.repository_path("events", @year, @month, @day)
+      adapter.repository_path("events", @year, @month)
     end
 
     def directory_files
