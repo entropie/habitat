@@ -18,6 +18,8 @@ module Booking
       attr_accessor *EventAttributes
       attr_accessor *DataAttributes
 
+      attr_accessor   :updated_at, :created_at
+
       def self.create(paramhash)
         created_event = Event.new
         created_event.set(paramhash)
@@ -36,6 +38,23 @@ module Booking
         DataAttributes.each do |pk, pv|
           send("#{pk}=", [])          
         end
+      end
+
+      def filename
+        "%s%s-%s.%s" % [File.join("events",
+                                  start_date.strftime("%y"),
+                                  @start_date.strftime("%m"), "/"),
+                        @start_date.strftime("%d"),
+                        @slug,
+                        "yaml"]
+      end
+
+      def to_yaml
+        YAML::dump(self)
+      end
+
+      def exist?
+        ::File.exist?(Habitat.adapter(:booking).repository_path(filename))
       end
     end
 

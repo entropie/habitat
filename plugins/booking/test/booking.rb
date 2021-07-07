@@ -7,13 +7,14 @@ require "minitest/autorun" if __FILE__ == $0
 
 Habitat.add_adapter(:booking, Booking::Database.with_adapter.new(TMP_PATH))
 
+include TestMixins
 
 def _clr
   FileUtils.rm_rf(TMP_PATH, :verbose => true)
 end
 
 def adapter
-  Habitat.adapter(:booking)
+  Habitat.adapter(:booking).with_user(MockUser)
 end
 
 TestEvents = [
@@ -35,7 +36,7 @@ class TestEventPath < Minitest::Test
 
   def test_create_event
     ev = adapter.create(:event, TestEvents.first)
-    p ev
+    ev
   end
 
   def test_event_files
