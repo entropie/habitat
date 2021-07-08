@@ -75,7 +75,11 @@ module Booking
 
     def to_a
       read unless @result
-      @result
+      @result || []
+    end
+
+    def each(&blk)
+      to_a.each(&blk)
     end
 
     def empty?
@@ -83,7 +87,7 @@ module Booking
     end
 
     def directory
-      adapter.repository_path("events", @year, @month)
+      Habitat.adapter(:booking).repository_path("events", @year, @month)
     end
 
     def directory_files

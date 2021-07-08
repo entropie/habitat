@@ -173,6 +173,10 @@ module Backend
           include ::Blog::BlogControllerMethods
         end
 
+        if Habitat.quart.plugins.enabled?(:booking)
+          include ::Booking::BookingControllerMethods
+        end
+
         before :reject_unless_authenticated
       end
 

@@ -35,6 +35,8 @@ module Booking
 
         def events(year: Time.now.strftime("%y"), month: Time.now.strftime("%m"))
           evs = ::Booking::Events.new(self, year: year, month: month)
+          p 1
+          evs
         end
 
         def create(what, params)

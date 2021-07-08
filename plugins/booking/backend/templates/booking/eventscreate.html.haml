@@ -1,1 +1,5 @@
-eventscreate
+.backend-page-header
+  %h1= t("events-page-topic-events-create")
+
+.main-content-block
+  = render template: "booking/_event_form", locals: {event: event}
