@@ -29,6 +29,7 @@ class TestEventPath < Minitest::Test
   include Booking
   
   def setup
+    _clr
     FileUtils.mkdir_p(File.join(TMP_PATH, "booking"))
   end
 
@@ -69,11 +70,12 @@ class TestSlots < Minitest::Test
 
   include Booking
   def setup
+    _clr
     FileUtils.mkdir_p(File.join(TMP_PATH, "booking"))
   end
 
   def wd(a = 2021, b = 7, c = 8)
-    Booking::Workday.new(a, b, c)
+    Booking::Workday.read_or_new(a, b, c)
   end
 
   def test_slot_path
@@ -82,6 +84,10 @@ class TestSlots < Minitest::Test
     entry.merge(phone: "1123", name: "Deine Mutter")
 
     adapter.store(day)
+
+    day = wd
+    assert day.exist?
+    assert "Deine Mutter", day.slots[14].name
   end
 
   def test_slot_available

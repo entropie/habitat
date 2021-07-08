@@ -108,11 +108,23 @@ module Booking
       what
     end
 
-
     def fill(whereby, slot)
       set_slot(slot, whereby.new(self, slot))
     end
 
+    def self.load_workday(wd)
+      Habitat.log :info, "reading workday[#{wd.filename}]"
+      YAML::load(File.readlines(Habitat.adapter(:booking).repository_path(wd.filename)).join)
+    end
+
+    def self.read_or_new(*args)
+      workday = Workday.new(*args)
+      if workday.exist?
+        load_workday(workday)
+      else
+        workday
+      end
+    end
 
     def self.default_slots
       @default_slots = YAML::load(Habitat.quart.media_path("slots.yaml"))
