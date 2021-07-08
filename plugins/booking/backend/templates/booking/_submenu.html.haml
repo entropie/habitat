@@ -1,5 +1,12 @@
 %li
   %ul.sub
     %li.nav-item
-      =# al(routes.snippetsCreate_path, "anlegen ", {:icon => "pencil"})
+      = al(routes.workdays_path, "workdays ", {:icon => "list"})
 
+
+%li.nav-item.modules-head
+  = al(routes.events_path, "events ", {:icon => "list"})
+%li
+  %ul.sub
+    %li.nav-item
+      = al(routes.eventsCreate_path, "Anlegen ", {:icon => "pencil"})
