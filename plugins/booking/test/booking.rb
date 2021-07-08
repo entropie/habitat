@@ -63,3 +63,48 @@ class TestEventPath < Minitest::Test
     assert_equal 3, adapter.events(year: 21, month: nil).to_a.size
   end
 end
+
+
+class TestSlots < Minitest::Test
+
+  include Booking
+  def setup
+    FileUtils.mkdir_p(File.join(TMP_PATH, "booking"))
+  end
+
+  def wd(a = 2021, b = 7, c = 8)
+    Booking::Workday.new(a, b, c)
+  end
+
+  def test_slot_path
+    day = wd
+    entry = day.fill(Booking::Workday::Single, 14)
+    entry.merge(phone: "1123", name: "Deine Mutter")
+
+    adapter.store(day)
+  end
+
+  def test_slot_available
+    assert wd.slots.first.available?
+    assert wd.slots[14].available?
+  end
+  
+  def test_slot_fill
+    day = wd
+    
+    entry = day.fill(Booking::Workday::Single, 14)
+    entry.merge(phone: "1123", name: "Deine Mutter")
+
+    entry = day.fill(Booking::Workday::Single, 16)
+    entry.merge(phone: "1123", name: "Dein Vater")
+
+    day.fill(Booking::Workday::Blocked, 12)
+
+    assert_equal false, day.slots[14].available?
+    assert_equal false, day.slots[16].available?
+    assert_equal false, day.slots[12].available?
+    
+  end
+
+
+end
