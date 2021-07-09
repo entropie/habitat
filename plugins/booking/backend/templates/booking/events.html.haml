@@ -3,5 +3,9 @@
 
 .main-content-block
   %ul.main-listing
-    - events.each do |event|
+    - pager.each do |event|
       = render template: "booking/_event_preview", locals: {event: event}
+  - if pager.empty?
+    .info= t("common-nothing-here-yet")
+  - else
+    = pager.navigation
