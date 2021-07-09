@@ -80,6 +80,10 @@ module Booking
       slots # initialize @slots for yaml
     end
 
+    def valid?
+      true
+    end
+
     def datestr
       date.strftime("%y-%m-%d")
     end
