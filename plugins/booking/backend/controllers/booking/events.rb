@@ -5,7 +5,8 @@ module Backend::Controllers::Booking
     expose :events
 
     def call(params)
-      @events = events
+      @events = booking.events(year: 2021, month: nil)
     end
   end
 end
+

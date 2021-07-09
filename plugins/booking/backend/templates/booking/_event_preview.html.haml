@@ -1,0 +1,14 @@
+%li
+  %h2
+    = event.title
+    %a{href: Backend.routes.eventEdit_path(event.slug)}
+      %span{:class => "glyphicon glyphicon-pencil"}
+
+  .div
+    = event.html_date(:start_date)
+    Uhr
+    &mdash;
+    = event.html_date(:end_date)
+    Uhr
+
+

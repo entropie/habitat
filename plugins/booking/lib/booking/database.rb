@@ -34,9 +34,11 @@ module Booking
         end
 
         def events(year: Time.now.strftime("%y"), month: Time.now.strftime("%m"))
-          evs = ::Booking::Events.new(self, year: year, month: month)
-          p 1
-          evs
+          @events = ::Booking::Events.new(self, year: year, month: month).read
+          p year, month
+          pp @events.class
+          pp @events
+          @events
         end
 
         def create(what, params)
@@ -55,6 +57,8 @@ module Booking
 
         def store(what)
           raise NoUserContext, "trying to call #store without valid user context " unless @user
+          raise Habitat::Database::EntryNotValid, "#{what.class}#valid? returns not true" unless what.valid?
+
           log :info, "booking:store:#{what.slug}"
 
           target_file = repository_path(what.filename)
@@ -73,7 +77,6 @@ module Booking
           log :info, "booking:REMOVE:#{what.slug}"
           rm(repository_path(what.filename), :verbose => true)
         end
-
 
         def with_user(user, &blk)
           @user, @events = user, nil

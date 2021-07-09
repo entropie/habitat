@@ -2,5 +2,6 @@
   %h1= t("events-page-topic-events-events")
 
 .main-content-block
-  - events.each do |event|
-    = render template: "booking/_event_preview", locals: {event: event}
+  %ul.main-listing
+    - events.each do |event|
+      = render template: "booking/_event_preview", locals: {event: event}

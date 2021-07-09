@@ -1,32 +1,48 @@
-%form{action: Backend.routes.eventsCreate_path}
+%form{action: Backend.routes.eventsCreate_path, method: :POST}
   .container
     .columns
-      .column.col-4
+      .column.col-3
+      .column.col-6
+        .form-group
+          .input-group
+            %span.input-group-addon Title
+            %input.form-input{:value => event.title, :name => :title}
+      .column.col-3
+    .columns.top-seperator
+      .column.col-3
+      .column.col-6
         .form-group
           .input-group
             %span.input-group-addon Ident
-            %input.form-input{:value => "", :name => :ident}
+            %input.form-input{:value => event.ident, :name => :ident}
+      .column.col-2
+        .help= t("booking-help-ident")
+    .columns.top-seperator
+      .column.col-2
       .column.col-4
         .form-group
           .input-group
             %span.input-group-addon Start Datum
-            %input.form-input.datepicker{:value => "2021/07/01 9:30", :name => :start_date}
+            %input.form-input.datepicker{:value => event.html_date(:start_date), :name => :start_date}
       .column.col-4
         .form-group
           .input-group
             %span.input-group-addon End Datum
-            %input.form-input.datepicker{:value => "", :name => :end_date}
-      .column.col-6.top-seperator
+            %input.form-input.datepicker{:value => event.html_date(:end_date), :name => :end_date}
+      .column.col-2
+    .columns.top-seperator
+      .column.col-2
+      .column.col-4
         .form-group
           .input-group
             %span.input-group-addon Teilnehmeranzahl
-            %input.form-input{:value => "", :name => :attender_slogs}
+            %input.form-input{:value => event.attender_slots, :name => :attender_slots}
 
-      .column.col-6.top-seperator
+      .column.col-4
         .form-group
           .input-group
             %span.input-group-addon Protagonisten
-            %input.form-input{:value => "", :name => :protagonists}
+            %input.form-input{:value => (event.protagonists.join(",") rescue ""), :name => "protagonists[]"}
 
 
       .column.col-12.text-center.top-seperator
@@ -34,4 +50,4 @@
 
       .column.col-12.top-seperator
         .form-group
-          %textarea#snippet-form.form-input.cm-form{:rows => 15, :name => :content, "data-codemirror-mode" => "text/x-haml"}= ""
+          %textarea#snippet-form.form-input.cm-form{:rows => 15, :name => :content, "data-codemirror-mode" => "text/x-haml"}= event.content

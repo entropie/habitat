@@ -134,16 +134,18 @@ module Backend
         Habitat.plugin_enabled?(:booking) do
           namespace :booking do
 
-            get  '/workdays/',     to: "booking#workdays", as:   :workdays
-            get  '/events/',      to: "booking#events", as:   :events
+            get  '/workdays/',           to: "booking#workdays", as:       :workdays
+            get  '/events/',             to: "booking#events", as:         :events
 
             get  '/events/create',       to: "booking#eventscreate", as:   :eventsCreate
-            post '/events/create',       to: "booking#create"
+            post '/events/create',       to: "booking#eventscreate"
+            get  '/events/:slug/edit',   to: "booking#eventedit", as:      :eventEdit
+            post '/events/:slug/edit',   to: "booking#eventedit"
 
-            get  '/events/:slug',        to: "booking#snippet", as:  :bookin
-            get  '/events/:slug/edit',   to: "booking#edit", as:     :bookingEdit
-            post '/events/:slug/edit',   to: "booking#edit"
-            get  '/',             to: "booking#index", as:    :booking
+            get  '/events/:slug',        to: "booking#snippet", as:        :event
+
+            get  '/',                   to: "booking#index", as:           :booking
+
             #get  '/page/:page',   to: "booking#index", as:    :bookingPager
           end
         end

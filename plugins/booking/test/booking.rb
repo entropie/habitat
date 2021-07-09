@@ -18,10 +18,10 @@ def adapter
 end
 
 TestEvents = [
-  {attender_slots: 10, protagonists: ["foo"], slug: "test", start_date: Time.new(2021, 5, 1, "15:00"), end_date: Time.new(2021, 5, 1, "17:00")},
-  {attender_slots: 15, protagonists: ["foo"], slug: "testa", start_date: Time.new(2021, 5, 1, "17:00"), end_date: Time.new(2021, 5, 1, "19:00")},
+  {title: "foobar", attender_slots: 10, protagonists: ["foo"], slug: "test", start_date: Time.new(2021, 5, 1, "15:00"), end_date: Time.new(2021, 5, 1, "17:00")},
+  {title: "barfoo", attender_slots: 15, protagonists: ["foo"], slug: "testa", start_date: Time.new(2021, 5, 1, "17:00"), end_date: Time.new(2021, 5, 1, "19:00")},
 
-  {attender_slots: 20, protagonists: ["foo"], slug: "test-two", start_date: Time.new(2021, 6, 1, "15:00"), end_date: Time.new(2021, 6, 2, "17:00")}
+  {title: "batz", attender_slots: 20, protagonists: ["foo"], slug: "test-two", start_date: Time.new(2021, 6, 1, "15:00"), end_date: Time.new(2021, 6, 2, "17:00")}
 ]
 
 class TestEventPath < Minitest::Test
