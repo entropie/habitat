@@ -121,6 +121,16 @@ module Booking
       self
     end
 
+    def _new(arr)
+      Events.new(@adapter, year: @year, month: @month).push(*arr)
+    end
+
+    def sorted(reverse = false)
+      new_sorted = sort_by{|ev| ev.start_date}
+      new_sorted = new_sorted.reverse if reverse
+      ret = _new(new_sorted)
+    end
+
     def filter(&blk)
       ret = Events.new(@adapter, year: @year, month: @month)
       eles = select{|ev|

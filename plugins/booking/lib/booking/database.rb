@@ -34,10 +34,7 @@ module Booking
         end
 
         def events(year: Time.now.strftime("%y"), month: Time.now.strftime("%m"))
-          @events = ::Booking::Events.new(self, year: year, month: month).read
-          p year, month
-          pp @events.class
-          pp @events
+          @events = ::Booking::Events.new(self, year: year, month: month).read.sorted(true)
           @events
         end
 
