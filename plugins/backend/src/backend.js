@@ -8,6 +8,8 @@ import 'jquery-tags-input/src/jquery.tagsinput.css'
 
 import 'webpack-jquery-ui/tabs'
 
+import "jquery-datetimepicker"
+import "jquery-datetimepicker/jquery.datetimepicker.css"
 
 import '../../../plugins/backend/src/backend.sass'
 
@@ -41,9 +43,12 @@ function betterTab(cm) {
   }
 }
 
+jQuery.datetimepicker.setLocale('de');
+
 $(document).ready(function() {
     console.log("backend");
 
+    $('.datepicker').datetimepicker();
 
     if($("#db-template-edit").length) {
         var hsh = window.location.hash;

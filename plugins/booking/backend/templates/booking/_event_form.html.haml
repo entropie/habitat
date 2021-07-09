@@ -1,2 +1,37 @@
 %form{action: Backend.routes.eventsCreate_path}
-  hallo
+  .container
+    .columns
+      .column.col-4
+        .form-group
+          .input-group
+            %span.input-group-addon Ident
+            %input.form-input{:value => "", :name => :ident}
+      .column.col-4
+        .form-group
+          .input-group
+            %span.input-group-addon Start Datum
+            %input.form-input.datepicker{:value => "2021/07/01 9:30", :name => :start_date}
+      .column.col-4
+        .form-group
+          .input-group
+            %span.input-group-addon End Datum
+            %input.form-input.datepicker{:value => "", :name => :end_date}
+      .column.col-6.top-seperator
+        .form-group
+          .input-group
+            %span.input-group-addon Teilnehmeranzahl
+            %input.form-input{:value => "", :name => :attender_slogs}
+
+      .column.col-6.top-seperator
+        .form-group
+          .input-group
+            %span.input-group-addon Protagonisten
+            %input.form-input{:value => "", :name => :protagonists}
+
+
+      .column.col-12.text-center.top-seperator
+        %input.btn.btn-primary{:type => :submit, :value => "Absenden"}    
+
+      .column.col-12.top-seperator
+        .form-group
+          %textarea#snippet-form.form-input.cm-form{:rows => 15, :name => :content, "data-codemirror-mode" => "text/x-haml"}= ""
