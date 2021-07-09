@@ -42,12 +42,15 @@ module Booking
       end
 
       def filename
-        "%s%s-%s.%s" % [File.join("events",
-                                  start_date.strftime("%y"),
-                                  @start_date.strftime("%m"), "/"),
-                        @start_date.strftime("%d"),
-                        @slug,
-                        "yaml"]
+        "%s%s-%s.%s" % [
+          File.join("events",
+                    start_date.strftime("%y"),
+                    @start_date.strftime("%m"),
+                    "/"),
+          @start_date.strftime("%d"),
+          @slug,
+          "yaml"
+        ]
       end
 
       def to_yaml
