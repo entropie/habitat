@@ -38,6 +38,10 @@ module Booking
           @events
         end
 
+        def events_all
+          events(year: nil, month: nil)
+        end
+
         def create(what, params)
           tclazz = case what
                    when :event
