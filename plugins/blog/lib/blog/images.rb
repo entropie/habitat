@@ -40,29 +40,21 @@ module Blog
     end
 
     def fullpath
-      bf = File.join(Habitat.adapter(:blog).path, @post.datadir("..", dirname, basename))
+      File.join(Habitat.adapter(:blog).path, @post.datadir("..", dirname, basename))
     end
 
-
-    def to_webp
-      name, extname = basename.split(".")
-      webp_filename = File.join(File.dirname(fullpath), "%s.%s" % [name, "webp"])
-      unless File.exist?(webp_filename)
-        Habitat.log :debug, "blog:image generating webp for #{fullpath}"
-        WebP.encode(fullpath, webp_filename)
+    def css_header_defintion
+      retstr = "background-image: url(%s)" % url
+      if Habitat.quart.plugins.enabled?(:webp)
+        extend(Webp)
+        Webp.encode(fullpath)
+        retstr << ";background-image: url(%s)" % webp_url
       end
-      webp_filename
+      retstr
     end
 
     def url
       File.join("/attachments", dirname, basename)
-    end
-
-    def webp_url
-      to_webp
-      File.join("/attachments", dirname, basename.split(".").first + ".webp")
-    rescue
-      ""
     end
 
     def dimensions
