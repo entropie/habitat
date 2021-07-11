@@ -66,7 +66,11 @@ module Galleries
       elsif !img
         msg = "image <i>#{ident}</i> not existing in gallery <i>#{gal}</i>."
       else
-        return img.url
+        begin
+          return _raw(img.url)
+        rescue
+          return img.url
+        end
       end
 
       return "<div class='error-msg'>#{msg}</div>"
