@@ -53,8 +53,12 @@ module Blog
       retstr
     end
 
-    def url
+    def http_path(*args)
       File.join("/attachments", dirname, basename)
+    end
+    
+    def url
+      http_path
     end
 
     def dimensions

@@ -56,6 +56,25 @@ module Galleries
 
   module GalleriesAccessMethods
 
+    def CSS_BACKGROUND(gal, ident)
+      gallery = Habitat.adapter(:galleries).find(gal)
+      img = gallery.images(ident)
+
+      msg = ""
+      if !gallery
+        msg = "gallery <i>#{gal}</i> not existing"
+      elsif !img
+        msg = "image <i>#{ident}</i> not existing in gallery <i>#{gal}</i>."
+      else
+        begin
+          return _raw(img.css_background_defintion)
+        rescue
+          return img.css_background_defintion
+        end
+      end
+    end
+    
+
     def IMGSRC(gal, ident)
       gallery = Habitat.adapter(:galleries).find(gal)
       img = gallery.images(ident)
@@ -176,11 +195,11 @@ module Galleries
       end
 
       def gallery
-        Habitat.adapter(:galleries).find(filename.split("/").first)
+        Habitat.adapter(:galleries).find(@filename.split("/").first)
       end
       
       def path
-        gallery.path("images", ::File.basename(filename))
+        Habitat.adapter(:galleries).repository_path(@filename)
       end
 
       def fullpath
@@ -191,16 +210,20 @@ module Galleries
         ret = Digest::SHA1.hexdigest(File.new(file).read) + File.extname(file).downcase
       end
 
+      def http_path(*args)
+        File.join(Habitat.quart.default_application.routes.gallery_path, @filename)
+      end
+      
       def url
         if Habitat.quart.plugins.enabled?(:webp)
           extend(Webp)
           webp_url
         else
-          File.join(Habitat.quart.default_application.routes.gallery_path, filename)
+          http_path
         end
       end
 
-      def css_header_defintion
+      def css_background_defintion
         retstr = "background-image: url(%s)" % url
         if Habitat.quart.plugins.enabled?(:webp)
           extend(Webp)

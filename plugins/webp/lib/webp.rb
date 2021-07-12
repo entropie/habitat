@@ -12,8 +12,8 @@ module Webp
 
   def webp_url
     Webp.encode(fullpath)
-    file, ext = filename.split(".")
-    File.join(Habitat.quart.default_application.routes.gallery_path, file + ".webp")
+    urlwoext, ext = http_path.split(".")
+    urlwoext + ".webp"
   end
   
 end

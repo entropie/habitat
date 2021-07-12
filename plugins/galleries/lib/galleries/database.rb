@@ -27,7 +27,9 @@ module Galleries
         end
 
         def find(gallery_ident, user = nil)
-          find_or_create(gallery_ident, user)
+          gal = find_or_create(gallery_ident, user)
+          raise "gallery not found #{gallery_ident}" unless gal
+          gal
         end
 
         def all(user = nil)
