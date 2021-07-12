@@ -43,7 +43,7 @@ module Blog
       File.join(Habitat.adapter(:blog).path, @post.datadir("..", dirname, basename))
     end
 
-    def css_header_defintion
+    def css_background_defintion
       retstr = "background-image: url(%s)" % url
       if Habitat.quart.plugins.enabled?(:webp)
         extend(Webp)

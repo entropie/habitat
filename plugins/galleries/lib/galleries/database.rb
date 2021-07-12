@@ -27,9 +27,7 @@ module Galleries
         end
 
         def find(gallery_ident, user = nil)
-          gallery = find_or_create(gallery_ident, user)
-          raise Habitat::Database::EntryNotValid, "gallery not existing" unless gallery.exist?
-          gallery
+          find_or_create(gallery_ident, user)
         end
 
         def all(user = nil)
@@ -40,7 +38,7 @@ module Galleries
 
         def transaction(gallery, &blk)
           log :info, "gallery:#{gallery.ident} transaction starting..."
-          g = yield gallery
+          g = yield gallery if block_given?
           gallery.write_metadata
           log :info, "gallery:#{gallery.ident} transaction finish"
           g

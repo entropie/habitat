@@ -36,7 +36,7 @@ module Galleries
         ul(:class => "gallery-thumbnails") do
           filtered.each_with_index do |img, index|
             li do
-              a(:href => img.url, :style => "background-image: url(#{img.url}", :class => "popupImg")
+              a(:href => img.url, :style => img.css_background_defintion, :class => "popupImg")
             end
           end
         end
@@ -45,7 +45,7 @@ module Galleries
           ul(:class => "thumbs") do
             filtered.each_with_index do |img, index|
               li do
-                a(:href => "##{index+1}", "data-slide" => index+1, :style => "background-image: url(#{img.url}")
+                a(:href => "##{index+1}", "data-slide" => index+1, :style => img.css_background_defintion)
               end
             end
           end
@@ -165,7 +165,6 @@ module Galleries
 
       def initialize(filename, gallery)
         @filename = filename
-        @gallery = gallery
       end
 
       def hash
@@ -176,8 +175,16 @@ module Galleries
         FileUtils.rm_rf(path, :verbose => true)
       end
 
+      def gallery
+        Habitat.adapter(:galleries).find(filename.split("/").first)
+      end
+      
       def path
-        @gallery.path("..", @filename)
+        gallery.path("images", ::File.basename(filename))
+      end
+
+      def fullpath
+        path
       end
 
       def self.hash_filename(file)
@@ -185,9 +192,23 @@ module Galleries
       end
 
       def url
-        File.join(Habitat.quart.default_application.routes.gallery_path, filename)
+        if Habitat.quart.plugins.enabled?(:webp)
+          extend(Webp)
+          webp_url
+        else
+          File.join(Habitat.quart.default_application.routes.gallery_path, filename)
+        end
       end
 
+      def css_header_defintion
+        retstr = "background-image: url(%s)" % url
+        if Habitat.quart.plugins.enabled?(:webp)
+          extend(Webp)
+          retstr << ";background-image: url(%s)" % webp_url
+        end
+        retstr
+      end
+      
       def ident
         @ident || hash
       end
