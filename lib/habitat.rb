@@ -35,7 +35,13 @@ module Habitat
   end
 
   def self.calculated_version_hash
-    @calculated_version_hash ||= Digest::SHA2.new(256).hexdigest(commit_hash + quart_commit_hash)[0..12]
+    unless @calculated_version_hash
+      @calculated_version_hash = Digest::SHA2.new(256).hexdigest(commit_hash + quart_commit_hash)[0..12]
+      if quart.development?
+        @calculated_version_hash += "&r=#{rand(999)}"
+      end
+    end
+    @calculated_version_hash
   end
 
   def self.calculate_version_hash!
