@@ -12,6 +12,7 @@
 * **pager** paging
 * **prettydate** transform dates to custom formats across application
 * **projectsettings** project wide variables (example is analytics or disqus id)
+* **simpledb** used to make arbitrary data from ~/media directory accessible (e.g. csv files)
 * **snippets** are pages (including pages in sub and sub-sub* directories), blocks of content or text-snippets. It's the way to deliver any static content
 * **stars** rating plugin
 * **t** text substitution and multi language support (not right now)
