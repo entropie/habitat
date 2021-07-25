@@ -95,7 +95,7 @@ module Galleries
       return "<div class='error-msg'>#{msg}</div>"
     end
 
-    def IMG(gal, ident)
+    def IMG(gal, ident, hsh = {  })
       gallery = Habitat.adapter(:galleries).find(gal)
       img = gallery.images(ident)
 
@@ -105,7 +105,8 @@ module Galleries
       elsif !img
         msg = "image <i>#{ident}</i> not existing in gallery <i>#{gal}</i>."
       else
-        return "<div class='gallery-image-container'><a href='#{img.url}' class='popupImg' style='background-image: url(#{img.url})'></a></div>"
+        acss = hsh.map{ |h,k| "#{h}:#{k}" }.join(";")
+        return "<div href='#{img.url}' class='popupImg' style='background-image: url(#{img.url});#{acss}'></div>"
       end
 
       return "<div class='error-msg'>#{msg}</div>"
