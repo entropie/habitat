@@ -148,6 +148,7 @@ module Blog
       rethash[:updated_at] = updated_at
       rethash[:title]      = title
       rethash[:url]        = Habitat.quart.default_application.routes.post_path(slug)
+      rethash[:slug]       = slug
       rethash
     end
 

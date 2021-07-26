@@ -38,7 +38,12 @@ class TestReadpi < Minitest::Test
   def test_read_api
     api = Blog::ReadAPI.new("https://fluffology.de/api/post")
     ret = api.posts
-    p ret.first["url"]
+    # sleep 3
+    ret = api.posts
+    p ret.first.class
+    # ret = api.posts
+    # ret = api.posts
+    # p ret.first["url"]
   end
 end
 
