@@ -16,6 +16,22 @@ module Blog
     def slug
       @posthash["slug"]
     end
+
+    def title
+      @posthash["title"]
+    end
+
+    def intro_html
+      @posthash["intro"]
+    end
+
+    def image
+      @posthash["image"]
+    end
+
+    def to_human
+      Time.parse(@posthash["created_at"])
+    end
   end
 
   class ReadAPI

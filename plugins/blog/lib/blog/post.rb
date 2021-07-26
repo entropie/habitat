@@ -149,6 +149,7 @@ module Blog
       rethash[:title]      = title
       rethash[:url]        = Habitat.quart.default_application.routes.post_path(slug)
       rethash[:slug]       = slug
+      rethash[:image]      = image.url
       rethash
     end
 
