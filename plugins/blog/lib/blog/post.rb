@@ -136,10 +136,19 @@ module Blog
     end
     
     def to_hash
-      Attributes.keys.inject({}) {|m, v|
-        m[v] = instance_variable_get("@#{v}")
-        m
-      }
+      # Attributes.keys.inject({}) {|m, v|
+      #   m[v] = instance_variable_get("@#{v}")
+      #   m
+      # }
+      rethash = {  }
+      rethash[:content]    = with_filter
+      rethash[:intro]      = intro
+      rethash[:user]       = Habitat.adapter(:user).by_id(user_id).name
+      rethash[:created_at] = created_at
+      rethash[:updated_at] = updated_at
+      rethash[:title]      = title
+      rethash[:url]        = Habitat.quart.default_application.routes.post_path(slug)
+      rethash
     end
 
     def update(param_hash)
