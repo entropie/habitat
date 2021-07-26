@@ -44,7 +44,7 @@ module Blog
     end
 
     def to_human
-      Time.parse(@posthash["created_at"])
+      created_at.to_human
     end
 
     def url(*add)
