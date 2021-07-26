@@ -1,8 +1,11 @@
 module Blog
 
   class APIPost
-    def initialize(hash)
-      @posthash = hash
+
+    attr_reader :api
+
+    def initialize(hash, api)
+      @posthash, @api = hash, api
     end
 
     def created_at
@@ -25,13 +28,35 @@ module Blog
       @posthash["intro"]
     end
 
+    class APIPostIMG
+      attr_reader :image, :api
+      def initialize(img, api)
+        @image, @api = img, api
+      end
+
+      def css_background_defintion
+        "background-image: url(%s)" % api.url(@image)
+      end
+    end
+
     def image
-      @posthash["image"]
+      APIPostIMG.new(@posthash["image"], api)
     end
 
     def to_human
       Time.parse(@posthash["created_at"])
     end
+
+    def url(*add)
+      api.url(*add)
+    end
+
+    def post_url
+      url("/post/", slug)
+
+    end
+
+
   end
 
   class ReadAPI
@@ -44,6 +69,10 @@ module Blog
 
     def initialize(endpoint)
       @endpoint = endpoint
+    end
+
+    def url(*add)
+      "https://%s" % File.join( URI.parse(endpoint).host, *add )
     end
 
     def self.cache_file
@@ -74,7 +103,7 @@ module Blog
         Habitat.log :info, "readapi: reading #{uri}"
         response = Net::HTTP.get(uri)
         Habitat.log :info, "readapi: result: #{ response.size }kb"
-        ReadAPI.cached = JSON.parse(response)["posts"].map{ |apip| APIPost.new(apip) }
+        ReadAPI.cached = JSON.parse(response)["posts"].map{ |apip| APIPost.new(apip, self) }
       end
       ReadAPI.cached
     end
