@@ -29,6 +29,19 @@ PostHash = {
   :tags => "foo, bar"
 }
 
+
+class TestReadpi < Minitest::Test
+  def setup
+    @adapter = Habitat.adapter(:blog)
+  end
+
+  def test_read_api
+    api = Blog::ReadAPI.new("https://fluffology.de/api/post")
+    ret = api.posts
+    p ret.first["url"]
+  end
+end
+
 class TestDatabase < Minitest::Test
   def test_default_adapter
     assert_equal Database.adapter, :File
@@ -180,16 +193,16 @@ class TestCreatePost < Minitest::Test
     #   a.create(PostHash)
     # end
     
-    post = @adapter.with_user(@user) do |a|
-      i = File.open( File.join(File.dirname(__FILE__), "test.jpg"))
-      post = a.create(PostHash)
-      a.upload(post, i)
-      post
-    end
+    # post = @adapter.with_user(@user) do |a|
+    #   i = File.open( File.join(File.dirname(__FILE__), "test.jpg"))
+    #   post = a.create(PostHash)
+    #   a.upload(post, i)
+    #   post
+    # end
 
-    @adapter.with_user(@user) do |a|
-      a.store(post)
-    end
+    # @adapter.with_user(@user) do |a|
+    #   a.store(post)
+    # end
 
     # assert post.image.path
     # t =  Blog.templates(@template_path)[:alpha].apply(post)
@@ -198,7 +211,7 @@ class TestCreatePost < Minitest::Test
     # p t.ruby
     # p t.template
     # p t.compile
-    p post.with_template(:prettyok).compile
+    # p post.with_template(:prettyok).compile
 
   end
 
