@@ -41,6 +41,9 @@ module Habitat::Mixins
 
     def write(file, cnts)
       cnts = cleaned_content(cnts)
+
+      FileUtils.mkdir_p(::File.dirname(file), :verbose => true)
+
       r=File.open(file, "w+") do |fp|
         fp.puts(cnts)
       end
