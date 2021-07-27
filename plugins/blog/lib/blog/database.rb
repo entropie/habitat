@@ -111,9 +111,10 @@ module Blog
 
           for_yaml.updated_at = Time.now
 
-          content = post_or_draft.content
           write(for_yaml.fullpath, YAML.dump(for_yaml))
           FileUtils.mkdir_p(post_or_draft.datapath, :verbose => true)
+
+          content = post_or_draft.content
           write(post_or_draft.datafile, content)
 
           Habitat.plugin_enabled?(:cache) do
