@@ -131,9 +131,15 @@ module Booking
     end
 
     def self.default_slots
-      @default_slots = YAML::load(Habitat.quart.media_path("slots.yaml"))
-    rescue
-      @default_slots = [10, 12, 14, 16, 18, 20]
+      yaml_file = Habitat.quart.media_path("slots.yaml")
+      if ::File.exist?(yaml_file)
+        Habitat.log :info, "booking: reading workdays from #{Habitat.S("yaml_file")}"
+        @default_slots = YAML::load_file(yaml_file)
+      else
+        #ile.open(yaml_file, "w+"){ |fp| fp.puts(YAML.dump([10, 12, 14, 16, 18])) }
+        Habitat.log :warn, "no slots.yaml: #{Habitat.S(yaml_file)}"
+        @default_slots = [10, 12, 14, 16, 18]
+      end
     end
     
   end
