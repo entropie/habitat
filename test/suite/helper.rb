@@ -22,7 +22,7 @@ class MockUser
 end
 
 Habitat.quart = Habitat::Quarters[:test]
-TMP_PATH = Habitat.quart.media_path
+TMP_PATH = "/tmp/habitattest"
 
 module TestMixins
   module UserMixin

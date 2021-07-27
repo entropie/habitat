@@ -40,7 +40,7 @@ class TestReadpi < Minitest::Test
     ret = api.posts
     # sleep 3
     ret = api.posts
-    p ret.first.class
+    # p ret.first.class
     # ret = api.posts
     # ret = api.posts
     # p ret.first["url"]
@@ -140,6 +140,7 @@ class TestCreatePost < Minitest::Test
   include UserMixin
   
   def setup
+    _clr
     @user = MockUser1
     @adapter = Habitat.adapter(:blog)
   end
@@ -194,20 +195,20 @@ class TestCreatePost < Minitest::Test
   end
 
   def test_create_with_user
-    # post = @adapter.with_user(@user) do |a|
-    #   a.create(PostHash)
-    # end
+    post = @adapter.with_user(@user) do |a|
+      a.create(PostHash)
+    end
     
-    # post = @adapter.with_user(@user) do |a|
-    #   i = File.open( File.join(File.dirname(__FILE__), "test.jpg"))
-    #   post = a.create(PostHash)
-    #   a.upload(post, i)
-    #   post
-    # end
+    post = @adapter.with_user(@user) do |a|
+      i = File.open( File.join(File.dirname(__FILE__), "test.jpg"))
+      post = a.create(PostHash)
+      a.upload(post, i)
+      post
+    end
 
-    # @adapter.with_user(@user) do |a|
-    #   a.store(post)
-    # end
+    @adapter.with_user(@user) do |a|
+      a.store(post)
+    end
 
     # assert post.image.path
     # t =  Blog.templates(@template_path)[:alpha].apply(post)
