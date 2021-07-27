@@ -1,5 +1,5 @@
 # coding: utf-8
-TMP_PATH = "/tmp/minitest"
+
 
 class MockUser
   attr_reader :id
@@ -21,6 +21,8 @@ class MockUser
   end
 end
 
+Habitat.quart = Habitat::Quarters[:test]
+TMP_PATH = Habitat.quart.media_path
 
 module TestMixins
   module UserMixin
