@@ -1,0 +1,7 @@
+--- !ruby/hash:ProjectSettings::Settings
+:host: https://localhost
+:pager: '5'
+:title: default habitat title
+:description: deine mama ist ein schaf
+:disqus_ident: nil
+:ga: nil

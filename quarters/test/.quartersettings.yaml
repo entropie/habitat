@@ -1,0 +1,7 @@
+--- !ruby/hash:Habitat::Configuration::Config::ConfigHash
+:plugins:
+- :user
+- :api
+- :pager
+- :projectsettings
+- :backend
