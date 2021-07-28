@@ -6,7 +6,6 @@ module Backend::Controllers::Booking
 
     def call(params)
       @event = booking.events_all.find_or_create(params)
-      pp @event
       if request.post?
         booking.store(@event)
       end

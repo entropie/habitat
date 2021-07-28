@@ -63,11 +63,12 @@ module Booking
           log :info, "booking:store:#{what.slug}"
 
           target_file = repository_path(what.filename)
-          mkdir_p(::File.dirname(target_file))
 
           if what.exist?
+            rm(target_file, verbose: true)
             what.updated_at = Time.now
           else
+            mkdir_p(::File.dirname(target_file))
             what.created_at = Time.now
           end
 
@@ -76,7 +77,7 @@ module Booking
 
         def destroy(what)
           log :info, "booking:REMOVE:#{what.slug}"
-          rm(repository_path(what.filename), :verbose => true)
+          rm(repository_path(what.filename), verbose: true)
         end
 
         def with_user(user, &blk)
