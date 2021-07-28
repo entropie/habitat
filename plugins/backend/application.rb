@@ -135,7 +135,7 @@ module Backend
           namespace :booking do
 
             get  '/events/',             to: "booking#events", as:         :events
-            get  '/events/create',       to: "booking#eventscreate", as:   :eventsCreate
+            get  '/events/create',       to: "booking#eventscreate", as:   :eventCreate
             get  '/events/:page',        to: "booking#events", as:         :eventsPager
 
             post '/events/create',       to: "booking#eventscreate"

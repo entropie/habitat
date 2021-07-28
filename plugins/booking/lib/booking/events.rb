@@ -30,15 +30,37 @@ module Booking
 
       attr_accessor   :updated_at, :created_at
 
+
+      def self.normalize_params(paramhash)
+        ret = {  }
+        nh = paramhash.to_hash
+        nh.each_pair{ |k,v|
+          ret[k.to_sym] = v
+        }
+        ret
+      end
+
       def self.inherited(o)
         Events::EventTypes.types << o
         Habitat.log :info, "adding #{o} to EventTypes"
       end
 
+      def self.find_for_type(type)
+        symtype = type.to_sym
+        retclz = EventTypes.types.select{ |et| et.type == symtype }.shift
+        retclz || Event
+      end
+
       def self.create(paramhash)
-        created_event = Event.new
-        created_event.set(paramhash)
-        created_event
+        created_event = Event
+        type = paramhash.delete(:type)
+        if type
+          created_event = find_for_type(type)
+        end
+
+        ev = created_event.new
+        ev.set(paramhash)
+        ev
       end
 
       def initialize
@@ -67,6 +89,30 @@ module Booking
           send("#{pk}=", pv)
         end
         self
+      end
+
+      def to_hash
+        ret = {  }
+        instance_variables.each{ |iv|
+          nk = iv.to_s.sub("@", "").to_sym
+          ret[nk] = instance_variable_get(iv)
+        }
+        ret
+      end
+
+      def update(params)
+        normalized_params = Event.normalize_params(params)
+        newtype = normalized_params.delete(:type)
+        newtype = newtype.to_sym if newtype
+
+        retclz = self
+        if newtype and newtype != type
+          retclz = Event.find_for_type(newtype).new
+        end
+        retclz.set(normalized_params.merge(to_hash))
+        p retclz
+        # exit
+        retclz
       end
 
       def filename
@@ -183,11 +229,18 @@ module Booking
         yield ev
       }
       ret.push(*eles)
+      return ret.shift if ret.size == 1
+      ret
+    end
+
+    def by_slug(slug)
+      ret = filter {|ev| ev.slug == slug}
+      return nil if not ret.kind_of?(Event) and ret.empty? 
       ret.shift
     end
 
     def find_or_create(params)
-      filter {|ev| ev.slug == params[:slug]} || Event.new.set(params.to_hash)
+      by_slug(params[:slug]) || Event.new.set(params.to_hash)
     end
 
     def has_range?

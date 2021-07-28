@@ -11,6 +11,7 @@ module Booking
 
         include Habitat::Mixins::FU
 
+
         def initialize(path)
           @path = path
         end
@@ -52,8 +53,20 @@ module Booking
           to_create
         end
 
-        def update_or_create(slug, param_hash)
-          raise "not implemented"
+        def update(what, params)
+          updated = what.update(params)
+          store(updated)
+          updated
+        end
+
+        def find_update_or_create(param_hash)
+          slug = param_hash[:slug]
+          ev = events_all.by_slug(slug)
+          if ev
+            return ev
+          else
+            create(:event, Booking::Events::Event.normalize_params(param_hash))
+          end
         end
 
         def store(what)
