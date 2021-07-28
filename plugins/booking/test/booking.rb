@@ -20,8 +20,8 @@ end
 TestEvents = [
   {title: "foobar", attender_slots: 10, protagonists: ["foo"], slug: "test", start_date: Time.new(2021, 5, 1, "15:00"), end_date: Time.new(2021, 5, 1, "17:00")},
   {title: "barfoo", attender_slots: 15, protagonists: ["foo"], slug: "testa", start_date: Time.new(2021, 5, 1, "17:00"), end_date: Time.new(2021, 5, 1, "19:00")},
-
-  {title: "batz", attender_slots: 20, protagonists: ["foo"], slug: "test-two", start_date: Time.new(2021, 6, 1, "15:00"), end_date: Time.new(2021, 6, 2, "17:00")}
+  {title: "batz", attender_slots: 20, protagonists: ["foo"], slug: "test-two", start_date: Time.new(2021, 6, 1, "15:00"), end_date: Time.new(2021, 6, 2, "17:00")},
+  {title: "batzbumm", attender_slots: 20, protagonists: ["foo"], slug: "test-two", start_date: Time.new(2023, 6, 1, "15:00"), end_date: Time.new(2023, 6, 2, "17:00")}
 ]
 
 class TestEventPath < Minitest::Test
@@ -45,7 +45,7 @@ class TestEventPath < Minitest::Test
   def test_event_files
     
     assert_equal File.join(TMP_PATH, "booking", "events", "20"),
-     ::Booking::Events.new(self, year: 20, month: nil).directory
+                 ::Booking::Events.new(self, year: 20, month: nil).directory
 
     assert_equal File.join(TMP_PATH, "booking", "events", Time.now.strftime("%y"), "05"),
                  ::Booking::Events.new(self, month: 5).directory
@@ -114,3 +114,23 @@ class TestSlots < Minitest::Test
 
 
 end
+
+class TestGet < Minitest::Test
+
+  include Booking
+  def setup
+    _clr
+    FileUtils.mkdir_p(File.join(TMP_PATH, "booking"))
+  end
+
+  def test_get_all
+    adapter.create(:event, TestEvents[0])
+    adapter.create(:event, TestEvents[1])
+    adapter.create(:event, TestEvents[2])
+    adapter.create(:event, TestEvents[3])
+    assert_equal 4, adapter.events_all.size
+  end
+
+
+end
+

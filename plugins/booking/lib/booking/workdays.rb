@@ -133,7 +133,7 @@ module Booking
     def self.default_slots
       yaml_file = Habitat.quart.media_path("slots.yaml")
       if ::File.exist?(yaml_file)
-        Habitat.log :info, "booking: reading workdays from #{Habitat.S("yaml_file")}"
+        Habitat.log :info, "booking: reading workdays from #{Habitat.S(yaml_file)}"
         @default_slots = YAML::load_file(yaml_file)
       else
         #ile.open(yaml_file, "w+"){ |fp| fp.puts(YAML.dump([10, 12, 14, 16, 18])) }

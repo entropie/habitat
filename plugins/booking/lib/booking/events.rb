@@ -1,3 +1,4 @@
+# coding: utf-8
 module Booking
 
   class Events < Array
@@ -51,6 +52,7 @@ module Booking
       def set(params)
         params.each_pair do |pk, pv|
           pv = Time.parse(pv) if not pv.kind_of?(Time) and pk.to_s =~ /date$/
+          pv = pv.to_i if pv.kind_of?(String) and pv =~ /^\d+$/
           send("#{pk}=", pv)
         end
         self
@@ -97,11 +99,16 @@ module Booking
     end
 
     def padmonth(i)
-      i.to_s.rjust(2, "0") if i
+      if i
+        i.to_s.rjust(2, "0")
+      else
+        nil
+      end
     end
     private :padmonth
 
     def padyear(i)
+      return nil unless i
       ys = i.to_s
       ys.size == 4 ? ys[2..4] : ys
     end
@@ -143,14 +150,23 @@ module Booking
     def find_or_create(params)
       filter {|ev| ev.slug == params[:slug]} || Event.new.set(params.to_hash)
     end
-    
+
+    def has_range?
+      not [@year, @month].map{ |part| part and part != "" and part or nil}.compact.empty?
+    end
+
     def directory
-      Habitat.adapter(:booking).repository_path("events", @year, @month)
+      Habitat.adapter(:booking).repository_path("events", *[@year, @month].compact)
+    end
+    
+    def directory_glob
+      args = has_range? ? [@year, @month] : ["/**"]
+      ret = Habitat.adapter(:booking).repository_path("events", *args)
+      ret << "/**/*.yaml"
     end
 
     def directory_files
-      event_file_glob = directory + "/**/*.yaml"
-      Dir.glob(event_file_glob).reject{|ef| ef[0..1] == "."}
+      Dir.glob(directory_glob).reject{|ef| ef[0..1] == "."}
     end
 
   end
