@@ -5,7 +5,7 @@ module Backend::Controllers::Booking
     expose :events, :pager
 
     def call(params)
-      @events = booking.events(year: 2021, month: nil)
+      @events = booking.events_all
       @pager = Pager.paginate(params, @events, 10)
       @pager.link_proc = -> (n) { routes.eventsPager_path(n) } 
     end
