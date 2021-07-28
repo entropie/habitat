@@ -5,6 +5,16 @@
       .column.col-6
         .form-group
           .input-group
+            %span.input-group-addon Typ
+            %select.form-input{name: :type}
+              - Booking::Events::EventTypes.types.each do |et|
+                %option{value: et.type, selected: et.default?}= et.type 
+      .column.col-3.top-seperator
+    .columns
+      .column.col-3
+      .column.col-6
+        .form-group
+          .input-group
             %span.input-group-addon Title
             %input.form-input{:value => event.title, :name => :title}
       .column.col-3

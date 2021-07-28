@@ -3,6 +3,12 @@ module Booking
 
   class Events < Array
 
+    class EventTypes
+      def self.types
+        @types ||= []
+      end
+    end
+
     class Event
 
       EventAttributes = [
@@ -23,6 +29,11 @@ module Booking
       attr_accessor *DataAttributes
 
       attr_accessor   :updated_at, :created_at
+
+      def self.inherited(o)
+        Events::EventTypes.types << o
+        Habitat.log :info, "adding #{o} to EventTypes"
+      end
 
       def self.create(paramhash)
         created_event = Event.new
@@ -95,8 +106,36 @@ module Booking
         else raise "dont know what to do with #{PP.pp(what, '')}"
         end
       end
-      
+
+      def self.type
+        name.split("::").last.downcase.to_sym
+      end
+
+      def type
+        self.class.type
+      end
+
+      def human_type
+        type.to_s.capitalize
+      end
+
+      def css_class
+        "e-%s" % type.to_s
+      end
+
+      def repetitive?
+        false
+      end
+
+      def self.default?
+        type == :group
+      end
     end
+
+
+
+
+
 
     def padmonth(i)
       if i
@@ -168,6 +207,6 @@ module Booking
     def directory_files
       Dir.glob(directory_glob).reject{|ef| ef[0..1] == "."}
     end
-
   end
+
 end
