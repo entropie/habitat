@@ -42,6 +42,14 @@ module PrettyDate
       strftime(format)
     end
 
+    def monthname
+      Date::MONTHNAMES[self.mon]
+    end
+
+    def smonthname
+      Date::ABBR_MONTHNAMES[self.mon]
+    end
+
   end
 end
 
