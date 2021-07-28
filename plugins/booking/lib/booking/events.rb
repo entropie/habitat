@@ -30,7 +30,6 @@ module Booking
 
       attr_accessor   :updated_at, :created_at
 
-
       def self.normalize_params(paramhash)
         ret = {  }
         nh = paramhash.to_hash
@@ -74,6 +73,10 @@ module Booking
       def ident=(o)
         @slug = o
       end
+
+      # dont need to sed type
+      def type=(o)
+      end
       
       def valid?
         values = EventAttributes.map do |event_attribute|
@@ -110,8 +113,6 @@ module Booking
           retclz = Event.find_for_type(newtype).new
         end
         retclz.set(normalized_params.merge(to_hash))
-        p retclz
-        # exit
         retclz
       end
 
@@ -235,8 +236,8 @@ module Booking
 
     def by_slug(slug)
       ret = filter {|ev| ev.slug == slug}
-      return nil if not ret.kind_of?(Event) and ret.empty? 
-      ret.shift
+      return ret.shift if ret.kind_of?(Array)
+      ret
     end
 
     def find_or_create(params)

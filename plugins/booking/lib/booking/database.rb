@@ -60,12 +60,13 @@ module Booking
         end
 
         def find_update_or_create(param_hash)
+          params = Booking::Events::Event.normalize_params(param_hash)
           slug = param_hash[:slug]
           ev = events_all.by_slug(slug)
           if ev
             return ev
           else
-            create(:event, Booking::Events::Event.normalize_params(param_hash))
+            create(:event, params)
           end
         end
 

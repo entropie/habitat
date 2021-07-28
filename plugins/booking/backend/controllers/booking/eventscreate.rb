@@ -5,10 +5,10 @@ module Backend::Controllers::Booking
     expose :event
 
     def call(params)
-      @event = Booking::Events::Event.new
+      @event = booking.events_all.find_or_create(params)
 
       if request.post?
-        booking.store(@event)
+        @event = booking.update(@event, params)
       end
     end
   end
