@@ -1,3 +1,21 @@
+#add-date-template{style: "display: none"}
+  .columns.top-seperator
+    .column.col-2
+    .column.col-4
+      .form-group
+        .input-group
+          %span.input-group-addon Start Datum
+          %input.form-input.datepicker{:name => "dates_start[]"}
+    .column.col-4
+      .form-group
+        .input-group
+          %span.input-group-addon End Datum
+          %input.form-input.datepicker{:name => "dates_end[]"}
+    .column.col-2
+
+
+
+
 %form{action: event.exist? ? Backend.routes.eventEdit_path(event.slug) : Backend.routes.eventCreate_path, method: :POST}
   .container
     .columns
@@ -18,6 +36,10 @@
             %span.input-group-addon Title
             %input.form-input{:value => event.title, :name => :title}
       .column.col-3
+
+
+
+
     .columns.top-seperator
       .column.col-3
       .column.col-6

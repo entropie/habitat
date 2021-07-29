@@ -179,6 +179,18 @@ module Booking
       end
     end
 
+    class Recurrent < Event 
+      attr_accessor :dates
+      def initialize
+        super
+        @dates = []
+      end
+
+      def repetitive?
+        true
+      end
+    end
+
 
 
 
