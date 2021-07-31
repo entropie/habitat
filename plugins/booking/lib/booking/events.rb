@@ -9,6 +9,22 @@ module Booking
       end
     end
 
+
+    class DateRange
+      attr_reader :begin_date, :end_date
+      def initialize(begind, endd)
+        @begin_date, @end_date = Time.parse(begind), Time.parse(endd)
+      end
+
+      def begin_date_p
+        begin_date.form_date
+      end
+
+      def end_date_p
+        end_date.form_date
+      end
+    end
+
     class Event
 
       EventAttributes = [
@@ -28,7 +44,7 @@ module Booking
       attr_accessor *EventAttributes
       attr_accessor *DataAttributes
 
-      attr_accessor   :updated_at, :created_at
+      attr_accessor   :updated_at, :created_at, :dates
 
       def self.normalize_params(paramhash)
         ret = {  }
@@ -112,7 +128,7 @@ module Booking
         if newtype and newtype != type
           retclz = Event.find_for_type(newtype).new
         end
-        retclz.set(normalized_params.merge(to_hash))
+        retclz.set(to_hash.merge(normalized_params))
         retclz
       end
 
@@ -145,11 +161,10 @@ module Booking
       end
 
       def html_date(what = :start_date)
-        format_string = "%Y/%m/%d %H:%M"
         if what.kind_of?(Symbol)
-          send(what).strftime(format_string)
+          send(what).form_date
         elsif what.kind_of?(Time)
-          what.strftime(format_string)
+          what.form_date
         else raise "dont know what to do with #{PP.pp(what, '')}"
         end
       end
@@ -174,13 +189,31 @@ module Booking
         false
       end
 
+      def recurrent?
+        repetitive?
+      end
+
       def self.default?
         type == :group
+      end
+
+      # actually only used in Recurrent events but in parent class to not lose dates when switching types
+      def dates=(hash)
+        if hash.kind_of?(Array)
+          @dates = hash
+          return @dates
+        end
+
+        @dates = []
+        normalized_hash = Event.normalize_params(hash)
+        normalized_hash[:begin].each_with_index do |bdate, i|
+          @dates << DateRange.new(bdate, normalized_hash[:end][i])
+        end
+        @dates
       end
     end
 
     class Recurrent < Event 
-      attr_accessor :dates
       def initialize
         super
         @dates = []

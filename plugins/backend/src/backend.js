@@ -34,6 +34,7 @@ import 'codemirror/addon/fold/comment-fold.js'
 import 'codemirror/addon/display/autorefresh.js'
 
 
+
 function betterTab(cm) {
   if (cm.somethingSelected()) {
     cm.indentSelection("add");
@@ -49,6 +50,15 @@ $(document).ready(function() {
     console.log("backend");
 
     $('.datepicker').datetimepicker();
+
+    if($("#events-edit").length) {
+        $("#add-date-template-link").click(function() {
+            let ele2copy = $("#add-date-template .date-line:last-child").clone();
+            console.log(ele2copy);
+            ele2copy.find(".datepicker").datetimepicker();
+            ele2copy.insertAfter( $("#events-edit .date-line").filter(":last") ).addClass("toadd");
+        });
+    }
 
     if($("#db-template-edit").length) {
         var hsh = window.location.hash;

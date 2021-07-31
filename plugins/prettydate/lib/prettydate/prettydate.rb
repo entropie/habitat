@@ -50,6 +50,11 @@ module PrettyDate
       Date::ABBR_MONTHNAMES[self.mon]
     end
 
+    def form_date
+      format_string = "%Y/%m/%d %H:%M"
+      strftime(format_string)
+    end
+
   end
 end
 

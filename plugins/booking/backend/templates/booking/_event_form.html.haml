@@ -1,67 +1,68 @@
-#add-date-template{style: "display: none"}
-  .columns.top-seperator
-    .column.col-2
-    .column.col-4
-      .form-group
-        .input-group
-          %span.input-group-addon Start Datum
-          %input.form-input.datepicker{:name => "dates_start[]"}
-    .column.col-4
-      .form-group
-        .input-group
-          %span.input-group-addon End Datum
-          %input.form-input.datepicker{:name => "dates_end[]"}
-    .column.col-2
+#add-date-template.top-seperator{style: "display: none"}
+  = render template: "booking/_dates_add_template", locals: { begin_date: _raw(event.html_date(:start_date)), end_date: _raw(event.html_date(:end_date)) }
 
 
-
-
-%form{action: event.exist? ? Backend.routes.eventEdit_path(event.slug) : Backend.routes.eventCreate_path, method: :POST}
+%form#events-edit{action: event.exist? ? Backend.routes.eventEdit_path(event.slug) : Backend.routes.eventCreate_path, method: :POST}
   .container
-    .columns
-      .column.col-3
-      .column.col-6
+
+    .columns.top-seperator
+      .column.col-2
+      .column.col-8
+        .form-group
+          .input-group
+            %span.input-group-addon Title
+            %input.form-input{:value => event.title, :name => :title}
+      .column.col-2
+
+
+    .columns.top-seperator
+      .column.col-1
+      .column.col-5
+        .form-group
+          .input-group
+            %span.input-group-addon Ident
+            %input.form-input{:value => event.ident, :name => :ident}
+      .column.col-5
         .form-group
           .input-group
             %span.input-group-addon Typ
             %select.form-input{name: :type}
               - Booking::Events::EventTypes.types.each do |et|
                 %option{value: et.type, selected: et.type == event.type}= et.type 
-      .column.col-3.top-seperator
-    .columns
-      .column.col-3
-      .column.col-6
-        .form-group
-          .input-group
-            %span.input-group-addon Title
-            %input.form-input{:value => event.title, :name => :title}
-      .column.col-3
-
+      .column.col-2
 
 
 
     .columns.top-seperator
-      .column.col-3
-      .column.col-6
-        .form-group
-          .input-group
-            %span.input-group-addon Ident
-            %input.form-input{:value => event.ident, :name => :ident}
       .column.col-2
-        .help= t("booking-help-ident")
-    .columns.top-seperator
-      .column.col-2
-      .column.col-4
+      .column.col-8
         .form-group
           .input-group
             %span.input-group-addon Start Datum
             %input.form-input.datepicker{:value => event.html_date(:start_date), :name => :start_date}
-      .column.col-4
+      .column.col-2
+        - if event.recurrent?
+          %a#add-date-template-link add
+
+
+    - if event.recurrent?
+      - if not event.dates or event.dates.empty?
+        .columns.date-line{style: "display:none"}
+      - else
+        - event.dates.each do |daterange|
+          = render template: "booking/_dates_add_template", locals: {begin_date: _raw(daterange.begin_date_p), end_date: _raw(daterange.end_date_p)}
+
+
+    .columns
+      .column.col-2
+      .column.col-8
         .form-group
           .input-group
             %span.input-group-addon End Datum
             %input.form-input.datepicker{:value => event.html_date(:end_date), :name => :end_date}
       .column.col-2
+
+
     .columns.top-seperator
       .column.col-2
       .column.col-4

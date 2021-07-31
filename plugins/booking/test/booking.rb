@@ -24,11 +24,44 @@ TestEvents = [
   {title: "batzbumm", attender_slots: 20, protagonists: ["foo"], slug: "test-two", start_date: Time.new(2023, 6, 1, "15:00"), end_date: Time.new(2023, 6, 2, "17:00")}
 ]
 
-
+TestReccuringEvents = [
+  {
+    :title=>"title1",
+    :ident=>"foobar",
+    :type=>"testb",
+    :start_date=>"2021/07/16 20:00",
+    :dates=>
+    {
+      :begin=>
+      ["2021/07/16 20:00",
+       "2021/07/17 20:00",
+       "2021/07/18 20:00",
+       "2021/07/19 20:00",
+       "2021/07/20 20:00"],
+      "end"=>
+      ["2021/07/16 22:00",
+       "2021/07/17 22:00",
+       "2021/07/18 22:00",
+       "2021/07/19 22:00",
+       "2021/07/20 22:00"]
+    },
+    :end_date=>"2021/07/20 22:00",
+    :attender_slots=>"3",
+    :protagonists=>["foobar"],
+    :content=>"fofoofof",
+    :slug=>"foobar"}
+]
 
 class Booking::Events::TestA < Booking::Events::Event
   def human_type
     "testa"
+  end
+end
+
+
+class Booking::Events::TestB < Booking::Events::Recurrent
+  def human_type
+    "testb"
   end
 end
 
@@ -149,6 +182,23 @@ class TestGet < Minitest::Test
 end
 
 
+class TestUpdate < Minitest::Test
+
+  include Booking
+  def setup
+    _clr
+    FileUtils.mkdir_p(File.join(TMP_PATH, "booking"))
+  end
+
+  def test_get_all
+    adapter.create(:event, TestEvents[0])
+    ev = adapter.events_all.first
+    adapter.update(ev, title: "barbum")
+    assert_equal "barbum", adapter.events_all.first.title
+  end
+end
+
+
 class TestTypes < Minitest::Test
 
   include Booking
@@ -188,6 +238,26 @@ class TestTypes1000 < Minitest::Test
   def test_find_update_or_create
     assert_equal :event, adapter.find_update_or_create(TestEvents[0]).type
     assert_equal 1, event = adapter.events_all.size
+  end
+
+
+end
+
+
+class TestReccuringDates < Minitest::Test
+
+  include Booking
+  def setup
+    _clr
+    FileUtils.mkdir_p(File.join(TMP_PATH, "booking"))
+  end
+
+  def test_get_all
+    te = TestReccuringEvents[0]
+    adapter.create(:event, te)
+
+    se = adapter.events_all.first
+    assert_equal 5, se.dates.size
   end
 
 
