@@ -15,9 +15,11 @@ $(document).ready(function() {
             // other options
         });
     
-    $('.open-popup-link').magnificPopup({
-        type:'inline',
-    });
+    if($(".popupImg").length)
+        $('.open-popup-link').magnificPopup({
+            type:'inline',
+        });
+
     $(".gallery-slider").each(function() {
         let slider = $(this);
 
