@@ -1,0 +1,13 @@
+.columns.date-line
+  .column.col-2
+  .column.col-4
+    .form-group
+      .input-group
+        %span.input-group-addon Start Range
+        %input.form-input.datepicker{:name => "dates[begin][]", value: _raw(begin_date)}
+  .column.col-4
+    .form-group
+      .input-group
+        %span.input-group-addon End Range
+        %input.form-input.datepicker{:name => "dates[end][]", value: _raw(end_date)}
+  .column.col-2

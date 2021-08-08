@@ -185,6 +185,10 @@ module Booking
         "e-%s" % type.to_s
       end
 
+      def dom_uniq_id
+        "ev-#{slug}"
+      end
+
       def repetitive?
         false
       end

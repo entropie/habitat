@@ -43,6 +43,10 @@ module Booking
           events(year: nil, month: nil)
         end
 
+        def by_slug(slug)
+          events_all.by_slug(slug)
+        end
+
         def create(what, params)
           tclazz = case what
                    when :event
@@ -62,7 +66,7 @@ module Booking
         def find_update_or_create(param_hash)
           params = Booking::Events::Event.normalize_params(param_hash)
           slug = param_hash[:slug]
-          ev = events_all.by_slug(slug)
+          ev = by_slug(slug)
           if ev
             return ev
           else

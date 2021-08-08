@@ -9,13 +9,15 @@ import 'slippry/dist/slippry.css'
 $(document).ready(function() {
     console.log("shared");
 
-
     if($(".popupImg").length)
         $('.popupImg').magnificPopup({
             type: 'image'
             // other options
         });
-
+    
+    $('.open-popup-link').magnificPopup({
+        type:'inline',
+    });
     $(".gallery-slider").each(function() {
         let slider = $(this);
 
