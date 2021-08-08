@@ -15,7 +15,7 @@ $(document).ready(function() {
             // other options
         });
     
-    if($(".popupImg").length)
+    if($(".open-popup-link").length)
         $('.open-popup-link').magnificPopup({
             type:'inline',
         });
