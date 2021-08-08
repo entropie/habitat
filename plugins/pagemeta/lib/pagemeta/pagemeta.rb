@@ -4,7 +4,7 @@ module PageMeta
     params = obj.params
     request_path = params.env["REQUEST_PATH"]
 
-    if current_post = obj.post
+    if obj.respond_to?(:post) and current_post = obj.post
       imgurl = current_post.image ? current_post.image.url : ""
       fbm =
         FaceBook.new(:image => imgurl,
