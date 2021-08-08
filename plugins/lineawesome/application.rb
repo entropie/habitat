@@ -46,6 +46,6 @@ module LineAwesome
   end
 end
 
-Habitat.mounts[ LineAwesome::Application ] = "/a/lineawesome"
+Habitat.mounts[ LineAwesome::Application ] = "/_lineawesome"
 
 
