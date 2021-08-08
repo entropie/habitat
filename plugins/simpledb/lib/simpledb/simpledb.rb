@@ -53,7 +53,7 @@ module SimpleDB
       Habitat.adapter(:simpledb).repository_path(*args)
     end
 
-    def self.=~ (obj)
+    def self.=~(obj)
       name.to_s.split("::").last.downcase.to_sym == obj
     end
 
