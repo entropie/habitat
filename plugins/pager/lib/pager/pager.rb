@@ -78,6 +78,16 @@ module Pager
     attr_reader :pager
     attr_accessor :max
 
+    attr_reader :icons
+
+    DEFAULT_ICONS = {
+      :forward   => "glyphicon glyphicon-forward",
+      :backward  => "glyphicon glyphicon-backward",
+      :fforward  => "glyphiconglyphicon-fast-forward",
+      :fbackward => "glyphicon glyphicon-fast-backward",
+    }.freeze
+
+
     MAX = 10
 
     def max
@@ -100,18 +110,35 @@ module Pager
       @link_proc = obj
     end
 
+    def self.icons=(hash)
+      @icons ||= {  }
+      @icons.merge!(hash)
+    end
+
+    def self.icons
+      @icons
+    end
+
+    def iconclz(icontype)
+      icnsymb = icontype.to_sym
+      icndef = self.class.icons[icnsymb]
+      icndef = DEFAULT_ICONS[icnsymb] unless icndef
+    end
+
     def navigation(limit = 8)
       html.ul(:class => :pager) do
         if first_page?
           li(:class => "page-item disabled") {
             span(:class => 'first grey'){
-              span(:class => "glyphicon glyphicon-fast-backward") {""}
+              span(:class => iconclz(:fbackward)) {""}
             } }
           li(:class => "page-item disabled") {
-            span(:class => 'previous grey'){ span(:class => "glyphicon glyphicon-backward") {""} } } 
+            span(:class => 'previous grey'){
+              span(:class => iconclz(:backward)) {""}
+            } }
         else
-          li(:class => "page-item") { a(:href => link_proc.call(1)){ span(:class => "glyphicon glyphicon-fast-backward hl first")}}
-          li(:class => "page-item") { a(:href => link_proc.call(prev_page||1)){ span(:class => "glyphicon glyphicon-backward hl previous")}}
+          li(:class => "page-item") { a(:href => link_proc.call(1)){ span(:class => "#{iconclz(:fbackward)} hl first")}}
+          li(:class => "page-item") { a(:href => link_proc.call(prev_page||1)){ span(:class => "#{iconclz(:backward)} hl previous")}}
         end
 
         lower = limit ? (current_page - limit) : 1
@@ -125,9 +152,9 @@ module Pager
         
         if last_page?
           li(:class => "page-item disabled") {
-            span(:class => 'next grey'){ span(:class => "glyphicon glyphicon-fast-forward") {""} } }
+            span(:class => 'next grey'){ span(:class => iconclz(:fforward)) {""} }}
           li(:class => "page-item disabled") {
-            span(:class => 'next grey'){ span(:class => "glyphicon glyphicon-forward") {""} } } 
+            span(:class => 'next grey'){ span(:class => iconclz(:forward)) {""} }}
         elsif next_page
           higher = limit ? (next_page + limit) : page_count
           higher = [higher, page_count].min
@@ -137,8 +164,8 @@ module Pager
             }
           end
 
-          li(:class => "page-item") { a(:href => link_proc.call(next_page)){ span(:class => "glyphicon glyphicon-forward hl next")}}
-          li(:class => "page-item") { a(:href => link_proc.call(page_count)){ span(:class => "glyphicon glyphicon-fast-forward hl last")}}
+          li(:class => "page-item") { a(:href => link_proc.call(next_page)){ span(:class => "#{iconclz(:forward)} hl next")}}
+          li(:class => "page-item") { a(:href => link_proc.call(page_count)){ span(:class => "#{iconclz(:fforward)}  hl last")}}
         end
       end
     end
