@@ -83,7 +83,7 @@ module Pager
     DEFAULT_ICONS = {
       :forward   => "glyphicon glyphicon-forward",
       :backward  => "glyphicon glyphicon-backward",
-      :fforward  => "glyphiconglyphicon-fast-forward",
+      :fforward  => "glyphicon glyphicon-fast-forward",
       :fbackward => "glyphicon glyphicon-fast-backward",
     }.freeze
 
@@ -123,6 +123,7 @@ module Pager
       icnsymb = icontype.to_sym
       icndef = self.class.icons[icnsymb]
       icndef = DEFAULT_ICONS[icnsymb] unless icndef
+      icndef
     end
 
     def navigation(limit = 8)
