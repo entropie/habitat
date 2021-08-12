@@ -6,7 +6,7 @@ module Backend::Controllers::Stars
 
     def call(params)
       @stars = adapter(:stars).stars.sort_by{|s| s.ident.to_s }
-      @pager = Pager.paginate(params, @stars, 10)
+      @pager = Pager::BackendPager.new(params, @stars, 10)
       @pager.link_proc = -> (n) { routes.starsPager_path(n) } 
     end
   end

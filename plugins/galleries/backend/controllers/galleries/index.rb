@@ -7,7 +7,7 @@ module Backend::Controllers::Galleries
 
     def call(params)
       @all = galleries.all
-      @pager = Pager.paginate(params, @all)
+      @pager = Pager::BackendPager.new(params, @all)
       @pager.link_proc = -> (n) { routes.galleriesPager_path(n) }
 
     end

@@ -6,7 +6,7 @@ module Backend::Controllers::Booking
 
     def call(params)
       @events = booking.events_all
-      @pager = Pager.paginate(params, @events, 10)
+      @pager = Pager::BackendPager.new(params, @events, 10)
       @pager.link_proc = -> (n) { routes.eventsPager_path(n) } 
     end
   end

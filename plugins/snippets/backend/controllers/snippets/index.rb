@@ -11,7 +11,7 @@ module Backend::Controllers::Snippets
           true
         end
       }.sort_by{|s| s.ident.to_s }
-      @pager = Pager.paginate(params, @snippets, 10)
+      @pager = Pager::BackendPager.new(params, @snippets, 10)
       @pager.link_proc = -> (n) { routes.snippetsPager_path(n) } 
     end
   end

@@ -85,7 +85,7 @@ module Pager
       :backward  => "glyphicon glyphicon-backward",
       :fforward  => "glyphicon glyphicon-fast-forward",
       :fbackward => "glyphicon glyphicon-fast-backward",
-    }.freeze
+    }
 
 
     MAX = 10
@@ -116,7 +116,7 @@ module Pager
     end
 
     def self.icons
-      @icons
+      @icons || { }
     end
 
     def iconclz(icontype)
@@ -188,6 +188,9 @@ module Pager
     def empty?; @pager.empty?; end
     def count; @pager.count; end
     def shift; @pager.shift; end
+  end
+
+  class BackendPager < Pager
   end
   
 end
