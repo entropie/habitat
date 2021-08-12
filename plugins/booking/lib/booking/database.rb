@@ -43,6 +43,10 @@ module Booking
           events(year: nil, month: nil)
         end
 
+        def events_published
+          events_all.select{ |e| e.published? }
+        end
+
         def by_slug(slug)
           events_all.by_slug(slug)
         end

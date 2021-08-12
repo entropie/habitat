@@ -262,3 +262,29 @@ class TestReccuringDates < Minitest::Test
 
 
 end
+
+
+class TestPublishAndUnpublish < Minitest::Test
+
+  include Booking
+  def setup
+    _clr
+    FileUtils.mkdir_p(File.join(TMP_PATH, "booking"))
+  end
+
+  def test_publish
+    te = TestReccuringEvents[0]
+    adapter.create(:event, te)
+
+    ev = adapter.events_all.first
+    assert_equal false, ev.published
+
+    ev.publish!
+    adapter.store(ev)
+    assert_equal true, ev.published
+
+    ev.unpublish!
+    adapter.store(ev)
+    assert_equal false, ev.published
+  end
+end
