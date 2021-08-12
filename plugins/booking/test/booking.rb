@@ -18,10 +18,10 @@ def adapter
 end
 
 TestEvents = [
-  {title: "foobar", attender_slots: 10, protagonists: ["foo"], slug: "test", start_date: Time.new(2021, 5, 1, "15:00"), end_date: Time.new(2021, 5, 1, "17:00")},
-  {title: "barfoo", attender_slots: 15, protagonists: ["foo"], slug: "testa", start_date: Time.new(2021, 5, 1, "17:00"), end_date: Time.new(2021, 5, 1, "19:00")},
-  {title: "batz", attender_slots: 20, protagonists: ["foo"], slug: "test-two", start_date: Time.new(2021, 6, 1, "15:00"), end_date: Time.new(2021, 6, 2, "17:00")},
-  {title: "batzbumm", attender_slots: 20, protagonists: ["foo"], slug: "test-two", start_date: Time.new(2023, 6, 1, "15:00"), end_date: Time.new(2023, 6, 2, "17:00")}
+  {title: "foobar", attender_slots: 10, protagonists: ["foo"], slug: "test",       dates: { :begin => [Time.new(2021, 5, 1, "15:00")], :end => [Time.new(2021, 5, 1, "17:00")] }},
+  {title: "barfoo", attender_slots: 15, protagonists: ["foo"], slug: "testa",      dates: { :begin => [Time.new(2021, 5, 1, "17:00")], :end => [Time.new(2021, 5, 1, "19:00")] }},
+  {title: "batz", attender_slots: 20, protagonists: ["foo"], slug: "test-two",     dates: { :begin => [Time.new(2021, 6, 1, "15:00")], :end => [Time.new(2021, 6, 2, "17:00")] }},
+  {title: "batzbumm", attender_slots: 20, protagonists: ["foo"], slug: "test-two", dates: { :begin => [Time.new(2023, 6, 1, "15:00")], :end => [Time.new(2023, 6, 2, "17:00")] }}
 ]
 
 TestReccuringEvents = [
@@ -29,7 +29,6 @@ TestReccuringEvents = [
     :title=>"title1",
     :ident=>"foobar",
     :type=>"testb",
-    :start_date=>"2021/07/16 20:00",
     :dates=>
     {
       :begin=>
@@ -38,14 +37,13 @@ TestReccuringEvents = [
        "2021/07/18 20:00",
        "2021/07/19 20:00",
        "2021/07/20 20:00"],
-      "end"=>
+      :end=>
       ["2021/07/16 22:00",
        "2021/07/17 22:00",
        "2021/07/18 22:00",
        "2021/07/19 22:00",
        "2021/07/20 22:00"]
     },
-    :end_date=>"2021/07/20 22:00",
     :attender_slots=>"3",
     :protagonists=>["foobar"],
     :content=>"fofoofof",
@@ -55,7 +53,6 @@ TestReccuringEvents = [
     :title=>"title2",
     :ident=>"foobarasdsad",
     :type=>"testb",
-    :start_date=>"2021/09/20 20:00",
     :dates=>
     {
       :begin=>
@@ -64,14 +61,13 @@ TestReccuringEvents = [
        "2021/09/18 20:00",
        "2021/09/19 20:00",
        "2021/09/20 20:00"],
-      "end"=>
+      :end =>
       ["2021/09/16 22:00",
        "2021/09/17 22:00",
        "2021/09/18 22:00",
        "2021/09/19 22:00",
        "2021/09/20 22:00"]
     },
-    :end_date=>"2021/09/20 22:00",
     :attender_slots=>"3",
     :protagonists=>["foobar"],
     :content=>"fofoofof",

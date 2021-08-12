@@ -17,7 +17,8 @@ module Booking
     class DateRange
       attr_reader :begin_date, :end_date
       def initialize(begind, endd)
-        @begin_date, @end_date = Time.parse(begind), Time.parse(endd)
+        @begin_date = if begind.kind_of?(Time) or begind.kind_of?(Date) then begind else Time.parse(begind) end
+        @end_date   = if endd.kind_of?(Time) or endd.kind_of?(Date)     then endd   else Time.parse(endd)   end
       end
 
       def begin_date_p
@@ -38,8 +39,7 @@ module Booking
       EventAttributes = [
         :title,
         :slug,
-        :start_date,
-        :end_date,
+        :dates,
         :protagonists,
         :attender_slots
       ]
@@ -53,7 +53,7 @@ module Booking
 
       attr_accessor :published
 
-      attr_accessor   :updated_at, :created_at, :dates
+      attr_accessor   :updated_at, :created_at
 
       def self.normalize_params(paramhash)
         ret = {  }
@@ -176,7 +176,7 @@ module Booking
       end
 
       def start_date
-        @start_date ||= Time.now
+        dates.first.begin_date rescue Time.now
       end
 
       def date_identifier
@@ -184,7 +184,7 @@ module Booking
       end
 
       def end_date
-        @end_date ||= Time.now
+        dates.first.end_date rescue Time.now
       end
 
       def html_date(what = :start_date)

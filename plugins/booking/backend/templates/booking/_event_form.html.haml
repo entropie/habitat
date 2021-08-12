@@ -34,13 +34,19 @@
 
 
     .columns.top-seperator
-      .column.col-2
-      .column.col-8
+      .column.col-1
+      .column.col-5
         .form-group
           .input-group
-            %span.input-group-addon Start Datum
-            %input.form-input.datepicker{:value => event.html_date(:start_date), :name => :start_date}
-      .column.col-2
+            %span.input-group-addon Erster Tag
+            %input.form-input.datepicker{:name => "dates[begin][]", :value => event.html_date(:start_date)}
+
+      .column.col-5
+        .form-group
+          .input-group
+            %span.input-group-addon Ende Erster Tag
+            %input.form-input.datepicker{:value => event.html_date(:end_date), :name => "dates[end][]"}
+      .column.col-1
         - if event.recurrent?
           %a#add-date-template-link add
 
@@ -49,18 +55,10 @@
       - if not event.dates or event.dates.empty?
         .columns.date-line{style: "display:none"}
       - else
-        - event.dates.each do |daterange|
+        - event.dates[1..-1].each do |daterange|
           = render template: "booking/_dates_add_template", locals: {begin_date: _raw(daterange.begin_date_p), end_date: _raw(daterange.end_date_p)}
 
 
-    .columns
-      .column.col-2
-      .column.col-8
-        .form-group
-          .input-group
-            %span.input-group-addon End Datum
-            %input.form-input.datepicker{:value => event.html_date(:end_date), :name => :end_date}
-      .column.col-2
 
 
     .columns.top-seperator
