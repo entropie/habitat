@@ -53,7 +53,9 @@ module Booking
 
       attr_accessor :published
 
-      attr_accessor   :updated_at, :created_at
+      attr_accessor :updated_at, :created_at
+
+      attr_accessor :selected_date
 
       def self.normalize_params(paramhash)
         ret = {  }
@@ -244,6 +246,11 @@ module Booking
         end
         @dates
       end
+
+      def for_date(datestr)
+        @selected_date = Date.parse(datestr)
+        self
+      end
     end
 
     class Recurrent < Event 
@@ -325,15 +332,16 @@ module Booking
       end
 
       def transform(events)
+        merge_proc = lambda {|ev, identdate|
+          (self[identdate] ||= Events.new(Habitat.adapter(:booking))) << ev.dup.for_date(identdate)
+        }
         events.each do |ev|
           if ev.recurrent?
             ev.dates.each do |daterange|
-              self[daterange.date_identifier] ||= Events.new(Habitat.adapter(:booking))
-              self[daterange.date_identifier] << ev
+              merge_proc.call(ev, daterange.date_identifier)
             end
           else
-            self[ev.date_identifier] ||= Events.new(Habitat.adapter(:booking))
-            self[ev.date_identifier] << ev
+            merge_proc.call(ev, ev.date_identifier)
           end
         end
       end

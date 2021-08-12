@@ -44,7 +44,7 @@
       .column.col-5
         .form-group
           .input-group
-            %span.input-group-addon Ende Erster Tag
+            %span.input-group-addon Ende
             %input.form-input.datepicker{:value => event.html_date(:end_date), :name => "dates[end][]"}
       .column.col-1
         - if event.recurrent?
