@@ -44,7 +44,7 @@ module Booking
         end
 
         def events_published
-          events_all.select{ |e| e.published? }
+          ::Booking::Events.new(self).push(*events_all.select{ |e| e.published? })
         end
 
         def by_slug(slug)

@@ -49,7 +49,35 @@ TestReccuringEvents = [
     :attender_slots=>"3",
     :protagonists=>["foobar"],
     :content=>"fofoofof",
-    :slug=>"foobar"}
+    :slug=>"foobar"
+  },
+  {
+    :title=>"title2",
+    :ident=>"foobarasdsad",
+    :type=>"testb",
+    :start_date=>"2021/09/20 20:00",
+    :dates=>
+    {
+      :begin=>
+      ["2021/09/16 20:00",
+       "2021/09/17 20:00",
+       "2021/09/18 20:00",
+       "2021/09/19 20:00",
+       "2021/09/20 20:00"],
+      "end"=>
+      ["2021/09/16 22:00",
+       "2021/09/17 22:00",
+       "2021/09/18 22:00",
+       "2021/09/19 22:00",
+       "2021/09/20 22:00"]
+    },
+    :end_date=>"2021/09/20 22:00",
+    :attender_slots=>"3",
+    :protagonists=>["foobar"],
+    :content=>"fofoofof",
+    :slug=>"foobar"
+  },
+  
 ]
 
 class Booking::Events::TestA < Booking::Events::Event
@@ -287,4 +315,36 @@ class TestPublishAndUnpublish < Minitest::Test
     adapter.store(ev)
     assert_equal false, ev.published
   end
+end
+
+
+class TestAgendaList99999 < Minitest::Test
+
+  include Booking
+  def setup
+    _clr
+    FileUtils.mkdir_p(File.join(TMP_PATH, "booking"))
+  end
+
+  def test_get_all
+    adapter.create(:event, TestReccuringEvents[0])
+    adapter.create(:event, TestEvents[0])
+    adapter.create(:event, TestEvents[1])
+    adapter.create(:event, TestReccuringEvents[1])
+    adapter.create(:event, TestEvents[3])
+    adapter.create(:event, TestEvents[2])
+    assert_equal 6, adapter.events_all.size
+
+    assert_equal 2, adapter.events_all.agenda_list["21-05-01"].size
+    assert_equal 1, adapter.events_all.agenda_list["21-09-20"].size
+    assert_equal 9, adapter.events_all.agenda_list.keys.size
+
+    # adapter.events_all.agenda_list.each do |ed, aevents|
+    #   p [ed, aevents.size]
+    #   pp aevents
+    # end
+    
+  end
+
+
 end

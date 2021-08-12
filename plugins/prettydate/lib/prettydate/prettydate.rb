@@ -61,3 +61,7 @@ end
 class Time
   include PrettyDate::HumanTime
 end
+
+class Date
+  include PrettyDate::HumanTime
+end

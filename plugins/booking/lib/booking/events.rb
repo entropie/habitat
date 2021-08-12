@@ -1,6 +1,10 @@
 # coding: utf-8
 module Booking
 
+  def self.date_identifier(date)
+    date.strftime("%y-%m-%d")
+  end
+  
   class Events < Array
 
     class EventTypes
@@ -22,6 +26,10 @@ module Booking
 
       def end_date_p
         end_date.form_date
+      end
+
+      def date_identifier
+        Booking.date_identifier(begin_date)
       end
     end
 
@@ -171,6 +179,10 @@ module Booking
         @start_date ||= Time.now
       end
 
+      def date_identifier
+        Booking.date_identifier(start_date)
+      end
+
       def end_date
         @end_date ||= Time.now
       end
@@ -200,8 +212,10 @@ module Booking
         "e-%s %s" % [type.to_s, published? ? "" : "unpublished"]
       end
 
-      def dom_uniq_id
-        "ev-#{slug}"
+      def dom_uniq_id(add = nil)
+        ret = "ev-#{slug}"
+        ret << "-#{add}" if add
+        ret
       end
 
       def repetitive?
@@ -302,6 +316,38 @@ module Booking
       ret = filter {|ev| ev.slug == slug}
       return ret.shift if ret.kind_of?(Array)
       ret
+    end
+
+    class Agenda < Hash
+      def initialize(events)
+        @events = events
+        transform(@events)
+      end
+
+      def transform(events)
+        events.each do |ev|
+          if ev.recurrent?
+            ev.dates.each do |daterange|
+              self[daterange.date_identifier] ||= Events.new(Habitat.adapter(:booking))
+              self[daterange.date_identifier] << ev
+            end
+          else
+            self[ev.date_identifier] ||= Events.new(Habitat.adapter(:booking))
+            self[ev.date_identifier] << ev
+          end
+        end
+      end
+
+      def each(&blk)
+        sorted_keys = keys.sort
+        sorted_keys.each do |k|
+          yield k, self[k].sorted.uniq
+        end
+      end
+    end
+
+    def agenda_list
+      Agenda.new(self)
     end
 
     def find_or_create(params)
