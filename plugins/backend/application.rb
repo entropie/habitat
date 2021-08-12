@@ -143,6 +143,7 @@ module Backend
 
             post '/events/:slug/edit',   to: "booking#eventsedit"
             get  '/events/:slug',        to: "booking#event", as:          :event
+            get  '/events/publishtoggle/:slug',to: "booking#eventtogglepublish", as: :eventTPublish
 
             get  '/workdays/',           to: "booking#workdays", as:       :workdays
 

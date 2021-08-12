@@ -1,5 +1,6 @@
-%li
+%li{class: event.css_class}
   %h2
+    %a{href: Backend.routes.eventTPublish_path(event.slug,"url":  params.env["REQUEST_PATH"]) }= event.published? ? "Unpublish" : "publish"
     = event.title
     %a{href: Backend.routes.eventEdit_path(event.slug)}
       %span{:class => "glyphicon glyphicon-pencil"}

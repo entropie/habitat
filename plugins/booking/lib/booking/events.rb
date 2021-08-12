@@ -37,12 +37,13 @@ module Booking
       ]
 
       DataAttributes = [
-        :attender,
         :content
       ]
 
       attr_accessor *EventAttributes
       attr_accessor *DataAttributes
+
+      attr_accessor :published
 
       attr_accessor   :updated_at, :created_at, :dates
 
@@ -80,6 +81,7 @@ module Booking
 
       def initialize
         @created_at = Time.now
+        @published = false
       end
 
       def ident
@@ -93,6 +95,19 @@ module Booking
       # dont need to sed type
       def type=(o)
       end
+
+      def publish!
+        @published = true
+      end
+
+      def unpublish!
+        @published = false
+      end
+
+      def published?
+        @published
+      end
+
       
       def valid?
         values = EventAttributes.map do |event_attribute|
@@ -182,7 +197,7 @@ module Booking
       end
 
       def css_class
-        "e-%s" % type.to_s
+        "e-%s %s" % [type.to_s, published? ? "" : "unpublished"]
       end
 
       def dom_uniq_id
