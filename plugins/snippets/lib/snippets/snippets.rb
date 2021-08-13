@@ -9,6 +9,11 @@ module Snippets
       Habitat.adapter(:snippets).select(arg, env || locals[:params])
     end
 
+    def scrollReveal(enter: "bottom", fvactor: 0.3, scale: "up 20%")
+      {"data-sr" => "enter %s, vFactor %s, scale %s" % [enter, fvactor, scale]}
+    end
+
+
   end
 
   module SnippetsControllerMethods
@@ -109,6 +114,8 @@ module Snippets
       if Habitat.quart.plugins.activated?(:galleries)
         extend(Galleries::GalleriesAccessMethods)
       end
+
+      extend SnippetsViewMethods
     end
 
     def active_path(path)
@@ -139,11 +146,6 @@ module Snippets
     def P(*args)
       routes.page_path(*args)
     end
-
-    def scrollReveal(enter: "bottom", fvactor: 0.3, scale: "up 20%")
-      {"data-sr" => "enter %s, vFactor %s, scale %s" % [enter, fvactor, scale]}
-    end
-
 
     # def accept_cookies?
     #   locals.accept_cookies
