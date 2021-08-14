@@ -128,7 +128,6 @@ module Booking
 
       def set(params)
         params.each_pair do |pk, pv|
-          pv = Time.parse(pv) if not pv.kind_of?(Time) and pk.to_s =~ /date$/
           pv = pv.to_i if pv.kind_of?(String) and pv =~ /^\d+$/
           send("#{pk}=", pv)
         end
