@@ -87,7 +87,14 @@ module Booking
           target_file = repository_path(what.filename)
 
           if what.exist?
-            rm(target_file, verbose: true)
+            existing = by_slug(what.slug)
+
+            if existing.start_date != what.start_date
+              rm(repository_path(existing.filename), verbose: true)
+            else
+              rm(target_file, verbose: true)              
+            end
+
             what.updated_at = Time.now
           else
             mkdir_p(::File.dirname(target_file))
