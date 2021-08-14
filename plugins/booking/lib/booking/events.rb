@@ -25,6 +25,8 @@ module Booking
         begin_date.form_date
       end
 
+      alias :start_date :begin_date
+
       def end_date_p
         end_date.form_date
       end
@@ -79,7 +81,8 @@ module Booking
 
       def self.create(paramhash)
         created_event = Event
-        type = paramhash.delete(:type)
+        normalized_params = Event.normalize_params(paramhash)
+        type = normalized_params[:type]
         if type
           created_event = find_for_type(type)
         end
@@ -231,7 +234,6 @@ module Booking
         type == :group
       end
 
-      # actually only used in Recurrent events but in parent class to not lose dates when switching types
       def dates=(hash)
         if hash.kind_of?(Array)
           @dates = hash
@@ -244,6 +246,27 @@ module Booking
           @dates << DateRange.new(bdate, normalized_hash[:end][i])
         end
         @dates
+      end
+
+      def set_date(slot, date_to_set)
+        case slot
+        when :start
+          if repetitive?
+            @dates[0] = DateRange.new(date_to_set, @dates[0].end_date)
+          end
+        when :end
+          if repetitive?
+            @dates[0] = DateRange.new(@dates[0].start_date, date_to_set)
+          end
+        end
+      end
+
+      def start_date=(obj)
+        set_date(:start, obj)
+      end
+
+      def end_date=(obj)
+        set_date(:end, obj)
       end
 
       def for_date(datestr)
