@@ -12,6 +12,7 @@ include TestMixins
 def _clr
   FileUtils.rm_rf(TMP_PATH, :verbose => true)
 end
+_clr
 
 def adapter
   Habitat.adapter(:booking).with_user(MockUser)
@@ -21,7 +22,7 @@ TestEvents = [
   {title: "foobar", attender_slots: 10, protagonists: ["foo"], slug: "test",       dates: { :begin => [Time.new(2021, 5, 1, "15:00")], :end => [Time.new(2021, 5, 1, "17:00")] }},
   {title: "barfoo", attender_slots: 15, protagonists: ["foo"], slug: "testa",      dates: { :begin => [Time.new(2021, 5, 1, "17:00")], :end => [Time.new(2021, 5, 1, "19:00")] }},
   {title: "batz", attender_slots: 20, protagonists: ["foo"], slug: "test-two",     dates: { :begin => [Time.new(2021, 6, 1, "15:00")], :end => [Time.new(2021, 6, 2, "17:00")] }},
-  {title: "batzbumm", attender_slots: 20, protagonists: ["foo"], slug: "test-two", dates: { :begin => [Time.new(2023, 6, 1, "15:00")], :end => [Time.new(2023, 6, 2, "17:00")] }}
+  {title: "batzbumm", attender_slots: 20, protagonists: ["foo"], slug: "test-three", dates: { :begin => [Time.new(2023, 6, 1, "15:00")], :end => [Time.new(2023, 6, 2, "17:00")] }}
 ]
 
 TestReccuringEvents = [
@@ -71,9 +72,32 @@ TestReccuringEvents = [
     :attender_slots=>"3",
     :protagonists=>["foobar"],
     :content=>"fofoofof",
-    :slug=>"foobar"
+    :slug=>"foobar-barfoo"
   },
-  
+  {
+    :title=>"title3",
+    :ident=>"foobarasdsad",
+    :type=>"testb",
+    :dates=>
+    {
+      :begin=>
+      ["2021/09/16 20:00",
+       "2021/09/17 20:00",
+       "2021/09/18 20:00",
+       "2021/09/19 20:00",
+       "2021/09/20 20:00"],
+      :end =>
+      ["2021/09/16 22:00",
+       "2021/09/17 22:00",
+       "2021/09/18 22:00",
+       "2021/09/19 22:00",
+       "2021/09/20 22:00"]
+    },
+    :attender_slots=>"3",
+    :protagonists=>["foobar"],
+    :content=>"fofoofof",
+    :slug=>"kekelala"
+  },
 ]
 
 class Booking::Events::TestA < Booking::Events::Event
@@ -314,7 +338,7 @@ class TestPublishAndUnpublish < Minitest::Test
 end
 
 
-class TestAgendaList99999 < Minitest::Test
+class TestAgendaList < Minitest::Test
 
   include Booking
   def setup
@@ -333,7 +357,7 @@ class TestAgendaList99999 < Minitest::Test
 
     assert_equal 2, adapter.events_all.agenda_list["21-05-01"].size
     assert_equal 1, adapter.events_all.agenda_list["21-09-20"].size
-    assert_equal 9, adapter.events_all.agenda_list.keys.size
+    assert_equal 13, adapter.events_all.agenda_list.keys.size
 
     # adapter.events_all.agenda_list.each do |ed, aevents|
     #   p [ed, aevents.size]
@@ -341,6 +365,41 @@ class TestAgendaList99999 < Minitest::Test
     # end
     
   end
-
-
 end
+
+class TestChangeDateStart < Minitest::Test
+
+  include Booking
+  def setup
+    _clr
+    FileUtils.mkdir_p(File.join(TMP_PATH, "booking"))
+  end
+  def test_change_start_date_reccuring
+    a = adapter.create(:event, TestReccuringEvents[2])
+    adapter.store(a)
+    new_startdate = a.start_date - 60*60*24
+    a.start_date = new_startdate
+    assert_equal new_startdate, a.start_date
+    adapter.store(a)
+    assert_equal new_startdate, adapter.by_slug("kekelala").start_date
+  end
+end
+
+class TestChangeDateEnd < Minitest::Test
+
+  include Booking
+  def setup
+    _clr
+    FileUtils.mkdir_p(File.join(TMP_PATH, "booking"))
+  end
+  def test_change_end_date_reccuring
+    a = adapter.create(:event, TestReccuringEvents[2])
+    new_end_date = a.end_date + 60*60*2
+    a.end_date = new_end_date
+    assert_equal new_end_date, a.end_date
+    adapter.store(a)
+    assert_equal new_end_date, adapter.by_slug("kekelala").end_date
+  end
+end
+
+
