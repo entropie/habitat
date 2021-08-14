@@ -29,7 +29,7 @@ module Habitat::Mixins
     def cleaned_content(str)
       str.gsub(/\r/, "")
     end
-    private :cleaned_content
+    module_function :cleaned_content
     
     def overwrite(file, cnts)
       cnts = cleaned_content(cnts)
@@ -47,8 +47,10 @@ module Habitat::Mixins
       r=File.open(file, "w+") do |fp|
         fp.puts(cnts)
       end
-      log :fs, "write: #{file} #{r}"
+      Habitat.log :fs, "write: #{file} #{r}"
     end
+
+    module_function :write
 
     def log(*args)
       Habitat.log(*args)
