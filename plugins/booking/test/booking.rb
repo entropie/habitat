@@ -25,6 +25,20 @@ TestEvents = [
   {title: "batzbumm", attender_slots: 20, protagonists: ["foo"], slug: "test-three", dates: { :begin => [Time.new(2023, 6, 1, "15:00")], :end => [Time.new(2023, 6, 2, "17:00")] }}
 ]
 
+Attender = [
+  {
+    :name => "Horrible Me",
+    :email => "horrible@me.de",
+    :phone => "123"
+  },
+  {
+    :name => "Me Horrible ",
+    :email => "me@horriblede",
+    :phone => "321"
+  }
+  
+]
+
 TestReccuringEvents = [
   {
     :title=>"title1",
@@ -403,3 +417,17 @@ class TestChangeDateEnd < Minitest::Test
 end
 
 
+class TestEventAttend < Minitest::Test
+
+  include Booking
+  def setup
+    _clr
+    FileUtils.mkdir_p(File.join(TMP_PATH, "booking"))
+  end
+  def test_change_end_date_reccuring
+    a = adapter.create(:event, TestReccuringEvents[2])
+
+    at = a.attend(Attender[0], "2021/09/19 20:00")
+    assert_equal a.slug, a.attender.first.event.slug
+  end
+end
