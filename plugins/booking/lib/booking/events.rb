@@ -126,10 +126,11 @@ module Booking
         @published = false
       end
 
-      def attend(attender, slot = nil)
-        r = Attender.new(slug, attender, slot)
-        Habitat::Mixins::FU.write(r.filename, YAML::dump(r))
-        r
+      def attend(att_hash, slot = nil)
+        attn = Attender.new(slug, att_hash, slot)
+        @attender = nil
+        Habitat::Mixins::FU.write(attn.filename, YAML::dump(attn))
+        attn
       end
 
       def attender

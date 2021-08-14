@@ -417,6 +417,24 @@ class TestChangeDateEnd < Minitest::Test
 end
 
 
+class TestEventAttendRecurring < Minitest::Test
+
+  include Booking
+  def setup
+    _clr
+    FileUtils.mkdir_p(File.join(TMP_PATH, "booking"))
+  end
+
+  def test_add_attender_reccuring
+    a = adapter.create(:event, TestReccuringEvents[2])
+
+    at = a.attend(Attender[0], "2021/09/19 20:00")
+    assert_equal a.slug, a.attender.first.event.slug
+    at = a.attend(Attender[1], "2021/09/19 20:00")    
+    assert_equal 2, a.attender.size
+  end
+end
+
 class TestEventAttend < Minitest::Test
 
   include Booking
@@ -424,10 +442,13 @@ class TestEventAttend < Minitest::Test
     _clr
     FileUtils.mkdir_p(File.join(TMP_PATH, "booking"))
   end
-  def test_change_end_date_reccuring
-    a = adapter.create(:event, TestReccuringEvents[2])
+
+  def test_add_attender_reccuring
+    a = adapter.create(:event, TestEvents[1])
 
     at = a.attend(Attender[0], "2021/09/19 20:00")
     assert_equal a.slug, a.attender.first.event.slug
+    at = a.attend(Attender[1], "2021/09/19 20:00")    
+    assert_equal 2, a.attender.size
   end
 end
