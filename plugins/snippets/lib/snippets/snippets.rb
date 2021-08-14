@@ -200,8 +200,8 @@ module Snippets
       end
       ret = "%s" % Haml::Engine.new(to_s).render(Env.new(locals.merge(lcs)), locals)
       ret
-    # rescue
-    #   "nope: something went wrong while processing #{ident}"
+    rescue
+      "nope: something went wrong while processing #{ident}: '#{$!}'"
     end
   end
 
