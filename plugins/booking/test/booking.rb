@@ -452,3 +452,12 @@ class TestEventAttend < Minitest::Test
     assert_equal 2, a.attender.size
   end
 end
+
+class TestParentCls < Minitest::Test
+
+  def test_add_attender_reccuring
+    assert_equal false, Booking::Events::TestA.new.is_parent?
+    assert Booking::Events::Recurrent.new.is_parent?
+    assert Booking::Events::Event.new.is_parent?
+  end
+end

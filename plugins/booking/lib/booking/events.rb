@@ -112,6 +112,10 @@ module Booking
         created_event = Event
         normalized_params = Event.normalize_params(paramhash)
         type = normalized_params[:type]
+        if existing = Habitat.adapter(:booking).events.by_slug(normalized_params[:ident])
+          raise "exists: #{existing.slug}"
+        end
+
         if type
           created_event = find_for_type(type)
         end
@@ -316,6 +320,10 @@ module Booking
       def for_date(datestr)
         @selected_date = Date.parse(datestr)
         self
+      end
+
+      def is_parent?
+        [Recurrent, Event].map{ |pc| self.class == pc }.any?
       end
     end
 
