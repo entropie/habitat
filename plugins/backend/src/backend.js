@@ -44,6 +44,13 @@ function betterTab(cm) {
   }
 }
 
+function dateLineLinkclick() {
+    let dl = $(this);
+    $(dl).find(".remove-day-link").click(function() {
+        dl.remove();
+    });
+}
+
 jQuery.datetimepicker.setLocale('de');
 
 $(document).ready(function() {
@@ -56,8 +63,11 @@ $(document).ready(function() {
             let ele2copy = $("#add-date-template .date-line:last-child").clone();
             console.log(ele2copy);
             ele2copy.find(".datepicker").datetimepicker();
+            $(ele2copy).each(dateLineLinkclick);
             ele2copy.insertAfter( $("#events-edit .date-line").filter(":last") ).addClass("toadd");
         });
+
+        $(".date-line").each(dateLineLinkclick);
     }
 
     if($("#db-template-edit").length) {
