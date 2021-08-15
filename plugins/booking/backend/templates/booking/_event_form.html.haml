@@ -21,13 +21,13 @@
         .form-group
           .input-group
             %span.input-group-addon Ident
-            %input.form-input{:value => event.ident, :name => :ident}
+            %input.form-input{:disabled => event.exist?, :value => event.ident, :name => :ident}
       .column.col-5
         .form-group
           .input-group
             %span.input-group-addon Typ
             %select.form-input{name: :type}
-              - Booking::Events::EventTypes.types.each do |et|
+              - Booking::Events::EventTypes.frontend_types.each do |et|
                 %option{value: et.type, selected: et.type == event.type}= et.type 
       .column.col-2
 

@@ -11,6 +11,10 @@ module Booking
       def self.types
         @types ||= []
       end
+
+      def self.frontend_types
+        types.reject{ |et| et.new.is_parent? }
+      end
     end
 
 
