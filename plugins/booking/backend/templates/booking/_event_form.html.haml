@@ -47,19 +47,13 @@
             %span.input-group-addon Ende
             %input.form-input.datepicker{:value => event.html_date(:end_date), :name => "dates[end][]"}
       .column.col-1
-        - if event.recurrent?
-          %a#add-date-template-link add
+        %a#add-date-template-link add
 
 
-    - if event.recurrent?
-      - if not event.dates or event.dates.empty?
-        .columns.date-line{style: "display:none"}
-      - else
-        - event.dates[1..-1].each do |daterange|
-          = render template: "booking/_dates_add_template", locals: {begin_date: _raw(daterange.begin_date_p), end_date: _raw(daterange.end_date_p)}
-
-
-
+    .columns.date-line
+    - if event.dates
+      - event.dates[1..-1].each do |daterange|
+        = render template: "booking/_dates_add_template", locals: {begin_date: _raw(daterange.begin_date_p), end_date: _raw(daterange.end_date_p)}
 
     .columns.top-seperator
       .column.col-2
