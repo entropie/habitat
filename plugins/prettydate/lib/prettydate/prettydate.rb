@@ -33,6 +33,10 @@ module PrettyDate
       mstrftime(fmtstr)
     end
 
+    def to_human_time(sep = " &mdash; ")
+      to_human + sep + strftime("%H:%M Uhr")
+    end
+
     def mstrftime(format)
       format = format.dup
       format.gsub!(/%a/, Date::ABBR_DAYNAMES[self.wday])
