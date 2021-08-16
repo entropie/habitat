@@ -38,6 +38,22 @@ module Booking
       def date_identifier
         Booking.date_identifier(begin_date)
       end
+
+      def to_human_time
+        begin_date.to_human_time
+      end
+
+      def duration
+        (@end_date.to_i - @begin_date.to_i).abs
+      end
+
+      def duration_text
+        duration_in_h = duration / 60 / 60
+        if duration_in_h > 24
+          return "%s Tage" % (duration / 60 / 60 / 24)
+        end
+        return "%s Stunden" % duration_in_h
+      end
     end
 
     class Event
@@ -245,6 +261,11 @@ module Booking
 
       def end_date
         dates.first.end_date rescue Time.now
+      end
+
+      def current_slot_date
+        ret = @dates.select{ |drange| selected_date == drange.begin_date.to_date }
+        ret and ret.shift
       end
 
       def html_date(what = :start_date)
