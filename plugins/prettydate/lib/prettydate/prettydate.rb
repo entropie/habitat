@@ -33,8 +33,12 @@ module PrettyDate
       mstrftime(fmtstr)
     end
 
+    def only_human_time
+      strftime("%H:%M")
+    end
+
     def to_human_time(sep = " &mdash; ")
-      to_human + sep + strftime("%H:%M Uhr")
+      to_human + sep + only_human_time
     end
 
     def mstrftime(format)
