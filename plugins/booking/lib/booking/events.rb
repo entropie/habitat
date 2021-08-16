@@ -134,6 +134,10 @@ module Booking
         @published = false
       end
 
+      def =~(obj)
+        type == obj.to_sym
+      end
+
       def attend(att_hash, slot = nil)
         attn = Attender.new(slug, att_hash, slot)
         @attender = nil
@@ -393,7 +397,7 @@ module Booking
         yield ev
       }
       ret.push(*eles)
-      return ret.shift if ret.size == 1
+      # return ret.shift if ret.size == 1
       ret
     end
 
@@ -429,6 +433,13 @@ module Booking
         sorted_keys.each do |k|
           yield k, self[k].sorted.uniq
         end
+      end
+
+      def filter(&blk)
+        puts "o #{ @events.size }"
+        @events = @events.filter(&blk)
+        puts "n #{ @events.size }"
+        self
       end
     end
 

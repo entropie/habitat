@@ -56,7 +56,7 @@ module Booking
                    when :event
                      ::Booking::Events::Event
                    end
-          to_create = tclazz.create(params)
+          to_create = tclazz.create(Booking::Events::Event.normalize_params(params))
           store(to_create)
           to_create
         end
