@@ -37,6 +37,10 @@ module PrettyDate
       strftime("%H:%M")
     end
 
+    def only_human_date
+      to_human
+    end
+
     def to_human_time(sep = " &mdash; ")
       to_human + sep + only_human_time
     end

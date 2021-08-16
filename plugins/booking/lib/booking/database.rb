@@ -109,6 +109,12 @@ module Booking
           rm(repository_path(what.filename), verbose: true)
         end
 
+        def upload(event, obj)
+          event = event.upload(obj)
+          store(event)
+          event
+        end
+
         def with_user(user, &blk)
           @user, @events = user, nil
           ret = yield self if block_given?

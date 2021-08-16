@@ -461,3 +461,20 @@ class TestParentCls < Minitest::Test
     assert Booking::Events::Event.new.is_parent?
   end
 end
+
+
+class TestEventImage < Minitest::Test
+
+  include Booking
+  def setup
+    _clr
+    FileUtils.mkdir_p(File.join(TMP_PATH, "booking"))
+  end
+
+  def test_add_attender_reccuring
+    a = adapter.create(:event, TestEvents[1])
+    i = File.open( File.join(File.dirname(__FILE__), "test.jpg"))
+    newev = adapter.upload(a, i)
+    assert_equal newev, newev.image.event
+  end
+end

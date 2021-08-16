@@ -43,6 +43,14 @@ module Booking
         begin_date.to_human_time
       end
 
+      def only_human_date
+        begin_date.only_human_date
+      end
+
+      def only_human_time
+        begin_date.only_human_time
+      end
+
       def duration
         (@end_date.to_i - @begin_date.to_i).abs
       end
@@ -50,9 +58,18 @@ module Booking
       def duration_text
         duration_in_h = duration / 60 / 60
         if duration_in_h > 24
-          return "%s Tage" % (duration / 60 / 60 / 24)
+          days = duration / 60 / 60 / 24
+          if days > 1
+            return "%s Tage" % days
+          else
+            return "1 Tag"
+          end
         end
-        return "%s Stunden" % duration_in_h
+        if duration_in_h > 1
+          return "%s Stunden" % duration_in_h
+        else
+          return "1 Stunde"
+        end
       end
     end
 
@@ -354,6 +371,38 @@ module Booking
       def is_parent?
         [Recurrent, Event].map{ |pc| self.class == pc }.any?
       end
+
+      def relative_datapath(*args)
+        ::File.join("data/events/#{slug}", *args)
+      end
+
+      def datapath(*args)
+        Habitat.quart.media_path(relative_datapath, *args)
+      end
+
+      def intro
+        content.split("\n").first
+      end
+
+      def image
+        @image.event = self
+        @image
+      rescue
+        @image = NoImage.new
+      end
+
+      def image=(obj)
+        return obj if obj.kind_of?(Image)
+        upload(obj, obj[:tempfile])
+        self
+      end
+
+      def upload(obj, path = nil)
+        img = Image.new(path || obj.path)
+        img.copy_to(self)
+        @image = img
+        self
+      end
     end
 
     class Recurrent < Event 
@@ -366,11 +415,6 @@ module Booking
         true
       end
     end
-
-
-
-
-
 
     def padmonth(i)
       if i

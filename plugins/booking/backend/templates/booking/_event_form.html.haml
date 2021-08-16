@@ -2,7 +2,7 @@
   = render template: "booking/_dates_add_template", locals: { begin_date: _raw(event.html_date(:start_date)), end_date: _raw(event.html_date(:end_date)) }
 
 
-%form#events-edit{action: event.exist? ? Backend.routes.eventEdit_path(event.slug) : Backend.routes.eventCreate_path, method: :POST}
+%form#events-edit{action: event.exist? ? Backend.routes.eventEdit_path(event.slug) : Backend.routes.eventCreate_path, method: :POST, enctype: 'multipart/form-data'}
   .container
 
     .columns.top-seperator
@@ -13,6 +13,15 @@
             %span.input-group-addon Title
             %input.form-input{:value => event.title, :name => :title}
       .column.col-2
+    .columns.top-seperator
+      .column.col-2
+      .column.col-8
+        .form-group
+          .input-group
+            .form-label{:for => :tags} Image
+            %input.form-input{:type => :file, :name => :image, :name => :image}
+      .column.col-2
+        %img{:src => event.image.url}
 
 
     .columns.top-seperator
