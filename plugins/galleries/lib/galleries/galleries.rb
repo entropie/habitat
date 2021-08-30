@@ -203,6 +203,14 @@ module Galleries
         Habitat.adapter(:galleries).repository_path(@filename)
       end
 
+      def size
+        ::File.size(path)
+      end
+
+      def human_size
+        '%.2f' % (size.to_f / 2**20)
+      end
+
       def fullpath
         path
       end
