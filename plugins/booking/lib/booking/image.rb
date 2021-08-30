@@ -67,7 +67,7 @@ module Booking
         ret
       end
 
-      def css_background_defintion
+      def css_background_definition
         retstr = "background-image: url(%s)" % url
         if Habitat.quart.plugins.enabled?(:webp)
           extend(Webp)
