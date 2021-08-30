@@ -8,5 +8,6 @@
     = post.with_filter
 
   %ul.tags
-    - post.tags.each do |tag|
-      = tag
+    - if post.tags
+      - post.tags.each do |tag|
+        = tag

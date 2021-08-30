@@ -149,7 +149,20 @@ module Blog
       rethash[:title]      = title
       rethash[:url]        = Habitat.quart.default_application.routes.post_path(slug)
       rethash[:slug]       = slug
-      rethash[:image]      = image.url
+      rethash[:image]      = image.url rescue ""
+      rethash
+    end
+
+    def to_h
+      rethash = {  }
+      rethash[:content]    = content
+      rethash[:user_id]    = Habitat.adapter(:user).by_id(user_id).id
+      rethash[:created_at] = created_at
+      rethash[:updated_at] = updated_at
+      rethash[:title]      = title
+      rethash[:url]        = Habitat.quart.default_application.routes.post_path(slug)
+      rethash[:slug]       = slug
+      rethash[:image]      = image if image
       rethash
     end
 
@@ -215,6 +228,8 @@ module Blog
       return nil unless @image
       @image.post = self
       @image
+    rescue
+      nil
     end
 
     def template
@@ -320,7 +335,7 @@ module Blog
     end
 
     def to_post(adapter)
-      Post.new(adapter).populate(to_hash)
+      Post.new(adapter).populate(to_h)
     end
 
     def draft?

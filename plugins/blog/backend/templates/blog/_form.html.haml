@@ -11,7 +11,7 @@
           
             .column.col-4
               .form-label{:for => :tags} Tags
-              %input.form-input.input-tagline{:type => :text, :id => :tags, :value => (post && post.tags.join(",")), :name => :tags}
+              %input.form-input.input-tagline{:type => :text, :id => :tags, :value => (post && post.tags && post.tags.join(",")), :name => :tags}
             .column.col-4
               - if C[:default_template]
                 .form-label{:for => :tags} Template
