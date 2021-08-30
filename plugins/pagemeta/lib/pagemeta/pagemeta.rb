@@ -1,5 +1,13 @@
 module PageMeta
 
+  def self.default_meta=(obj)
+    @default_meta = obj
+  end
+
+  def self.default_meta
+    @default_meta || Default
+  end
+
   def self.for(obj)
     params = obj.params
     request_path = params.env["REQUEST_PATH"]
@@ -14,7 +22,9 @@ module PageMeta
 
       fbm
     else
-      Default.new
+      pm = PageMeta.default_meta.new
+      pm.request = obj
+      pm
     end
   end
 
@@ -24,6 +34,7 @@ module PageMeta
     Attrs = [:image, :description, :url, :title]
 
     attr_reader *Attrs
+    attr_accessor :request
     
     def initialize(hsh)
       Attrs.each do |attr|
@@ -40,6 +51,18 @@ module PageMeta
       "<title>%s%s</title>" % [title, C[:title]]
     end
 
+    def key(sym)
+      "og:#{sym}"
+    end
+
+    def meta_str
+      "<meta content='%s' property='%s' />"
+    end
+
+    def to_hash
+      {  }
+    end
+
   end
 
   class Default < Meta
@@ -47,21 +70,22 @@ module PageMeta
     end
 
     def to_meta(args)
-      site_title(args.to_s)
+      ret = []
+      to_hash.each_pair do |v, k|
+        ret << meta_str % [k,v]
+      end
+      ret << site_title(args.to_s)
+      ret.join("\n")
     end
+
   end
   
   class FaceBook < Meta
 
-    def key(sym)
-      "og:#{sym}"
-    end
-
     def to_meta(*args)
-      str = "<meta content='%s' property='%s' />"
       ret = []
       to_hash.each_pair do |v, k|
-        ret << str % [k,v]
+        ret << meta_str % [k,v]
       end
       ret << site_title(title)
       ret.join("\n")
