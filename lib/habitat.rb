@@ -138,9 +138,13 @@ module Habitat
     @mounts ||= {}
   end
 
-  def self.default_application_config
+  def self.default_application_config(cookies = true)
     proc{
-      middleware.use Rack::Session::Cookie, secret: Habitat.quart.secret
+
+      if cookies
+        middleware.use Rack::Session::Cookie, secret: Habitat.quart.secret
+      end
+
       middleware.use Warden::Manager do |manager|
         # let Hanami deal with the 401s
         #manager.intercept_401 = false

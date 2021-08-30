@@ -403,6 +403,22 @@ module Booking
         @image = img
         self
       end
+
+      def template
+        default_template_file = "events/default"
+        mp = ::File.basename(Habitat::S Habitat.quart.media_path)
+        template_file = ::File.join("../../../", mp, "booking/templates", type.to_s)
+        if ::File.exist?(Habitat.adapter(:booking).repository_path("templates", "%s.html.haml" % type.to_s))
+          template_file
+        else
+          default_template_file
+        end
+      end
+
+      def html_text
+        markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true, footnotes: false)
+        r = markdown.render(content)
+      end
     end
 
     class Recurrent < Event 

@@ -67,6 +67,50 @@ module PrettyDate
       strftime(format_string)
     end
 
+    def relative_date(to_or_from_date)
+      relative_time(to_or_from_date.to_datetime, :DAYS)
+    end
+
+    TIME_UNIT_TO_SECS = { SECONDS:1, MINUTES:60, HOURS:3600, DAYS:24*3600,
+                          WEEKS: 7*24*3600 }
+    TIME_UNIT_LBLS    = { SECONDS:"Sekunden",
+                          MINUTES:"Minuten",
+                          HOURS:"Stunden",
+                          DAYS:"Tagen",
+                          WEEKS: "Wochen",
+                          MONTHS:"Monaten",
+                          YEARS: "Jahren"
+                        }
+
+    def relative_time(date_time, time_unit)
+      now = DateTime.now
+      if date_time < now
+        v = case time_unit
+            when :SECONDS, :MINUTES, :HOURS, :DAYS, :WEEKS
+              (now.to_time.to_i-date_time.to_time.to_i)/
+                TIME_UNIT_TO_SECS[time_unit]
+            when :MONTHS
+              0.step.find { |n| (date_time >> n) > now } -1
+            when :YEARS
+              0.step.find { |n| (date_time >> 12*n) > now } -1
+            else
+              raise ArgumentError, "Invalid value for 'time_unit'"
+            end
+        "#{v} #{TIME_UNIT_LBLS[time_unit]} ago"
+      else
+        v = case time_unit
+            when :SECONDS, :MINUTES, :HOURS, :DAYS, :WEEKS
+              (date_time.to_time.to_i - now.to_time.to_i)/TIME_UNIT_TO_SECS[time_unit]
+            when :MONTHS
+              0.step.find { |n| (date_time >> n) > now } -1
+            when :YEARS
+              0.step.find { |n| (date_time >> 12*n) > now } -1
+            else
+              raise ArgumentError, "Invalid value for 'time_unit'"
+            end
+        "in #{v} #{TIME_UNIT_LBLS[time_unit]} "
+      end
+    end
   end
 end
 

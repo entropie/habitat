@@ -172,6 +172,7 @@ module Backend
       # end
 
       instance_eval(&Habitat.default_application_config)
+      middleware.use Rack::Session::Cookie, secret: Habitat.quart.secret
 
       controller.prepare do
         if Habitat.quart.plugins.enabled?(:blog)
