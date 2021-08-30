@@ -136,10 +136,6 @@ module Blog
     end
     
     def to_hash
-      # Attributes.keys.inject({}) {|m, v|
-      #   m[v] = instance_variable_get("@#{v}")
-      #   m
-      # }
       rethash = {  }
       rethash[:content]    = with_filter
       rethash[:intro]      = intro
