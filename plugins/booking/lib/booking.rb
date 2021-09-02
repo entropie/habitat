@@ -1,5 +1,6 @@
 require_relative "booking/booking"
 require_relative "booking/events"
+require_relative "booking/attender"
 require_relative "booking/calendar"
 require_relative "booking/workdays"
 require_relative "booking/database"
