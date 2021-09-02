@@ -517,9 +517,7 @@ module Booking
       end
 
       def filter(&blk)
-        puts "o #{ @events.size }"
         @events = @events.filter(&blk)
-        puts "n #{ @events.size }"
         self
       end
     end

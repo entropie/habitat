@@ -137,9 +137,10 @@ module Booking
         @default_slots = YAML::load_file(yaml_file)
       else
         #ile.open(yaml_file, "w+"){ |fp| fp.puts(YAML.dump([10, 12, 14, 16, 18])) }
-        Habitat.log :warn, "no slots.yaml: #{Habitat.S(yaml_file)}"
         @default_slots = [10, 12, 14, 16, 18]
+        Habitat.log :warn, "no slots.yaml: #{Habitat.S(yaml_file)}; defaulting: #{PP.pp(@default_slots, "")}"
       end
+      @default_slots
     end
     
   end
