@@ -27,13 +27,11 @@ TestEvents = [
 
 Attender = [
   {
-    :name => "Horrible Me",
-    :email => "horrible@me.de",
+    :contact => "Horrible Me",
     :phone => "123"
   },
   {
-    :name => "Me Horrible ",
-    :email => "me@horriblede",
+    :contact => "me@horriblede",
     :phone => "321"
   }
   
@@ -426,7 +424,7 @@ class TestContact < Minitest::Test
   end
 
   def test_contact_msg
-    a = Contact.create("message" => "foobar", :emailorphone => "lala@foobar.de")
+    a = Contact.create("message" => "foobar", :contact => "lala@foobar.de")
     assert_equal true, File.exist?(a.filename)
   end
 end

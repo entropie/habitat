@@ -20,7 +20,7 @@ module Booking
       end
 
       def datahash
-        Digest::SHA1.hexdigest( [:email,:phone,:name].map{ |k| self[k].to_s }.join)[0..11]
+        Digest::SHA1.hexdigest( [:contact,:message].map{ |k| self[k].to_s }.join)[0..11]
       end
 
       def filename
