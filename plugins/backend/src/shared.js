@@ -20,6 +20,11 @@ $(document).ready(function() {
             type:'inline',
         });
 
+    if($(".open-popup-alink").length)
+        $('.open-popup-alink').magnificPopup({
+            type:'ajax',
+        });
+
     $(".gallery-slider").each(function() {
         let slider = $(this);
 

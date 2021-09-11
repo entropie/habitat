@@ -391,7 +391,7 @@ class TestChangeDateStart < Minitest::Test
   def test_change_start_date_reccuring
     a = adapter.create(:event, TestReccuringEvents[2])
     adapter.store(a)
-    new_startdate = a.start_date - 60*60*24
+    new_startdate = a.start_date - 60*60*24 
     a.start_date = new_startdate
     assert_equal new_startdate, a.start_date
     adapter.store(a)
@@ -415,6 +415,22 @@ class TestChangeDateEnd < Minitest::Test
     assert_equal new_end_date, adapter.by_slug("kekelala").end_date
   end
 end
+
+
+class TestContact < Minitest::Test
+
+  include Booking
+  def setup
+    _clr
+    FileUtils.mkdir_p(File.join(TMP_PATH, "booking"))
+  end
+
+  def test_contact_msg
+    a = Contact.create("message" => "foobar", :emailorphone => "lala@foobar.de")
+    assert_equal true, File.exist?(a.filename)
+  end
+end
+
 
 
 class TestEventAttendRecurring < Minitest::Test
