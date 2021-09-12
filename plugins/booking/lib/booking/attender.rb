@@ -2,8 +2,6 @@ module Booking
   class Events::Event
     class Attender < Hash
 
-      attr_reader :slot, :slug
-
       def self.load_for(event)
         files = Dir.glob(event.attender_path + "/*.yaml")
         files.map { |f| YAML::load_file(f) }
@@ -11,8 +9,14 @@ module Booking
 
       def initialize(event_slug, attender_hash, slot)
         ah = Events::Event.normalize_params(attender_hash)
+        self[:created_at] = Time.now
+        self[:slot] = slot
+        self[:slug] = event_slug
         merge!(ah)
-        @slot, @slug = slot, event_slug
+      end
+
+      def slug
+        self[:slug]
       end
 
       def event
