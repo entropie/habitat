@@ -21,6 +21,9 @@ module Booking
       cmsg = ContactMSG.new
       cmsg.merge!(Booking::Events::Event.normalize_params(params))
       write(cmsg.filename, YAML::dump(cmsg))
+      if Habitat.quart.plugins.enabled?(:notify)
+        Notify::notify(subject: "Einzelstunde / Nachricht (#{cmsg[:contact]})", body: "%s\n\n--\n\n%s" % [cmsg[:message], PP.pp(cmsg, "")] )
+      end
       cmsg
     end
     

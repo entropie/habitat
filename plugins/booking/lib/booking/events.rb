@@ -146,6 +146,10 @@ module Booking
         attn = Attender.new(slug, att_hash, slot)
         @attender = nil
         Habitat::Mixins::FU.write(attn.filename, YAML::dump(attn))
+
+        if Habitat.quart.plugins.enabled?(:notify)
+          Notify::notify(subject: "attend: #{slug}", body: PP.pp(att_hash, "") )
+        end
         attn
       end
 

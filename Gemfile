@@ -37,6 +37,8 @@ gem "unicorn"
 
 gem "dimensions"
 
+gem "pony"
+
 gem "flickraw", github: 'hanklords/flickraw'
 gem "builder"
 
