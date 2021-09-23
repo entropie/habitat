@@ -71,6 +71,10 @@ module Booking
           return "1 Stunde"
         end
       end
+
+      def is_past?(odate = Time.now)
+        begin_date < odate
+      end
     end
 
     class Event
