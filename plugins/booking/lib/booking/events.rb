@@ -148,7 +148,9 @@ module Booking
         Habitat::Mixins::FU.write(attn.filename, YAML::dump(attn))
 
         if Habitat.quart.plugins.enabled?(:notify)
-          Notify::notify(subject: "attend: #{slug}", body: PP.pp(att_hash, "") )
+          notify_hash = att_hash.merge(slot: slot)
+
+          Notify::notify(subject: "attend: #{slug} - #{slot}", body: PP.pp(notify_hash, "") )
         end
         attn
       end
