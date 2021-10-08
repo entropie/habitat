@@ -154,7 +154,7 @@ module Booking
         if Habitat.quart.plugins.enabled?(:notify)
           notify_hash = att_hash.merge(slot: slot)
 
-          Notify::notify(subject: "attend: #{slug} - #{slot}", body: PP.pp(notify_hash, "") )
+          Notify::notify(subject: "attend: #{slug} - #{slot}", body: "%s\n\n--\n\n%s" % [notify_hash[:message], PP.pp(notify_hash, "")])
         end
         attn
       end
