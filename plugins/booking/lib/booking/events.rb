@@ -400,6 +400,10 @@ module Booking
         markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true, footnotes: false)
         r = markdown.render(content)
       end
+
+      def corresponding_page
+        nil
+      end
     end
 
     class Recurrent < Event 
