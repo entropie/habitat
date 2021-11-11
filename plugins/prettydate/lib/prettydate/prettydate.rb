@@ -108,7 +108,11 @@ module PrettyDate
             else
               raise ArgumentError, "Invalid value for 'time_unit'"
             end
-        "in #{v} #{TIME_UNIT_LBLS[time_unit]} "
+        if v == 0
+          "Heute"
+        else
+          "in #{v} #{TIME_UNIT_LBLS[time_unit]} "          
+        end
       end
     end
   end
