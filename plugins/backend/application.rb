@@ -140,8 +140,9 @@ module Backend
 
             post '/events/create',       to: "booking#eventscreate"
             get  '/events/:slug/edit',   to: "booking#eventsedit", as:     :eventEdit
-
             post '/events/:slug/edit',   to: "booking#eventsedit"
+            get  '/events/:slug/destroy',  to: "booking#eventdestroy", as:   :eventDestroy
+
             get  '/events/:slug',        to: "booking#event", as:          :event
             get  '/events/publishtoggle/:slug',to: "booking#eventtogglepublish", as: :eventTPublish
 

@@ -1,9 +1,17 @@
 %li{class: event.css_class}
   %h2
-    %a{href: Backend.routes.eventTPublish_path(event.slug,"url":  params.env["REQUEST_PATH"]) }= event.published? ? "Unpublish" : "publish"
     = event.title
+  .div.post-controls
+    %a{href: Backend.routes.eventTPublish_path(event.slug,"url":  params.env["REQUEST_PATH"]) }
+      - if event.published?
+        %span{:class => "glyphicon glyphicon-eye-close"}
+      - else
+        %span{:class => "glyphicon glyphicon-globe"}
+
     %a{href: Backend.routes.eventEdit_path(event.slug)}
       %span{:class => "glyphicon glyphicon-pencil"}
+    %a{href: Backend.routes.eventDestroy_path(event.slug), :onclick => "return confirm('Are you sure?')"}
+      %span{:class => "glyphicon glyphicon-remove"}
 
   .div
     = event.html_date(:start_date)
