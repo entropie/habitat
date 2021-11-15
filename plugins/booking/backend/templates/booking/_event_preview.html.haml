@@ -1,6 +1,8 @@
 %li{class: event.css_class}
   %h2
     = event.title
+    %small
+      = "##{event.slug}"
   .div.post-controls
     %a{href: Backend.routes.eventTPublish_path(event.slug,"url":  params.env["REQUEST_PATH"]) }
       - if event.published?
