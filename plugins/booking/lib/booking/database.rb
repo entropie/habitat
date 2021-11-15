@@ -106,6 +106,10 @@ module Booking
 
         def destroy(what)
           log :info, "booking:REMOVE:#{what.slug}"
+          begin
+            rm(what.image.fullpath, verbose: true)
+          rescue
+          end
           rm(repository_path(what.filename), verbose: true)
         end
 

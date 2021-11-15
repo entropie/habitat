@@ -7,7 +7,7 @@ module Backend::Controllers::Booking
 
       @event = booking.update(@event, params)
       booking.destroy(@event)
-      redirect_to Backend.routes.eventsPath
+      redirect_to Backend.routes.events_path
     end
   end
 end
