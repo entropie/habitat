@@ -1,4 +1,4 @@
-root = "/home/habitats/%%%identifier%%%/current/quarters/%%%identifier%%%"
+root = "/home/habitats/%%%identifier%%%/current"
 working_directory root
 pid "/home/unicorn/%%%identifier%%%.pid"
 stderr_path "#{root}/log/unicorn.log"

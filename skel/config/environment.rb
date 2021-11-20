@@ -1,15 +1,20 @@
-require 'bundler/setup'
-require 'hanami/setup'
-require 'hanami/model'
+# coding: utf-8
+
 require_relative '../lib/%%%identifier%%%'
 
-require_relative '../../../lib/habitat'
+Bundler.require
 
 Dir["#{ __dir__ }/initializers/*.rb"].each { |file| require_relative file }
 
 q = Habitat.quart = Habitat::Quarters[:%%%identifier%%%]
 
+HABITAT_APP_ROOT =  File.expand_path(File.join(File.dirname(File.expand_path(__FILE__)), ".."))
+
+q = Habitat.quart = Habitat::Quarters::Quart.read(HABITAT_APP_ROOT)
+
 require_relative '../apps/web/application'
+
+#Habitat.quart.secret = ""
 
 # loads application files for active plugins
 Habitat.load_application_files_for_plugins!
