@@ -1,3 +1,5 @@
+require "jwt"
+
 module User
   module Database
     extend Habitat::Database
