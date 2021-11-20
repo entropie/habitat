@@ -41,6 +41,10 @@ module Booking
         File.join(dirname, basename)
       end
 
+      def exist?
+        File.exist?(fullpath)
+      end
+
       def fullpath
         Habitat.quart.media_path(dirname, "images", basename)
       end
@@ -93,9 +97,13 @@ module Booking
       end
 
       def url
-        "no-image"
+        ""
       end
 
+      def exist?
+        false
+      end
+      
       def css_background_defintion
         ""
       end
