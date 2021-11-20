@@ -1,5 +1,9 @@
 require_relative "lib/habitat"
-require_relative "test/test"
+
+begin 
+  require_relative "test/test"
+rescue LoadError
+end
 
 require "fileutils"
 require "pp"

@@ -1,13 +1,14 @@
-import "./gallery.sass"
-
+import 'jquery';
 import 'magnific-popup'
 import 'magnific-popup/dist/magnific-popup.css'
 
 import 'slippry/dist/slippry.min.js'
 import 'slippry/dist/slippry.css'
 
+import './gallery.sass'
+
 $(document).ready(function() {
-    console.log("shared");
+    console.log("gallery");
 
     if($(".popupImg").length)
         $('.popupImg').magnificPopup({

@@ -87,7 +87,7 @@ module Habitat::Quarters
     end
 
     def app_root(*args)
-      quarters_root(identifier.to_s, *args.map(&:to_s))
+      File.join(path, *args.map(&:to_s))
     end
 
     def media_path(*args)
@@ -107,9 +107,8 @@ module Habitat::Quarters
     end
 
     def load_enviroment!
-      Dir.chdir(app_root) do
-        Hanami.boot
-      end
+      Hanami.boot
+
       Habitat.calculate_version_hash!
       Plugins.load_from_symbols(config.fetch(:plugins))
     end

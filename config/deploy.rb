@@ -2,12 +2,15 @@ require 'capistrano/bundler'
 
 identifier = File.expand_path(__FILE__).split("/")[-3]
 
-require_relative File.join(File.expand_path(__FILE__), "../../../../lib/habitat.rb")
+load File.join(File.dirname(File.expand_path(__FILE__)), "../vendor/gems/habitat/lib/habitat.rb")
+
 Q = Habitat.quart = Habitat::Quarters[identifier]
 
 set :application, Q.identifier.to_s
 
-set :repo_url, "git://github.com/entropie/habitat.git"
+set :habitat_repo, "git://github.com/entropie/habitat.git"
+
+set :repo_url, "/home/mit/Source/habitats/#{Q.identifier}"
 
 set :habitat_url, "/home/mit/Source/habitats/#{fetch(:application)}"
 set :media_path,  "/home/mit/Data/quarters/media/#{fetch(:application)}"
@@ -16,7 +19,7 @@ set :media_path,  "/home/mit/Data/quarters/media/#{fetch(:application)}"
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 # Default deploy_to directory is /var/www/my_app_name
-set :deploy_to, "/home/habitats/#{fetch(:application)}"
+set :deploy_to, "/home/habitats/#{fetch(:application)}/"
 
 
 # Default value for :format is :airbrussh.
@@ -50,9 +53,9 @@ set :deploy_to, "/home/habitats/#{fetch(:application)}"
 server "hive", roles: %w{web app db}
 set    :branch, 'master'
 
-set    :bundle_gemfile, -> { release_path.join('quarters', fetch(:application), 'Gemfile') } 
+#set    :bundle_gemfile, -> { release_path.join('quarters', fetch(:application), 'Gemfile') } 
 
-set    :habitat, release_path.join("quarters", fetch(:application))
+set    :habitat, release_path
 
 set    :nginx_config, "/etc/nginx/sites-enabled/habitat-#{fetch(:application)}.conf"
 set    :unicorn_init, "/etc/init.d/unicorn_#{fetch(:application)}"
@@ -91,21 +94,19 @@ namespace :habitat do
   
   task :link_files do
     on roles(:app) do
-      habitat_root = fetch(:habitat)
-      
       unless remote_link_exists?(fetch(:nginx_config))
-        sudo :ln, "-s #{habitat_root.join("config/nginx.conf")} #{fetch(:nginx_config)}"
+        sudo :ln, "-s #{release_path.join("config/nginx.conf")} #{fetch(:nginx_config)}"
       end
       
       unless remote_link_exists?(fetch(:unicorn_init))
-        sudo :ln, "-s #{habitat_root.join("config/unicorn_init.sh")} #{fetch(:unicorn_init)} "
+        sudo :ln, "-s #{release_path.join("config/unicorn_init.sh")} #{fetch(:unicorn_init)} "
       end
     end
   end
 
   task :link_media do
     on roles(:app) do
-      habitat_media_path = fetch(:habitat).join("media")
+      habitat_media_path = release_path.join("media")
       unless remote_link_exists?(habitat_media_path)
         execute :ln, "-s #{fetch(:media_path)} #{habitat_media_path}"
       end
@@ -123,19 +124,8 @@ namespace :habitat do
 
   task :checkout do
     on roles(:app) do
-      within release_path.join("quarters") do
-        tdir = release_path.join("quarters", fetch(:application))
-
-        if remote_file_exists?(tdir)
-          execute :mv, "%s %s.bak" % [tdir, tdir]
-        end
-        
-        execute :git, "clone #{fetch(:habitat_url)}"
-
-        if remote_file_exists?("%s.bak" % tdir)        
-          execute :mv, "#{tdir}.bak/.bundle", File.join(tdir, ".bundle")
-        end
-        
+      within release_path.join("vendor/gems") do
+        execute :git, "clone #{fetch(:habitat_repo)} habitat"
       end
     end
   end
@@ -150,14 +140,29 @@ namespace :habitat do
     end
   end
 
-  after "habitat:setup", "habitat:restart"
+  after "deploy:log_revision", "habitat:setup"
+
+  after "habitat:setup",       "habitat:restart"
+
+
+  after "deploy:symlink:release", "habitat:gemfile_path"
+  task :gemfile_path do
+    on fetch(:bundle_servers) do
+      within current_path do
+        with fetch(:bundle_env_variables) do
+          execute :bundle, "config --local gemfile #{current_path.join("Gemfile")}"
+        end
+      end
+    end
+  end
+  
 
   task :bundle do
     on fetch(:bundle_servers) do
-      within release_path.join("quarters/#{fetch(:application)}") do
+      within release_path do
         with fetch(:bundle_env_variables) do
           options = []
-          options << "--gemfile #{fetch(:bundle_gemfile)}" if fetch(:bundle_gemfile)
+          options << "--gemfile #{release_path.join("Gemfile")}"
           options << "--path #{fetch(:bundle_path)}" if fetch(:bundle_path)
           unless test(:bundle, :check, *options)
             options << "--binstubs #{fetch(:bundle_binstubs)}" if fetch(:bundle_binstubs)
@@ -176,4 +181,4 @@ end
 
 Rake::Task["bundler:install"].clear_actions
 
-after 'deploy:log_revision', 'habitat:setup'
+

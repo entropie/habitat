@@ -3,6 +3,15 @@ require "bundler"
 
 Bundler.require
 
+require "hanami"
+require "warden"
+require "bcrypt"
+require "memcached"
+require "rack-cache"
+require "flickraw"
+require "redcarpet"
+require "nokogiri"
+
 require "pp"
 
 module Habitat
@@ -121,9 +130,9 @@ module Habitat
   end
 
   def log(k, msg, &blk)
-    if Hanami::Components.resolved('logger')
+    begin
       Hanami.logger.send(:info, "#{k}: #{msg}")
-    else
+    rescue
       puts "%12s  %s" % [k.to_s, msg]
     end
   end

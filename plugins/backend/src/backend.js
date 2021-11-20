@@ -1,7 +1,7 @@
 import "spectre.css"
 
 
-import 'jquery';
+
 
 import 'jquery-tags-input/src/jquery.tagsinput.js'
 import 'jquery-tags-input/src/jquery.tagsinput.css' 
@@ -10,12 +10,6 @@ import 'webpack-jquery-ui/tabs'
 
 import "jquery-datetimepicker"
 import "jquery-datetimepicker/jquery.datetimepicker.css"
-
-import '../../../plugins/backend/src/backend.sass'
-
-import "../../../plugins/backend/src/fa.css.sass"
-
-
 
 
 import 'codemirror/lib/codemirror.css'
