@@ -1,3 +1,5 @@
+require "pony"
+
 module Notify
 
   def notify(*args)
