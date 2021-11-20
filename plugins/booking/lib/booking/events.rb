@@ -84,7 +84,8 @@ module Booking
         :slug,
         :dates,
         :protagonists,
-        :attender_slots
+        :attender_slots,
+        :price
       ]
 
       DataAttributes = [

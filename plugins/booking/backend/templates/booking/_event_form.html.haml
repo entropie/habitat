@@ -21,7 +21,8 @@
             .form-label{:for => :tags} Image
             %input.form-input{:type => :file, :name => :image, :name => :image}
       .column.col-2
-        %img{:src => event.image.url}
+        - if event.image.exist?
+          %img{:src => event.image.url}
 
 
     .columns.top-seperator
@@ -78,8 +79,14 @@
         = render template: "booking/_dates_add_template", locals: {begin_date: _raw(daterange.begin_date_p), end_date: _raw(daterange.end_date_p)}
 
     .columns.top-seperator
-      .column.col-2
-      .column.col-4
+      .column.col-1
+      .column.col-3
+        .form-group
+          .input-group
+            %span.input-group-addon Preis
+            %input.form-input{:value => event.price,  :name => :price}
+
+      .column.col-3
         .form-group
           .input-group
             %span.input-group-addon Teilnehmeranzahl
@@ -89,7 +96,7 @@
         .form-group
           .input-group
             %span.input-group-addon Protagonisten
-            %input.form-input{:value => (event.protagonists.join(",") rescue ""), :name => "protagonists[]"}
+            %input.form-input{:value => (event.protagonists.join(",") rescue "Anna Pietschmann"), :name => "protagonists[]"}
 
 
       .column.col-12.text-center.top-seperator
