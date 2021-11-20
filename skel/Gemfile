@@ -1,4 +1,6 @@
 source 'https://rubygems.org'
 
-eval(File.read("../../Gemfile"), binding, "")
+gem 'habitat', path: "vendor/gems/habitat"
+gem "hanami-webpack", github: 'entropie/hanami-webpack'
+
 

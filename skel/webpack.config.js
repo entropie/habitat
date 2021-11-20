@@ -17,7 +17,14 @@ const config = {
     mode: env || 'development',
     
     entry: {
-        app: './apps/web/assets/javascripts/application.js',
+        app: [
+            './apps/web/assets/javascripts/application.js',
+            './vendor/gems/habitat/plugins/galleries/src/gallery.js',
+        ],
+        be: [
+            './vendor/gems/habitat/plugins/galleries/src/gallery.js',
+            './vendor/gems/habitat/plugins/backend/src/combined.js'
+        ],
     },
 
     output: {
@@ -27,6 +34,7 @@ const config = {
     },
 
     resolve: {
+        symlinks: false,
         alias: {
         //'vue$': 'vue/dist/vue.esm.js'
         }
@@ -68,29 +76,6 @@ const config = {
 };
 
 module.exports = config
-
-
-// if (process.env.INBUILT_WEBPACK_DEV_SERVER) {
-
-//     var merge = require("webpack-merge");
-
-//     var dev_server_config = {
-//         devServer: {
-//             port: devServerPort,
-//             headers: {
-//                 "Access-Control-Allow-Origin": "*",
-//             }
-//         }
-//     };
-
-//     var dev_server_output = {
-//         output: {
-//             publicPath: "//" + devServerHost + ":" + devServerPort + "/"
-//         }
-
-//     };
-//     module.exports = merge(module.exports, dev_server_config, dev_server_output);
-// }
 
 
 
