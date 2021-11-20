@@ -95,11 +95,11 @@ namespace :habitat do
   task :link_files do
     on roles(:app) do
       unless remote_link_exists?(fetch(:nginx_config))
-        sudo :ln, "-s #{release_path.join("config/nginx.conf")} #{fetch(:nginx_config)}"
+        sudo :ln, "-s #{current_path.join("config/nginx.conf")} #{fetch(:nginx_config)}"
       end
       
       unless remote_link_exists?(fetch(:unicorn_init))
-        sudo :ln, "-s #{release_path.join("config/unicorn_init.sh")} #{fetch(:unicorn_init)} "
+        sudo :ln, "-s #{current_path.join("config/unicorn_init.sh")} #{fetch(:unicorn_init)} "
       end
     end
   end
