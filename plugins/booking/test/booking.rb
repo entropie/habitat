@@ -19,10 +19,10 @@ def adapter
 end
 
 TestEvents = [
-  {title: "foobar", attender_slots: 10, protagonists: ["foo"], slug: "test",       dates: { :begin => [Time.new(2021, 5, 1, "15:00")], :end => [Time.new(2021, 5, 1, "17:00")] }},
-  {title: "barfoo", attender_slots: 15, protagonists: ["foo"], slug: "testa",      dates: { :begin => [Time.new(2021, 5, 1, "17:00")], :end => [Time.new(2021, 5, 1, "19:00")] }},
-  {title: "batz", attender_slots: 20, protagonists: ["foo"], slug: "test-two",     dates: { :begin => [Time.new(2021, 6, 1, "15:00")], :end => [Time.new(2021, 6, 2, "17:00")] }},
-  {title: "batzbumm", attender_slots: 20, protagonists: ["foo"], slug: "test-three", dates: { :begin => [Time.new(2023, 6, 1, "15:00")], :end => [Time.new(2023, 6, 2, "17:00")] }}
+  {title: "foobar", attender_slots: 10, protagonists: ["foo"], slug: "test",       dates: { :begin => [Time.new(2021, 5, 1, "15:00")], :end => [Time.new(2021, 5, 1, "17:00")] }, :price=>20},
+  {title: "barfoo", attender_slots: 15, protagonists: ["foo"], slug: "testa",      dates: { :begin => [Time.new(2021, 5, 1, "17:00")], :end => [Time.new(2021, 5, 1, "19:00")] }, :price=>20},
+  {title: "batz", attender_slots: 20, protagonists: ["foo"], slug: "test-two",     dates: { :begin => [Time.new(2021, 6, 1, "15:00")], :end => [Time.new(2021, 6, 2, "17:00")]}, :price=>20 },
+  {title: "batzbumm", attender_slots: 20, protagonists: ["foo"], slug: "test-three", dates: { :begin => [Time.new(2023, 6, 1, "15:00")], :end => [Time.new(2023, 6, 2, "17:00")]}, :price=>20}
 ]
 
 Attender = [
@@ -60,7 +60,8 @@ TestReccuringEvents = [
     :attender_slots=>"3",
     :protagonists=>["foobar"],
     :content=>"fofoofof",
-    :slug=>"foobar"
+    :slug=>"foobar",
+    :price=>20
   },
   {
     :title=>"title2",
@@ -84,7 +85,8 @@ TestReccuringEvents = [
     :attender_slots=>"3",
     :protagonists=>["foobar"],
     :content=>"fofoofof",
-    :slug=>"foobar-barfoo"
+    :slug=>"foobar-barfoo",
+    :price=>20
   },
   {
     :title=>"title3",
@@ -108,7 +110,8 @@ TestReccuringEvents = [
     :attender_slots=>"3",
     :protagonists=>["foobar"],
     :content=>"fofoofof",
-    :slug=>"kekelala"
+    :slug=>"kekelala",
+    :price=>10
   },
 ]
 
