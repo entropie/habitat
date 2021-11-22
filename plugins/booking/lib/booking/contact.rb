@@ -17,13 +17,12 @@ module Booking
       end
     end
 
-    def self.create(params)
+    def self.create(params, &blk)
       cmsg = ContactMSG.new
       cmsg.merge!(Booking::Events::Event.normalize_params(params))
+
       write(cmsg.filename, YAML::dump(cmsg))
-      if Habitat.quart.plugins.enabled?(:notify)
-        Notify::notify(subject: "Einzelstunde / Nachricht (#{cmsg[:contact]})", body: "%s\n\n--\n\n%s" % [cmsg[:message], PP.pp(cmsg, "")] )
-      end
+      yield cmsg if block_given?
       cmsg
     end
     
