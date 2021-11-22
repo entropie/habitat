@@ -147,16 +147,11 @@ module Booking
         type == obj.to_sym
       end
 
-      def attend(att_hash, slot = nil)
+      def attend(att_hash, slot = nil, &blk)
         attn = Attender.new(slug, att_hash, slot)
         @attender = nil
         Habitat::Mixins::FU.write(attn.filename, YAML::dump(attn))
-
-        if Habitat.quart.plugins.enabled?(:notify)
-          notify_hash = att_hash.merge(slot: slot)
-
-          Notify::notify(subject: "attend: #{slug} - #{slot}", body: "%s\n\n--\n\n%s" % [notify_hash[:message], PP.pp(notify_hash, "")])
-        end
+        yield attn if block_given?
         attn
       end
 
