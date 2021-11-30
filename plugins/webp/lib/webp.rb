@@ -1,3 +1,5 @@
+require "webp-ffi"
+
 module Webp
 
   def self.encode(complete_filename)
