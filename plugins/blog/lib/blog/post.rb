@@ -243,9 +243,9 @@ module Blog
         [:adapter, :content, :request_language, :lang].map{|iv| "@#{iv}"}.each do |iv|
           ret.remove_instance_variable(iv) if ret.instance_variable_get(iv)
         end
-
       #rescue
       end
+      image.post = nil if image
       ret
     end
 
