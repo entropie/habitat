@@ -134,7 +134,7 @@ module Blog
           fact = nil
           node.text.scan(/(\[quickfact: (.*)\])/) do |match|
             fact = $2.strip
-            sret = "<div style='display:none' class='quickfact quickfact-#{fact.downcase}' data-fact='#{fact.downcase}'>o</div>"
+            sret = "<div style='display:none' class='quickfact quickfact-#{fact.downcase}' data-fact='#{fact.downcase}'></div>"
             node.replace(sret)
           end
         end
