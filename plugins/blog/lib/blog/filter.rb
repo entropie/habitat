@@ -126,6 +126,22 @@ module Blog
       end
     end
     
+    class QuickFacts < Filter
+
+      def filter(str)
+        ret = nokogiri(str)
+        ret.css("p").each_with_index do |node, index|
+          fact = nil
+          node.text.scan(/(\[quickfact: (.*)\])/) do |match|
+            fact = $2.strip
+            sret = "<div style='display:none' class='quickfact quickfact-#{fact.downcase}' data-fact='#{fact.downcase}'>o</div>"
+            node.replace(sret)
+          end
+        end
+        ret.to_html
+      end
+    end
+    
 
     class Paragraphing < Filter
       def filter(str)
