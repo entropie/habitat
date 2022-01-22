@@ -58,7 +58,7 @@ module Flickr
     end
 
     def flickr
-      FlickRaw::Flickr.new(ENV['FLICKRAW_API_KEY'], ENV['FLICKRAW_SHARED_SECRET'])
+      FlickRaw::Flickr.new(api_key: ENV['FLICKRAW_API_KEY'], shared_secret: ENV['FLICKRAW_SHARED_SECRET'])
     end
 
     def sizes(which = nil)
