@@ -146,6 +146,7 @@ module Blog
       rethash[:url]        = Habitat.quart.default_application.routes.post_path(slug)
       rethash[:slug]       = slug
       rethash[:image]      = image.url rescue ""
+      rethash[:tags]       = tags
       rethash
     end
 
@@ -156,9 +157,10 @@ module Blog
       rethash[:created_at] = created_at
       rethash[:updated_at] = updated_at
       rethash[:title]      = title
-      rethash[:url]        = Habitat.quart.default_application.routes.post_path(slug)
+      rethash[:url]        = "%s" % Habitat.quart.default_application.routes.post_path(slug)
       rethash[:slug]       = slug
       rethash[:image]      = image if image
+      rethash[:tags]       = tags
       rethash
     end
 
@@ -245,7 +247,7 @@ module Blog
         end
       #rescue
       end
-      image.post = nil if image
+      #image.post = nil if image
       ret
     end
 
@@ -277,7 +279,7 @@ module Blog
     end
 
     def to_draft(adapter)
-      Draft.new(adapter).populate(to_hash)
+      Draft.new(adapter).populate(to_h)
     end
 
     # returns [ "Saturday", "May", 12 ]
