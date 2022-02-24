@@ -33,7 +33,6 @@ module Pager
       @array.shift
     end
 
-
     def prev_page
       @page <= 1 ? nil : @page - 1
     end
@@ -42,6 +41,10 @@ module Pager
       @page <= 1
     end
 
+    def last_page
+      page_count
+    end
+    
     def last_page?
       page_count == @page
     end
@@ -126,7 +129,7 @@ module Pager
       icndef
     end
 
-    def navigation(limit = 8)
+    def navigation(limit = 8, max_direct_links = 4)
       html.ul(:class => :pager) do
         if first_page?
           li(:class => "page-item disabled") {
@@ -145,8 +148,26 @@ module Pager
         lower = limit ? (current_page - limit) : 1
         lower = lower < 1 ? 1 : lower
 
-        (lower...current_page).each do |n|
-          li(:class => "page-item") { a(:href => link_proc.call(n)){ n } }
+        higher = limit ? (next_page + limit) : page_count rescue page_count
+        higher = [higher, page_count].min
+
+        direct_links_shown = -1
+        skip_before = false
+        skip_after  = false
+
+        (1...current_page).each do |n|
+          direct_links_shown += 1
+
+          if skip_before
+            next
+          elsif  direct_links_shown > max_direct_links/2
+            skip_before = true
+            li(:class => "page-item page-item-ellipsis") { "..." }
+            li(:class => "page-item") { a(:href => link_proc.call(current_page-1)){ "#{current_page-1}" } }
+            next
+          end
+          
+          li(:class => "page-item") { a(:href => link_proc.call(n)){ "#{n}" } }
         end
 
         li(:class => "page-item active disabled") { span current_page }
@@ -157,12 +178,28 @@ module Pager
           li(:class => "page-item disabled") {
             span(:class => 'next grey'){ span(:class => iconclz(:forward)) {""} }}
         elsif next_page
-          higher = limit ? (next_page + limit) : page_count
-          higher = [higher, page_count].min
+
           (next_page..higher).each do |n|
-            li(:class => "page-item") {
-              a(:href => link_proc.call(n)){ n }
-            }
+            direct_links_shown += 1
+
+            if skip_after
+              next
+            elsif direct_links_shown > max_direct_links/2 and n != last_page-1
+              skip_after = true
+              li(:class => "page-item") {
+                a(:href => link_proc.call(n)){ n }
+              }
+              
+              if next_page != last_page and next_page != last_page-1 and n != last_page
+                li(:class => "page-item page-item-ellipsis") { "..." }
+                li(:class => "page-item") { a(:href => link_proc.call(last_page)){ "#{last_page}" } }
+              end
+            else
+              li(:class => "page-item") {
+                a(:href => link_proc.call(n)){ n }
+              }
+            end
+
           end
 
           li(:class => "page-item") { a(:href => link_proc.call(next_page)){ span(:class => "#{iconclz(:forward)} hl next")}}
