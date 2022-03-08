@@ -1,3 +1,5 @@
+require "builder"
+
 module Rss
   def to_xml(&blk)
     xml = Builder::XmlMarkup.new(:indent => 1)
@@ -5,10 +7,10 @@ module Rss
       xml.stylesheet(:type => "text/css", :href => "#{C[:host]}/assets/screen-app.css")
       xml.channel do
         xml.title C[:title]
-        xml.description C[:description]
+        xml.description(C[:description], "type" => "html")
         xml.language "en-en"
         xml.generator "Plaby"
-        xml.link "#{C[:host]}#{routes.posts_path}"
+        xml.link C[:host]
         xml.pubDate(Time.now.strftime("%a, %d %b %Y %H:%M:%S %z")) #Time.now.rfc2822
         xml.managingEditor "mictro@gmail.com"
         xml.webMaster "mictro@gmail.com"
@@ -26,14 +28,18 @@ module Feed::Controllers::Feed
 
     def call(params)
       self.status = 200
-      self.body = to_xml do |xml|
-        blog.posts.sort_by {|p| p.created_at }.reverse.each do |post|
-          begin
-            post_to_xml(xml, post)
-          rescue
+      res = FileCache.cached_or_fresh(:feed, force_when: lambda{ |o| (Time.now - ::File.mtime(o)) > FileCache::DEFAULT_CACHE_TIMER}) do
+        to_xml do |xml|
+          blog.posts.sort_by {|p| p.created_at }.reverse.first(10).each do |post|
+            begin
+              post_to_xml(xml, post)
+            rescue
+            end
           end
         end
+
       end
+      self.body = res
     end
   end
 end
