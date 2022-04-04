@@ -49,7 +49,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'memcached', '~> 1.8.0'
   s.add_dependency 'puma', '>= 5.5.2', '< 5.7.0'
   s.add_dependency 'rack', '~> 2.2.3'
-  s.add_dependency 'nokogiri', '~> 1.12.5'
+  s.add_dependency 'nokogiri', '>= 1.12.5', '< 1.14.0'
   s.add_dependency 'haml', '~> 5.2.2'
   s.add_dependency 'sassc', '~> 2.4.0'
   s.add_dependency 'jwt', '~> 2.3.0'
