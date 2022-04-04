@@ -88,6 +88,13 @@ module Booking
           :horizontal
         end
       end
+
+      def cleaned
+        ret = self.class.new
+        ret.dirname = dirname
+        ret.basename = basename
+        ret
+      end
       
     end
 

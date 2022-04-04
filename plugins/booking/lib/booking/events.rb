@@ -222,6 +222,10 @@ module Booking
           retclz = Event.find_for_type(newtype).new
         end
         retclz.set(to_hash.merge(normalized_params))
+
+        if @image
+          retclz.instance_variable_set("@image", image.cleaned)
+        end
         retclz
       end
 
