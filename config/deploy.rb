@@ -8,7 +8,7 @@ Q = Habitat.quart = Habitat::Quarters[identifier]
 
 set :application, Q.identifier.to_s
 
-set :habitat_repo, "git://github.com/entropie/habitat.git"
+set :habitat_repo, "git@github.com:entropie/habitat.git"
 
 set :repo_url, "/home/mit/Source/habitats/#{Q.identifier}"
 
