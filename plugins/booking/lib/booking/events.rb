@@ -382,6 +382,7 @@ module Booking
       end
 
       def upload(obj, path = nil)
+        raise "event tries to upload but is not initialized properly (slug unset)" if not slug or slug.empty?
         img = Image.new(path || obj.path)
         img.copy_to(self)
         @image = img
