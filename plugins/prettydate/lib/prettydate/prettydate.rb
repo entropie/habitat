@@ -100,7 +100,7 @@ module PrettyDate
       else
         v = case time_unit
             when :SECONDS, :MINUTES, :HOURS, :DAYS, :WEEKS
-              (date_time.to_time.to_i - now.to_time.to_i)/TIME_UNIT_TO_SECS[time_unit]
+              ((date_time.to_time.to_i - now.to_time.to_i)/TIME_UNIT_TO_SECS[time_unit].to_f).round
             when :MONTHS
               0.step.find { |n| (date_time >> n) > now } -1
             when :YEARS
