@@ -8,7 +8,13 @@ module Backend::Controllers::Booking
       @event = Booking::Events::Event.new
 
       if request.post?
-        @event = booking.create(:event, params)
+        # first create event and save it so we have a proper set up instance for image upload
+        phash = params.to_hash
+        imgh = { :image => phash.delete(:image)}
+
+        event = booking.create(:event, phash)
+        event = booking.update(event, imgh) if imgh[:image]
+        @event = event
       end
     end
   end
