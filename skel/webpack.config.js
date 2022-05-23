@@ -29,7 +29,7 @@ const config = {
 
     output: {
         path: path.resolve(__dirname + '/media/assets'),
-        filename: 'bundle.js',
+        filename: 'bundle-[name].js',
         publicPath: './public'
     },
 
