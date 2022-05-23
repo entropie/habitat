@@ -225,8 +225,11 @@ module Habitat::Quarters
 
       from_skel("src")
       from_skel("log")
+      from_skel("vendor")
       from_skel("webpack.config.js")
       from_skel("package.json")
+
+      app_run("ln -s ~/Source/habitat vendor/gems/habitat")
 
       app_run "bundle install --quiet"
       

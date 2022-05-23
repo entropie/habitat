@@ -13,7 +13,7 @@ abort "need identifier of the beehive" if not identifier or identifier.empty?
 abort "beehive #{dir} !exist" unless File.exist?(dir)
 
 def sh(cmd)
-  log :info, "running #{cmd}"
+  Habitat.log :info, "running #{cmd}"
   puts `#{cmd}`
 end
 
