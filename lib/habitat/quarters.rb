@@ -192,7 +192,7 @@ module Habitat::Quarters
     def app_run(cmd)
       log :info, "running: '#{cmd}'"
       Dir.chdir(app_root){
-        Bundler.with_clean_env do
+        Bundler.with_unbundled_env do
           system(cmd)
         end
       }
