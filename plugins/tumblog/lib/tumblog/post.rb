@@ -312,6 +312,14 @@ module Tumblog
       handler.to_html(logged_in)
     end
 
+    def css_class
+      "tumblog-entry"
+    end
+
+    def slug
+      @slug || id
+    end
+
   end
 
   class Entries < Array

@@ -1,0 +1,11 @@
+%li.post-preview{:class => post.css_class }
+  .container
+    .columns
+      .column.col-12
+        %p.post-title.text-ellipsis
+          = post.content
+  .post-controls
+    .published
+    .edit
+      %a{:href => routes.tumblogEdit_path(post.slug)}
+        .glyphicon.glyphicon-pencil

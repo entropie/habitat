@@ -220,6 +220,7 @@ module Galleries
       end
 
       def http_path(*args)
+        raise "Habitat.quart.default_application unset" unless Habitat.quart.default_application
         File.join(Habitat.quart.default_application.routes.gallery_path, @filename)
       end
       

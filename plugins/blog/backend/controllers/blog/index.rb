@@ -1,3 +1,4 @@
+
 module Backend::Controllers::Blog
   class Index
     include Api::Action
@@ -8,7 +9,6 @@ module Backend::Controllers::Blog
       @posts = blog.posts.sort_by {|p| p.created_at }.reverse
       @pager = Pager::BackendPager.new(params, @posts, 14)
       @pager.link_proc = -> (n) { routes.posts_path(n) }
-
     end
   end
 end

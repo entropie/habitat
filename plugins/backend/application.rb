@@ -62,6 +62,19 @@ module Backend
           end
         end
 
+        Habitat.plugin_enabled?(:tumblog) do
+          namespace :tumblog do
+            get  '/edit/:slug',      to: "tumblog#create_or_edit", as:     :tumblogEdit
+            get  '/publish/:slug',   to: "tumblog#publish",        as:     :tumblogPublish
+            get  '/create',          to: "tumblog#create",         as:     :tumblogCreate
+            get  '/create_or_edit/:slug',  to: "tumblog#create_or_edit", as:     :tumblogCreateOrEdit
+            get  '/destroy/:slug',   to: "tumblog#destroy",        as:     :tumblogDestroy
+            get  '/page/:page',      to: "tumblog#index",          as:     :tumblogs
+            get  '/',                to: "tumblog#index",          as:     :tumblog
+
+          end
+        end
+
         Habitat.plugin_enabled?(:galleries) do
           namespace :galleries do
 
