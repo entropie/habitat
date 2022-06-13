@@ -26,7 +26,7 @@ def gen(mod, name, action)
   cntrl = <<-HEREDOC
 module Backend::Controllers::#{name.capitalize}
   class #{action.capitalize}
-    include Api::Action
+    include Backend::Action
 
     def call(params)
     end
