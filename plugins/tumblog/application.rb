@@ -6,16 +6,20 @@ module Api
     configure do
       root __dir__
       routes do 
-        get '/post/new',             to: "post#create"
-        post '/post/new',            to: "post#create", as: :create
+        namespace :api do
 
-        post '/post/:id/toggle',     to: "post#toggle", as: :toggle
-        post '/post/:id/destroy',    to: "post#destroy", as: :destroy
-        post '/post/:id/topic',      to: "post#topic", as:  :topic
+          get '/new',             to: "post#create"
+          post '/new',            to: "post#create", as: :create
 
-        get '/post/',            to: "post#index", as: :posts
-        get '/post/:slug',       to: "post#index", as:  :post
-        get '/post/pid/:pid',    to: "post#index", as:   :pid
+          post '/:id/toggle',     to: "post#toggle", as: :toggle
+          post '/:id/destroy',    to: "post#destroy", as: :destroy
+          post '/:id/topic',      to: "post#topic", as:  :topic
+
+          get '/',            to: "post#index", as: :posts
+          get '/:slug',       to: "post#index", as:  :post
+          get '/pid/:pid',    to: "post#index", as:   :pid
+        end
+        
       end
       default_request_format :json
       default_response_format :json
@@ -69,6 +73,6 @@ module Api
   end
 end
 
-Habitat.mounts[ Api::Application ] = "/api"
+Habitat.mounts[ Api::Application ] = "/tumblog"
 
 
