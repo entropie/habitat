@@ -1,6 +1,6 @@
 module Backend::Controllers::Snippets
   class Create
-    include Api::Action
+    include Backend::Action
     expose :snippet
 
     def call(params)

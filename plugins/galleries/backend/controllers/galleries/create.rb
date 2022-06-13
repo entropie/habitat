@@ -1,6 +1,6 @@
 module Backend::Controllers::Galleries
   class Create
-    include Api::Action
+    include Backend::Action
     include Galleries::ControllerMethods
     
     expose :gallery

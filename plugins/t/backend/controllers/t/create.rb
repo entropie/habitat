@@ -1,6 +1,6 @@
 module Backend::Controllers::T
   class Create
-    include Api::Action
+    include Backend::Action
 
     def call(params)
     end

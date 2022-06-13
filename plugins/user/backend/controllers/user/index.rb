@@ -1,6 +1,6 @@
 module Backend::Controllers::User
   class Index
-    include Api::Action
+    include Backend::Action
 
     expose :user, :pager
 

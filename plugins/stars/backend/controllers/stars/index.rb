@@ -1,6 +1,6 @@
 module Backend::Controllers::Stars
   class Index
-    include Api::Action
+    include Backend::Action
 
     expose :stars, :pager
 

@@ -1,7 +1,7 @@
 
 module Backend::Controllers::Blog
   class Index
-    include Api::Action
+    include Backend::Action
     include ::Blog::BlogControllerMethods
     expose :posts, :pager
     def call(params)

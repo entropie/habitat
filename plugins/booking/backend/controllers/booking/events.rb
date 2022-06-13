@@ -1,6 +1,6 @@
 module Backend::Controllers::Booking
   class Events
-    include Api::Action
+    include Backend::Action
 
     expose :events, :pager
 

@@ -1,6 +1,6 @@
 module Backend::Controllers::User
   class Edit
-    include Api::Action
+    include Backend::Action
 
     expose :user
     

@@ -2,7 +2,7 @@
 
 module Api::Controllers::Sheets
   class Create
-    include Api::Action
+    include Backend::Action
     include Diary::ApiControllerMethods 
 
     def call(params)

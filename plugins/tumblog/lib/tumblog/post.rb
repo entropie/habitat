@@ -292,12 +292,19 @@ module Tumblog
       end
     end
 
+    def relative_datadir(*args)
+      datadir.gsub(@adapter.repository_path, "")
+    end
+
     def to_filename
       "#{id}#{Tumblog::Database::Adapter::File::BLOGPOST_EXTENSION}"
     end
 
     def filename
       @filename || @adapter.repository_path(dirname, to_filename)
+    end
+
+    def relative_filename
     end
 
     def dirname

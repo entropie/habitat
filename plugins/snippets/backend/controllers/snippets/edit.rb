@@ -1,6 +1,6 @@
 module Backend::Controllers::Snippets
   class Edit
-    include Api::Action
+    include Backend::Action
 
     expose :snippet
 

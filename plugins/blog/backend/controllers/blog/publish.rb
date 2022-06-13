@@ -1,6 +1,6 @@
 module Backend::Controllers::Blog
   class Publish
-    include Api::Action
+    include Backend::Action
     include Blog::BlogControllerMethods
 
     def call(params)

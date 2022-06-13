@@ -1,6 +1,6 @@
 module Backend::Controllers::Tumblog
   class CreateOrEdit
-    include Api::Action
+    include Backend::Action
 
     def call(params)
     end

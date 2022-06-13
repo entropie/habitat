@@ -1,6 +1,6 @@
 module Backend::Controllers::T
   class Edit
-    include Api::Action
+    include Backend::Action
     expose :trans
     def call(params)
       @trans = T[params[:slug]]

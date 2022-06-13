@@ -1,6 +1,6 @@
 module Backend::Controllers::Felle
   class Edit
-    include Api::Action
+    include Backend::Action
     include ::Felle::ControllerMethods
 
     expose :fell

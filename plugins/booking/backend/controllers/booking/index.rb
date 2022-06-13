@@ -1,6 +1,6 @@
 module Backend::Controllers::Booking
   class Index
-    include Api::Action
+    include Backend::Action
 
     def call(params)
     end

@@ -1,6 +1,6 @@
 module Backend::Controllers::Galleries
   class Control
-    include Api::Action
+    include Backend::Action
     include Galleries::ControllerMethods
 
     expose :gallery

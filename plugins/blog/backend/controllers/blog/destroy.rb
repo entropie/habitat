@@ -1,6 +1,6 @@
 module Backend::Controllers::Blog
   class Destroy
-    include Api::Action
+    include Backend::Action
     include ::Blog::BlogControllerMethods
 
     expose :post

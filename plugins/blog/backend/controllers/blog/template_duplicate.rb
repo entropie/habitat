@@ -1,6 +1,6 @@
 module Backend::Controllers::Blog
   class TemplateDuplicate
-    include Api::Action
+    include Backend::Action
 
     def call(params)
     end

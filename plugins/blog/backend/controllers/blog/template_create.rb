@@ -1,6 +1,6 @@
 module Backend::Controllers::Blog
   class TemplateCreate
-    include Api::Action
+    include Backend::Action
 
     def call(params)
       if request.post?

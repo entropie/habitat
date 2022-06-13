@@ -1,6 +1,6 @@
 module Backend::Controllers::Booking
   class Eventscreate
-    include Api::Action
+    include Backend::Action
 
     expose :event
 

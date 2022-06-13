@@ -1,6 +1,6 @@
 module Backend::Controllers::Booking
   class Eventsedit
-    include Api::Action
+    include Backend::Action
 
     expose :event
 

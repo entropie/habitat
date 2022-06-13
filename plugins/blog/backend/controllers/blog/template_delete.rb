@@ -1,6 +1,6 @@
 module Backend::Controllers::Blog
   class TemplateDelete
-    include Api::Action
+    include Backend::Action
 
     def call(params)
     end

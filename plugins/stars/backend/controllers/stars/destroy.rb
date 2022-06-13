@@ -1,6 +1,6 @@
 module Backend::Controllers::Stars
   class Destroy
-    include Api::Action
+    include Backend::Action
 
     def call(params)
     end

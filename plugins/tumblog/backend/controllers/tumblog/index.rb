@@ -1,6 +1,6 @@
 module Backend::Controllers::Tumblog
   class Index
-    include Api::Action
+    include Backend::Action
 
     include ::Tumblog::ControllerMethods
 

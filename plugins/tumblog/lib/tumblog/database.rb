@@ -85,8 +85,8 @@ module Tumblog
           log :info, "tumblog:STORE:#{post.id}"
           retval = post
           post.user_id = @user.id
-          post.datadir = post.datadir
-          post.filename = post.filename
+          post.datadir = post.relative_datadir
+          post.filename = post.relative_filename
 
           #puts post.to_yaml
           unless exist?(post)

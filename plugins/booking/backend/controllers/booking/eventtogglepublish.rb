@@ -1,6 +1,6 @@
 module Backend::Controllers::Booking
   class Eventtogglepublish
-    include Api::Action
+    include Backend::Action
 
     def call(params)
       @event = booking.events_all.find_or_create(params)

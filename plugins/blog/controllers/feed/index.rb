@@ -23,7 +23,7 @@ end
 
 module Feed::Controllers::Feed
   class Index
-    include Api::Action
+    include Backend::Action
     include Rss
 
     def call(params)

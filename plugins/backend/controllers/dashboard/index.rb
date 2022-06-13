@@ -1,6 +1,6 @@
 module Backend::Controllers::Dashboard
   class Index
-    include Api::Action
+    include Backend::Action
 
     def call(params)
       Habitat.plugin_enabled?(:snippets) do

@@ -1,6 +1,6 @@
 module Backend::Controllers::Blog
   class Template
-    include Api::Action
+    include Backend::Action
 
     expose :blemplate
 

@@ -2,7 +2,7 @@
 
 module Backend::Controllers::Stars
   class CreateOrEdit
-    include Api::Action
+    include Backend::Action
     expose :star
 
     def call(params)

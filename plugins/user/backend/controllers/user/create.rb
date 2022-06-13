@@ -1,6 +1,6 @@
 module Backend::Controllers::User
   class Create
-    include Api::Action
+    include Backend::Action
 
     expose :user
     def call(params)

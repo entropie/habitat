@@ -1,6 +1,6 @@
 module Backend::Controllers::Snippets
   class Index
-    include Api::Action
+    include Backend::Action
 
     expose :snippets, :pager
     def call(params)

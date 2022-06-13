@@ -1,6 +1,6 @@
 module Backend::Controllers::User
   class Logout
-    include Api::Action
+    include Backend::Action
     include Hanami::Action::Session
 
     def call(params)

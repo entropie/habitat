@@ -1,6 +1,6 @@
 module Backend::Controllers::Galleries
   class Upload
-    include Api::Action
+    include Backend::Action
     include Galleries::ControllerMethods
 
     def call(params)

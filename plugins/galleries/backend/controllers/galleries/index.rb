@@ -1,6 +1,6 @@
 module Backend::Controllers::Galleries
   class Index
-    include Api::Action
+    include Backend::Action
     include Galleries::ControllerMethods
 
     expose :all, :pager

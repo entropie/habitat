@@ -1,6 +1,6 @@
 module Api::Controllers::Sheets
   class Update
-    include Api::Action
+    include Backend::Action
     include Diary::ApiControllerMethods 
 
     def call(params)

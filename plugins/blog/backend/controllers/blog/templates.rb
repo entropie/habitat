@@ -1,6 +1,6 @@
 module Backend::Controllers::Blog
   class Templates
-    include Api::Action
+    include Backend::Action
     include Blog:: BlogControllerMethods
 
     expose :templates, :pager
