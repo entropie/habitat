@@ -1,6 +1,6 @@
-module Backend::Controllers::Tumblog
+module Tumblog::Controllers::Tumblog
   class Index
-    include Backend::Action
+    include Tumblog::Action
 
     def call(params)
       posts = tumblog.entries.sort_by{|p| p.updated_at }.reverse

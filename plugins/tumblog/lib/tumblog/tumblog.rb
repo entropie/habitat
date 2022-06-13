@@ -14,6 +14,7 @@ module BackgroundJob
 end
 
 
+
 module Tumblog
 
   DEFAULT_ADAPTER = :File
@@ -24,6 +25,12 @@ module Tumblog
 
   def self.token
     @token
+  end
+
+  module Controllers
+  end
+
+  module Action
   end
 
   module ControllerMethods

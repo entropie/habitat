@@ -8,16 +8,16 @@ module Tumblog
       routes do 
         namespace :api do
 
-          # get '/new',             to: "tumblog#create"
-          # post '/new',            to: "tumblog#create", as: :create
+          get '/new',             to: "tumblog#create"
+          post '/new',            to: "tumblog#create", as: :create
 
-          # post '/:id/toggle',     to: "tumblog#toggle", as: :toggle
-          # post '/:id/destroy',    to: "tumblog#destroy", as: :destroy
-          # post '/:id/topic',      to: "tumblog#topic", as:  :topic
+          post '/:id/toggle',     to: "tumblog#toggle", as: :toggle
+          post '/:id/destroy',    to: "tumblog#destroy",as: :destroy
+          post '/:id/topic',      to: "tumblog#topic",  as: :topic
 
-          # get '/',            to: "tumblog#index", as: :posts
-          # get '/:slug',       to: "tumblog#index", as:  :post
-          # get '/pid/:pid',    to: "tumblog#index", as:   :pid
+          get '/',                to: "tumblog#index",  as: :tumblog
+          get '/:slug',           to: "tumblog#index",  as: :post
+          get '/pid/:pid',        to: "tumblog#index",  as: :pid
         end
         
       end
