@@ -1,6 +1,6 @@
-module Api::Controllers::Post
+module Backend::Controllers::Tumblog
   class Topic
-    include Api::Action
+    include Backend::Action
 
     def call(params)
       ret = {}

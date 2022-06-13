@@ -1,23 +1,23 @@
 require 'hanami/helpers'
 require 'hanami/assets'
 
-module Api
+module Tumblog
   class Application < Hanami::Application
     configure do
       root __dir__
       routes do 
         namespace :api do
 
-          get '/new',             to: "post#create"
-          post '/new',            to: "post#create", as: :create
+          get '/new',             to: "tumblog#create"
+          post '/new',            to: "tumblog#create", as: :create
 
-          post '/:id/toggle',     to: "post#toggle", as: :toggle
-          post '/:id/destroy',    to: "post#destroy", as: :destroy
-          post '/:id/topic',      to: "post#topic", as:  :topic
+          post '/:id/toggle',     to: "tumblog#toggle", as: :toggle
+          post '/:id/destroy',    to: "tumblog#destroy", as: :destroy
+          post '/:id/topic',      to: "tumblog#topic", as:  :topic
 
-          get '/',            to: "post#index", as: :posts
-          get '/:slug',       to: "post#index", as:  :post
-          get '/pid/:pid',    to: "post#index", as:   :pid
+          get '/',            to: "tumblog#index", as: :posts
+          get '/:slug',       to: "tumblog#index", as:  :post
+          get '/pid/:pid',    to: "tumblog#index", as:   :pid
         end
         
       end
@@ -73,6 +73,6 @@ module Api
   end
 end
 
-Habitat.mounts[ Api::Application ] = "/tumblog"
+Habitat.mounts[ Tumblog::Application ] = "/tumblog"
 
 
