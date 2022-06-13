@@ -15,7 +15,7 @@ javascript:
     var endp = "#{ENDPOINT}";
     var token = "#{TKN}";
 
-    document.location.href=endp + "?token=" + token + "&s=" + url;
+    document.location.href=endp + "?token=" + TKN + "&s=" + url;
 JAVASCRIPT
 
 
