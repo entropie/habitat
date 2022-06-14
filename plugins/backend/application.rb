@@ -64,11 +64,22 @@ module Backend
 
         Habitat.plugin_enabled?(:tumblog) do
           namespace :tumblog do
-            get  '/edit/:slug',      to: "tumblog#create_or_edit", as:     :tumblogEdit
-            get  '/publish/:slug',   to: "tumblog#publish",        as:     :tumblogPublish
+            get  '/edit/:id',      to: "tumblog#create_or_edit", as:     :tumblogEdit
+
+           post  '/edit/:id',      to: "tumblog#create_or_edit"
+
+
+           get '/toggle/:id',     to: "tumblog#toggle", as: :tumblogToggle
+            post '/toggle/:id',   to: "tumblog#toggle", as: :tumblogToggle
+
+            get  '/show/:id',     to: "tumblog#show",         as:     :tumblogShow
+
             get  '/create',          to: "tumblog#create",         as:     :tumblogCreate
-            get  '/create_or_edit/:slug',  to: "tumblog#create_or_edit", as:     :tumblogCreateOrEdit
-            get  '/destroy/:slug',   to: "tumblog#destroy",        as:     :tumblogDestroy
+           post  '/create',          to: "tumblog#create"
+            get  '/create_or_edit/:id',  to: "tumblog#create_or_edit", as:     :tumblogCreateOrEdit
+           post  '/create_or_edit/:id',  to: "tumblog#create_or_edit"
+            get  '/destroy/:id',   to: "tumblog#destroy",        as:     :tumblogDestroy
+           post  '/destroy/:id',   to: "tumblog#destroy"
             get  '/page/:page',      to: "tumblog#index",          as:     :tumblogs
             get  '/',                to: "tumblog#index",          as:     :tumblog
 

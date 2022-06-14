@@ -1,5 +1,5 @@
 module Backend::Views::Tumblog
-  class CreateOrEdit
+  class Show
     include Backend::View
   end
 end

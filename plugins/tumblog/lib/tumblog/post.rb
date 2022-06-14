@@ -82,7 +82,7 @@ module Tumblog
 
       module YoutubeDLMixin
         def media_file
-          Dir.glob("%s/%s.*" % [post.datadir, post.id]).first          
+          Dir.glob("%s/%s.*" % [post.real_datadir, post.id]).first          
         end
 
         def media_file_src
@@ -96,7 +96,7 @@ module Tumblog
         include YoutubeDLMixin
         
         def thumbnail_file
-          post.datadir("#{post.id}.jpg")
+          post.real_datadir("#{post.id}.jpg")
         end
 
         def thumbnail_src
@@ -194,7 +194,10 @@ module Tumblog
 
 
         def to_html(logged_in = false)
-          %Q|<img class='preview' src='%s'/>| % post.http_data_dir("#{post.id}")
+          # %Q|<img class='preview' src='%s'/>| % post.http_data_dir("#{post.id}")
+          add = "<h3>gfycat: #{post.title}</h3>"
+          ret = "%s<video controls><source src='%s' type='video/mp4'></video>"
+          ret % [add, post.http_data_dir("#{post.id}")]
         end
 
       end
@@ -288,12 +291,16 @@ module Tumblog
       if @datadir
         File.join(@datadir, *args)
       else
-        @adapter.datadir(id, *args)
+        adapter.datadir(id, *args)
       end
     end
 
+    def real_datadir(*args)
+      adapter.datadir(id, *args)
+    end
+
     def relative_datadir(*args)
-      datadir.gsub(@adapter.repository_path, "")
+      ::File.join("../data", id, *args)
     end
 
     def to_filename
@@ -301,14 +308,23 @@ module Tumblog
     end
 
     def filename
-      @filename || @adapter.repository_path(dirname, to_filename)
+      @filename || ::File.join(dirname, to_filename)
+    end
+
+    def adapter
+      @adapter ||= Habitat.adapter(:tumblog)
     end
 
     def relative_filename
+      filename
+    end
+
+    def exist?
+      true
     end
 
     def dirname
-      "entries/#{@created_at.strftime("%Y%m")}"
+      "tumblblog/entries/#{@created_at.strftime("%Y%m")}"
     end
 
     def handler

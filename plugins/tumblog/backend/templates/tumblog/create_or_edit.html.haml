@@ -1,1 +1,11 @@
-create_or_edit
+.backend-page-header
+  %h1= t("t-page-topic-edit")
+
+#db-snippets.main-content-block
+  %ul.main-listing.single
+    - if post and post.exist?
+      = render template: "tumblog/_preview", locals: { post: post }
+
+    %li
+      = render template: "tumblog/_form", locals: { id: id, action: routes.tumblogEdit_path(id), content: CGI.unescapeHTML(post.content) }
+

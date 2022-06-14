@@ -1,5 +1,5 @@
 module Backend::Views::Tumblog
-  class CreateOrEdit
+  class Toggle
     include Backend::View
   end
 end

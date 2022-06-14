@@ -1,1 +1,7 @@
-create
+.backend-page-header
+  %h1= t("t-page-topic-create")
+
+#db-snippets.main-content-block
+  %ul.main-listing.single
+    %li
+      = render template: "tumblog/_form", locals: { id: nil, action: routes.tumblogCreate_path, content: "" }

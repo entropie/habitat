@@ -31,10 +31,14 @@ module Tumblog
         end
 
         def repository_path(*args)
-          ::File.join(::File.realpath(path), "tumblblog", *args)
+          ::File.join(path, relative_path(*args))
         rescue Errno::ENOENT
           warn "does not exist: #{path("blog")}"
           path("tumblblog", *args)
+        end
+
+        def relative_path(*args)
+          ::File.join("tumblblog", *args)
         end
 
         def post_filename(post)
@@ -95,7 +99,7 @@ module Tumblog
           else
             post.updated_at = Time.now
           end
-          write(post.filename, post.to_yaml)
+          write(::File.join(@path, post.filename), post.to_yaml)
           post
         end
 
@@ -105,8 +109,8 @@ module Tumblog
 
         def destroy(post)
           log :info, "tumblog:REMOVE:#{post.title}"
-          rm_rf(post.filename)
-          rm_rf(post.datadir)
+          rm_rf(path(post.filename))
+          rm_rf(path(post.datadir))
         end
 
         def with_user(user, &blk)

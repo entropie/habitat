@@ -1,0 +1,14 @@
+#db-snippets-form
+  %form{:method => :post, :action => action}
+    .container
+      .columns
+        .column.col-2
+          -# - h = id ? {:disabled => :disabled} : {}
+          - h = {:disabled => :disabled}
+          %input.form-input{h, :type => :text, :value => (id ? id : ""), :name => :id}
+        .column.col-8
+          %textarea.form-input{:name => :content}
+            = content
+        .column.col-2
+          %input.form-input{:type => :submit, :value => "Absenden"}
+

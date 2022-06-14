@@ -8,8 +8,7 @@ module Backend::Controllers::Tumblog
 
     def call(params)
 
-      @posts = tumblog.entries
-      
+      @posts = tumblog.entries.sort_by{ |e| e.created_at }.reverse
       @pager = Pager::BackendPager.new(params, @posts, 14)
       @pager.link_proc = -> (n) { routes.tumblogs_path(n) }
     end
