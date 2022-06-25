@@ -20,9 +20,18 @@ module Tumblog
         ret = handler.select{|h|
           h.responsible_for?(post)
         }
-        Habitat.log(:info, "#{post.content}: #{ret.first}")
-        handler = ret.first.new(post)
-        handler
+        Habitat.log(:debug, "tumblog: (#{post.content}: #{ret.first})")
+
+        raise "multiple handler for #{post} found; cannot continue" if ret.size > 1
+        handler = ret.first
+
+        unless handler
+          Habitat.log(:info, "tumblog: no handler found; using default/text")
+          handler = DefaultHandler
+        end
+
+        handled = handler.new(post)
+        handled
       end
 
       def self.responsible_for?(post)
@@ -78,6 +87,14 @@ module Tumblog
         b % ret
       end
 
+      def self.match
+        [false]
+      end
+
+      def process!
+        true
+      end
+
       
 
       module YoutubeDLMixin
@@ -88,6 +105,15 @@ module Tumblog
         def media_file_src
           post.http_data_dir(File.basename(media_file))
         end
+      end
+
+      class DefaultHandler < Handler
+
+        def to_html(logged_in = false)
+          markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true)
+          markdown.render(post.content)
+        end
+
       end
 
 
@@ -273,6 +299,10 @@ module Tumblog
 
     def private?
       @private != 0
+    end
+
+    def titled?
+      @title && @title.to_s.strip.size > 1
     end
 
     def to_yaml
