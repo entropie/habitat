@@ -12,9 +12,12 @@ $(document).ready(function() {
 
     if($(".popupImg").length)
         $('.popupImg').magnificPopup({
-            type: 'image'
+            type: 'image',
+            autoFocusLast: false,
+            fixedContentPos: false
             // other options
         });
+
     
     if($(".open-popup-link").length)
         $('.open-popup-link').magnificPopup({
