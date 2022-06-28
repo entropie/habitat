@@ -84,6 +84,14 @@ module Tumblog
           adapter_class(true).new(self).populate(param_hash)
         end
 
+
+        def update(post)
+          log :info, "updating #{post.id} #{post.filename}"
+          write(::File.join(@path, post.filename), post.to_yaml)
+          post
+        end
+
+
         def store(post)
           raise ::Habitat::Database::NoUserContext, "trying to call #store without valid user context " unless @user
           log :info, "tumblog:STORE:#{post.id}"

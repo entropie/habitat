@@ -18,17 +18,16 @@ module Tumblog
 
       def self.select_for(post)
         ret = handler.select{|h|
+          next if h.kind_of?(DefaultHandler)
           h.responsible_for?(post)
         }
-        Habitat.log(:debug, "tumblog: (#{post.content}: #{ret.first})")
 
         raise "multiple handler for #{post} found; cannot continue" if ret.size > 1
-        handler = ret.first
 
-        unless handler
-          Habitat.log(:info, "tumblog: no handler found; using default/text")
-          handler = DefaultHandler
-        end
+        handler = ret.first
+        handler = DefaultHandler unless handler
+
+        Habitat.log(:debug, "tumblog: (#{handler}:'#{post.content}')")
 
         handled = handler.new(post)
         handled
@@ -120,6 +119,7 @@ module Tumblog
       class Reddit < Handler
 
         include YoutubeDLMixin
+        include Habitat::Mixins::FU
         
         def thumbnail_file
           post.real_datadir("#{post.id}.jpg")
@@ -131,13 +131,19 @@ module Tumblog
 
 
         def self.match
-          [/reddit\.com/]
+          [/^https:\/\/reddit\.com/, /^https:\/\/www\.reddit\.com/, /^https:\/\/v\.redd\.it\//]
         end
 
         def process!
           FileUtils.mkdir_p(post.datadir)
 
           target_file = post.datadir(post.id + ".mp4")
+          if ::File.exist?(target_file)
+            rm(target_file)
+          end
+
+          log :info, "ytdl: #{post.id} #{post.content} #{target_file}"
+
           ydl = YoutubeDL.download(post.content, output: target_file, write_thumbnail: true)
           post.title = ydl.information[:title]
           true
@@ -152,7 +158,7 @@ module Tumblog
         include YoutubeDLMixin
 
         def self.match
-          [/youtube\.com/]
+          [/^https:\/\/youtube\.com/, /^https:\/\/www\.youtube\.com/]
         end
 
         def process!
@@ -290,6 +296,21 @@ module Tumblog
       self
     end
 
+    def update(hash)
+      changed = false
+
+      if new_tags = hash[:tags]
+        @tags = tagify(new_tags)
+      end
+
+      if content = hash[:content]
+        changed = true
+        @content = hash[:content]
+      end
+
+      changed
+    end
+
     def to_hash
       Attributes.keys.inject({}) {|m, k|
         m[k] = instance_variable_get("@%s" % k.to_s)
@@ -318,11 +339,7 @@ module Tumblog
 
 
     def datadir(*args)
-      if @datadir
-        File.join(@datadir, *args)
-      else
-        adapter.datadir(id, *args)
-      end
+      adapter.datadir(id, *args)
     end
 
     def real_datadir(*args)
