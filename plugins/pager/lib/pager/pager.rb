@@ -174,9 +174,9 @@ module Pager
         
         if last_page?
           li(:class => "page-item disabled") {
-            span(:class => 'next grey'){ span(:class => iconclz(:fforward)) {""} }}
-          li(:class => "page-item disabled") {
             span(:class => 'next grey'){ span(:class => iconclz(:forward)) {""} }}
+          li(:class => "page-item disabled") {
+            span(:class => 'next grey'){ span(:class => iconclz(:fforward)) {""} }}
         elsif next_page
 
           (next_page..higher).each do |n|
