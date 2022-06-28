@@ -1,9 +1,9 @@
 %li.post-preview{:class => post.css_class }
   .container
     .columns
-      .column.col-3.tumblog-preview
+      .column.col-12.tumblog-preview
         = post.to_html(true)
-      .column.col-9
+      .column.col-12
         %p.post-title.text-ellipsis
           %a{:href => routes.tumblogShow_path(post.id)}= "#"
           = post.content
