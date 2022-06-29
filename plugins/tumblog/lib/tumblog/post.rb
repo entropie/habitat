@@ -386,8 +386,16 @@ module Tumblog
       "tumblog-entry"
     end
 
+    def css_id
+      "entry-#{id[0..10]}"
+    end
+
     def slug
       @slug || id
+    end
+
+    def kind
+      handler.class.to_s.downcase.split("::").last.to_sym
     end
 
   end
