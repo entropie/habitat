@@ -2,8 +2,11 @@
 %html{:lang => "de"}
   %head
     %title Its ze Backend
+    %meta{:name => "viewport", :content => "width=device-width, initial-scale=1.0"}
     - if Habitat.quart.production?
       %link{:href => url_with_calculated_version_hash("/assets/screen-be.css"), :type => "text/css", :rel => "stylesheet"}
+
+    %link{:href => "/assets/favicon.ico", :rel => "shortcut icon", :type => "image/x-icon" }
 
   %body.backend
     .container.grid-xl
