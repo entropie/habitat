@@ -94,6 +94,9 @@ module Tumblog
         true
       end
 
+      def create_interactive?
+        false
+      end
       
 
       module YoutubeDLMixin
@@ -108,13 +111,16 @@ module Tumblog
 
       class DefaultHandler < Handler
 
+        def create_interactive?
+          true
+        end
+        
         def to_html(logged_in = false)
           markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true)
           markdown.render(post.content)
         end
 
       end
-
 
       class Reddit < Handler
 
@@ -171,41 +177,11 @@ module Tumblog
         end
 
         def to_html(logged_in = false)
-          add = "<h3>yt: #{post.title}</h3>"
+          add = "<h3>#{post.title}</h3>"
           ret = "%s<video controls><source src='%s' type='video/mp4'></video>"
           ret % [add, media_file_src]
         end
       end
-
-
-      # class GFYcat < Handler
-      #   def self.match
-      #     [/gfycat\.com/]
-      #   end
-
-      #   def process!
-      #     FileUtils.mkdir_p(post.datadir)
-          
-      #     target_file = post.datadir(post.id + ".mp4")
-
-      #     srcurl, thumbnail = "", ""
-      #     open(post.content) do |uri|
-      #       html = Nokogiri::HTML(uri.read)
-      #       srcurl = html.xpath('//source[@id="mp4Source"]').first[:src]
-      #       thumbnail = html.xpath('//video[@class="share-video-noscript"]').first[:poster]
-      #     end
-      #     ret = nil
-
-      #     ret = download(srcurl, target_file)
-      #     download(thumbnail, thumbnail_file)
-      #     ret
-      #   end
-
-
-      #   def to_html(logged_in = false)
-      #     super % post.http_data_dir(post.id + ".mp4")
-      #   end
-      # end
 
       class GFYcat < Handler
         include YoutubeDLMixin
@@ -227,14 +203,12 @@ module Tumblog
 
         def to_html(logged_in = false)
           # %Q|<img class='preview' src='%s'/>| % post.http_data_dir("#{post.id}")
-          add = "<h3>gfycat: #{post.title}</h3>"
+          add = "<h3>#{post.title}</h3>"
           ret = "%s<video controls><source src='%s' type='video/mp4'></video>"
           ret % [add, post.http_data_dir("#{post.id}")]
         end
 
       end
-      
-
 
       class Img < Handler
         def self.match
@@ -292,6 +266,7 @@ module Tumblog
         end
         instance_variable_set("@#{paramkey}", paramval)
       end
+      @tags = [] unless @tags
       @updated_at = @created_at = Time.now
       @id = Habitat::Database.get_random_id
       self
@@ -304,7 +279,13 @@ module Tumblog
         @tags = Tumblog.tagify(new_tags)
       end
 
-      if content = hash[:content]
+      if new_title = hash[:title]
+        @title = new_title
+      end
+
+      new_content = hash[:content]
+
+      if new_content && new_content != self.content and 
         changed = true
         @content = hash[:content]
       end

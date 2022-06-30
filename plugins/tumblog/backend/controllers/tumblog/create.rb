@@ -10,8 +10,9 @@ module Backend::Controllers::Tumblog
       return unless request.post?
       content = params[:content]
       tags = Tumblog.tagify(params[:tags])
+      title = params[:title]
       adapter = Habitat.adapter(:tumblog).with_user(session_user)
-      post = adapter.create(:content => content, :tags => tags)
+      post = adapter.create(:content => content, :tags => tags, :title => title)
       post.handler.process!
       adapter.store(post)
       ret[:ok] = true

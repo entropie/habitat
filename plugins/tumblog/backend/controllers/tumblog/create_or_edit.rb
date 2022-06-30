@@ -16,9 +16,8 @@ module Backend::Controllers::Tumblog
 
       return unless request.post?
 
-
       needs_processing = @post.update(params.to_hash)
-      @post.handler.process! # if needs_processing
+      @post.handler.process! if needs_processing
       adapter.update(@post)
 
     end
