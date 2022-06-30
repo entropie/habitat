@@ -3,7 +3,7 @@
   %head
     %title Its ze Backend
     - if Habitat.quart.production?
-      %link{:href => "/assets/screen-be.css", :type => "text/css", :rel => "stylesheet"}
+      %link{:href => url_with_calculated_version_hash("/assets/screen-be.css"), :type => "text/css", :rel => "stylesheet"}
 
   %body.backend
     .container.grid-xl
@@ -14,4 +14,4 @@
         .column.col-10.rel.main-content
           = yield
 
-  %script{:src => '/assets/bundle-be.js'}
+  %script{:src => url_with_calculated_version_hash('/assets/bundle-be.js')}
