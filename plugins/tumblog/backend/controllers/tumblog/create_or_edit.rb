@@ -12,9 +12,6 @@ module Backend::Controllers::Tumblog
       adapter = Habitat.adapter(:tumblog).with_user(session_user)
 
 
-      if not @post and request.post?
-      end
-
       @id = @post.id if @post
 
       return unless request.post?

@@ -4,4 +4,4 @@
 #db-snippets.main-content-block
   %ul.main-listing.single
     %li
-      = render template: "tumblog/_form", locals: { id: nil, action: routes.tumblogCreate_path, content: "" }
+      = render template: "tumblog/_form", locals: { post: post, id: nil, action: routes.tumblogCreate_path, content: "" }

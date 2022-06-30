@@ -277,8 +277,6 @@ module Tumblog
       :private     => Integer
     }
 
-    OptionalAttributes = [:image, :title, :tags]
-
     attr_reader *Attributes.keys
     attr_accessor :user_id, :datadir, :filename, :title, :private
 
@@ -289,6 +287,9 @@ module Tumblog
 
     def populate(param_hash)
       param_hash.each do |paramkey, paramval|
+        if paramval.class != Attributes[paramkey]
+          Habitat.log :error, "wrong type;expected:#{Attributes[paramkey]}: #{paramkey}:'#{paramval}'"
+        end
         instance_variable_set("@#{paramkey}", paramval)
       end
       @updated_at = @created_at = Time.now
@@ -300,7 +301,7 @@ module Tumblog
       changed = false
 
       if new_tags = hash[:tags]
-        @tags = tagify(new_tags)
+        @tags = Tumblog.tagify(new_tags)
       end
 
       if content = hash[:content]

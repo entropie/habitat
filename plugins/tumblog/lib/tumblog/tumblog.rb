@@ -46,6 +46,14 @@ module Tumblog
   end
 
 
+  def self.tagify(strorarr)
+    return [] unless strorarr
+    if strorarr.kind_of?(Array)
+      return strorarr
+    else
+      strorarr.split(",").map{ |e| e.strip }.compact
+    end
+  end
 
   
 end
