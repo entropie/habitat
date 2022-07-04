@@ -203,7 +203,7 @@ module Habitat
     def url_with_calculated_version_hash(url)
       ret = "vh=%s" % [Habitat.calculated_version_hash]
       ret = "?" + ret unless url.include?("?")
-      raw(url + ret)
+      _raw(url + ret)
     end
 
     def _javascript(str)
@@ -213,7 +213,7 @@ module Habitat
               File.join("/build", str)
             end
       src += ".js"
-      raw("<script src='#{src}' defer></script>")
+      _raw("<script src='#{src}' defer></script>")
     end
 
     def al(href, text = nil, opts = {})

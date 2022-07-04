@@ -100,7 +100,6 @@ module Tumblog
           post.datadir = post.relative_datadir
           post.filename = post.relative_filename
 
-          #puts post.to_yaml
           unless exist?(post)
             FileUtils.mkdir_p(::File.dirname(post.filename), :verbose => true)
             FileUtils.mkdir_p(post.datadir, :verbose => true)
