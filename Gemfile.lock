@@ -34,7 +34,6 @@ PATH
       uglifier (~> 4.2.0)
       unicorn (~> 6.0.0)
       warden (~> 1.2.9)
-      webp-ffi (~> 0.3.1)
 
 GEM
   remote: https://rubygems.org/
@@ -97,9 +96,6 @@ GEM
     execjs (2.8.1)
     fast_stack (0.2.0)
     ffi (1.15.5)
-    ffi-compiler (1.0.1)
-      ffi (>= 1.0.0)
-      rake
     flamegraph (0.9.5)
     flickraw (0.9.10)
     haml (5.2.2)
@@ -240,9 +236,6 @@ GEM
       rack
     warden (1.2.9)
       rack (>= 2.0.9)
-    webp-ffi (0.3.1)
-      ffi (>= 1.9.0)
-      ffi-compiler (>= 0.1.2)
 
 PLATFORMS
   x86_64-linux

@@ -30,10 +30,9 @@ module Feed::Controllers::Feed
       self.status = 200
       res = FileCache.cached_or_fresh(:feed, force_when: lambda{ |o| (Time.now - ::File.mtime(o)) > FileCache::DEFAULT_CACHE_TIMER}) do
         to_xml do |xml|
-          blog.posts.sort_by {|p| p.created_at }.reverse.first(10).each do |post|
+          posts.sort_by {|p| p.created_at }.reverse.first(10).each do |post|
             begin
               post_to_xml(xml, post)
-            rescue
             end
           end
         end

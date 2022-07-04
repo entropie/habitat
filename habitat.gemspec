@@ -69,7 +69,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'multi_json', '~> 1.15.0'
   s.add_dependency 'roar', '~> 1.1.0'
   s.add_dependency 'uglifier', '~> 4.2.0'
-  s.add_dependency 'webp-ffi', '~> 0.3.1'
+  # s.add_dependency 'webp-ffi', '~> 0.3.1'
   s.add_dependency 'dotenv', '~> 2.7.6'
   s.add_dependency 'flickraw', '~> 0.9.10'
 end

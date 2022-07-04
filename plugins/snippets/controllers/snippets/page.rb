@@ -1,6 +1,6 @@
-module Web::Controllers::Snippets
+module Backend::Controllers::Snippets
   class Page
-    include Web::Action
+    include Backend::Action
     include Snippets::SnippetsControllerMethods
 
     expose :snippet

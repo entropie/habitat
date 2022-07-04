@@ -46,7 +46,6 @@ module Blog
     def css_background_defintion
       retstr = "background-image: url(%s)" % url
       if Habitat.quart.plugins.enabled?(:webp)
-        extend(Webp)
         Webp.encode(fullpath)
         retstr << ";background-image: url(%s)" % webp_url
       end

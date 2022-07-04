@@ -96,7 +96,7 @@
         .form-group
           .input-group
             %span.input-group-addon Protagonisten
-            %input.form-input{:value => (event.protagonists.join(",") rescue "Anna Pietschmann"), :name => "protagonists[]"}
+            %input.form-input{:value => (event.protagonists.join(",") rescue T[:"default-person"]), :name => "protagonists[]"}
 
 
       .column.col-12.text-center.top-seperator

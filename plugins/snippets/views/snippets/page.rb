@@ -1,6 +1,6 @@
-module Web::Views::Snippets
+module Backend::Views::Snippets
   class Page
-    include Web::View
+    include Backend::View
 
 
   end

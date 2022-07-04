@@ -42,6 +42,32 @@ module Feed
       handle_exceptions false
     end
 
+    configure do
+      controller.prepare do
+        include ::Blog::BlogControllerMethods
+        include ::Blog::BlogViewMethods
+
+        def post_to_xml(builder, post)
+          builder.item do
+            builder.title post.title
+            builder.author blog_author(post).name
+            builder.link File.join(C[:host], "post", post.slug)
+            builder.guid post.id
+            builder.pubDate post.created_at.rfc2822
+            # builder.description post.intro
+            #builder.tag!("content:encoded", builder.cdata!(post.with_filter))
+            builder.description "type" => "html" do
+              builder.cdata!(post.with_filter)
+            end
+          end
+        end
+
+        def adapter(*arg)
+          Habitat.adapter(*arg)
+        end
+      end
+    end
+
 
   end
 end
