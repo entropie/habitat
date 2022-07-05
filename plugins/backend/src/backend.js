@@ -1,6 +1,6 @@
 import "spectre.css"
 
-
+import { compareAsc, format,add } from 'date-fns'
 
 
 import 'jquery-tags-input/src/jquery.tagsinput.js'
@@ -28,6 +28,12 @@ import 'codemirror/addon/fold/comment-fold.js'
 import 'codemirror/addon/display/autorefresh.js'
 
 
+function convertToSlug(text) {
+    return text.trim()
+        .toLowerCase()
+        .replace(/ /g, '-')
+        .replace(/[^\w-]+/g, '');
+}
 
 function betterTab(cm) {
   if (cm.somethingSelected()) {
@@ -45,12 +51,24 @@ function dateLineLinkclick() {
     });
 }
 
+
 jQuery.datetimepicker.setLocale('de');
 
 $(document).ready(function() {
     console.log("backend");
 
-    $('.datepicker').datetimepicker();
+    $('.datepicker').datetimepicker({
+        timepicker: true,
+        onChangeDateTime:function(dp,$input){
+            var date, datestr;
+            if($input.attr("name") === "dates[begin][]") {
+                date = new Date(Date.parse($input.val()));
+                date = add(date, { hours: 1 })
+                datestr = format(date, "yyyy/MM/dd hh:mm");
+                $input.parent().parent().parent().parent().find('input[name="dates[end][]"]').attr("value", datestr)
+            }
+        }
+    });
 
     if($("#events-edit").length) {
         $("#add-date-template-link").click(function() {
@@ -59,6 +77,11 @@ $(document).ready(function() {
             ele2copy.find(".datepicker").datetimepicker();
             $(ele2copy).each(dateLineLinkclick);
             ele2copy.insertAfter( $("#events-edit .date-line").filter(":last") ).addClass("toadd");
+        });
+
+        $('#events-edit input[name="title"]').change(function() {
+            let ident_field = $('#events-edit input[name="ident"]')
+            ident_field.attr("value", convertToSlug($(this).val()));
         });
 
         $(".date-line").each(dateLineLinkclick);
