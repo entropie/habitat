@@ -262,8 +262,12 @@ module Booking
       end
 
       def current_slot_date
+        unless selected_date
+          self.for_date(@dates.first.begin_date.to_date.to_s)
+        end
+
         ret = @dates.select{ |drange| selected_date == drange.begin_date.to_date }
-        ret and ret.shift
+        ret.shift
       end
 
       def html_date(what = :start_date)
