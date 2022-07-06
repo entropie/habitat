@@ -92,8 +92,8 @@ module Blog
         def update_or_create(param_hash)
           raise NoUserContext, "trying to call #create without valid user context " unless @user
 
-          title = Post.make_slug(param_hash[:title])
-          post = by_slug(title)
+          slug = if param_hash[:slug].nil? then Post.make_slug(param_hash[:title]) else param_hash[:slug] end
+          post = by_slug(slug)
 
           if post
             updated = post.update(param_hash)
