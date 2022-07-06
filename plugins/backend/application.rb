@@ -46,14 +46,15 @@ module Backend
             get '/templates/:slug/delete',to: "blog#template_delete",  as: :templateDelete
             get '/templates/:slug/duplicate',to: "blog#template_duplicate",  as: :templateDuplicate
 
-            get  '/:slug',           to: "blog#post", as:      :post
+            get  '/:slug(.:lang)',   to: "blog#post", as:      :post
 
-            get  '/:slug/edit',      to: "blog#edit", as:      :postEdit
+            get  '/:slug(.:lang)/edit',      to: "blog#edit", as:      :postEdit
+
             get  '/:slug/destroy',   to: "blog#destroy", as:   :postKill
 
             get  '/:slug/publish',   to: "blog#publish", as:   :postPublish
 
-            post '/:slug/edit',      to: "blog#edit"
+            post '/:slug(.:lang)/edit',      to: "blog#edit"
 
             get  '/page/:page',      to: "blog#index", as:     :posts
             get  '/',                to: "blog#index", as:     :blog
@@ -172,7 +173,7 @@ module Backend
 
             get  '/workdays/',           to: "booking#workdays", as:       :workdays
 
-            get  '/',                   to: "booking#index", as:           :booking
+            # get  '/',                   to: "booking#index", as:           :booking
 
             #get  '/page/:page',   to: "booking#index", as:    :bookingPager
           end

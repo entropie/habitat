@@ -68,7 +68,7 @@ module Blog
       def to_html
         langs = @post.languages
         return "" if langs.empty?
-        super % langs.map {|l| "<a href='#{Blog.routes.post_path(@post.slug, l)}'>#{l}</a>"}
+        super % langs.map {|l| "<a href='#{Backend.routes.post_path(@post.slug, l)}'>#{l}</a>"}
       end
 
     end

@@ -4,7 +4,8 @@ module Backend::Controllers::Blog
     include ::Blog::BlogControllerMethods
     expose :post
     def call(params)
-      @post  = blog.by_slug(params[:slug])
+      @post = blog.by_slug(params[:slug])
+      @post.i18n(params[:lang])
     end
   end
 end

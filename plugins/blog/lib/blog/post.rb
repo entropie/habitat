@@ -253,9 +253,9 @@ module Blog
 
     def url(variant = nil)
       if variant
-        Blog.routes.post_path(slug, variant)
+        Backend.routes.post_path(slug, variant)
       else
-        Blog.routes.post_path(slug)
+        Backend.routes.post_path(slug)
       end
 
     end
