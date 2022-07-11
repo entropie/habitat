@@ -63,8 +63,8 @@ $(document).ready(function() {
             var date, datestr;
             if($input.attr("name") === "dates[begin][]") {
                 date = new Date(Date.parse($input.val()));
-                date = add(date, { hours: 1 })
-                datestr = format(date, "yyyy/MM/dd hh:mm");
+                date = add(date, { minutes: 60 })
+                datestr = format(date, "yyyy/MM/dd HH:mm");
                 $input.parent().parent().parent().parent().find('input[name="dates[end][]"]').attr("value", datestr)
             }
         }
