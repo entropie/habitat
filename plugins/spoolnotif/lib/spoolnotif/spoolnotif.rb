@@ -15,7 +15,8 @@ module Spoolnotif
   end
 
   def self.clear
-    @spooler = MessageSpooler.new
+    @spooler = nil
+    spooler
   end
 
   def self.unspooler
