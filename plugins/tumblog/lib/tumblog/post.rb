@@ -357,7 +357,7 @@ module Tumblog
     end
 
     def handler
-      @handler = Handler.select_for(self)
+      @handler ||= Handler.select_for(self)
     end
 
     def to_html(logged_in = false)
