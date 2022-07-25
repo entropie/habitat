@@ -53,9 +53,9 @@ function dateLineLinkclick() {
 
 
 function setBookingIdentField(regexp, val) {
+    let identfield = $('#events-edit input[name="ident"]');
     if( identfield.is(':disabled') )
         return false;
-    let identfield = $('#events-edit input[name="ident"]');
     let newident = identfield.val().replace(regexp, val);
     identfield.attr("value", newident);
 }
