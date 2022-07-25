@@ -4,7 +4,7 @@ module Tumblog::Controllers::Tumblog
 
     def call(params)
       posts = tumblog.entries.sort_by{|p| p.updated_at }.reverse
-      self.body = {:entries => posts}.to_json
+      self.body = {:entries => posts.map{ |p| p.to_hash }}.to_json
     end
   end
 end

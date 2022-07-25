@@ -13,10 +13,9 @@ module Tumblog::Controllers::Tumblog
         post.private = 1
       end
       adapter.store(post)
-      # adapter.store(post)
-      # ret[:ok] = true
-      #self.body = ret.to_json
-      redirect_to back
+      ret[:body] = ret.to_json
+      ret[:ok] = true
+      ret
     end
   end
 end

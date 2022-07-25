@@ -8,8 +8,7 @@ module Tumblog::Controllers::Tumblog
       adapter = tumblog
       post = adapter.by_id(pid)
       adapter.destroy(post)
-      # adapter.store(post)
-      # ret[:ok] = true
+      ret[:ok] = true
       self.body = ret.to_json
     end
   end
