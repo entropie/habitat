@@ -52,12 +52,16 @@ function dateLineLinkclick() {
 }
 
 
-function replaceIdentFromTypeChange() {
+function setBookingIdentField(regexp, val) {
+    if( identfield.is(':disabled') )
+        return false;
     let identfield = $('#events-edit input[name="ident"]');
-    console.log($(this), $(this).data("humantype"));
-    let newident = identfield.val().replace(/^[\w\s]+--/, $(this).find(':selected').data("humantype") + "--");
+    let newident = identfield.val().replace(regexp, val);
     identfield.attr("value", newident);
+}
 
+function replaceIdentFromTypeChange() {
+    setBookingIdentField(/^[\w\s]+--/, $(this).find(':selected').data("humantype") + "--")
 }
 
 jQuery.datetimepicker.setLocale('de');
@@ -74,6 +78,9 @@ $(document).ready(function() {
                 date = new Date(Date.parse($input.val()));
                 date = add(date, { minutes: 60 })
                 datestr = format(date, "yyyy/MM/dd HH:mm");
+
+                setBookingIdentField(/\d\d?\-\d\d$/, format(date, "II-yy"))
+
                 $input.parent().parent().parent().parent().find('input[name="dates[end][]"]').attr("value", datestr)
             }
         }
@@ -93,21 +100,12 @@ $(document).ready(function() {
         });
 
 
-        // $('#events-edit input[name="title"]').change(function() {
-        //     let ident_field = $('#events-edit input[name="ident"]')
-        //     ident_field.attr("value", convertToSlug($(this).val()));
-        // });
-
         $(".date-line").each(dateLineLinkclick);
     }
 
     if($("#db-template-edit").length) {
         var hsh = window.location.hash;
         $("#db-template-edit .tabs").tabs();
-
-        // $("#db-template-edit .tabs li").each(function() {
-        //     var href = $(this).find("a").attr("href");
-        // });
 
         var setTabActive = function(tbhsh) {
             var scrollmem = $('body').scrollTop();
