@@ -301,7 +301,7 @@ module Tumblog
     end
 
     def private?
-      @private != 0
+      @private == 1
     end
 
     def titled?
@@ -365,7 +365,8 @@ module Tumblog
     end
 
     def css_class
-      "tumblog-entry"
+      visible_add = @private == 1 ? " private" : ""
+      "tumblog-entry#{visible_add}"
     end
 
     def css_id

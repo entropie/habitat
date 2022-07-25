@@ -165,27 +165,24 @@ ul.main-listing
 
   li
     border: 1px solid $nav-bgcolor
-    padding: 10px
     h3
       font-size: 20px
     width: calc(50% - 20px)
     margin-bottom: 20px
-    margin-right: 10px
-    margin-left: 10px
-
     position: relative
-    padding-right: 20px
+    padding: 10px
+    margin: 10px
     .post-controls, .controls
       position: absolute
       top: 0
       height: 100%
       right: 0
       width: 20px
-    &.post-draft, &.draft
+    &.post-draft, &.draft, &.private
       background-color: $disabledBG
   &.single
     li
-      width: 100%
+      flex-basis: 100%
   /* .topline
   .body
     display: flex

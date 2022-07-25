@@ -9,6 +9,11 @@
           = post.content
   .post-controls
     .published
+      %a{:href => routes.tumblogToggle_path(post.slug)}
+        - if post.private?
+          .glyphicon.glyphicon-eye-open
+        - else
+          .glyphicon.glyphicon-eye-close
     .edit
       %a{:href => routes.tumblogEdit_path(post.slug)}
         .glyphicon.glyphicon-pencil

@@ -19,6 +19,7 @@ module Backend::Controllers::Tumblog
       # # adapter.store(post)
       # # ret[:ok] = true
       self.body = ret.to_json
+      redirect_to back
     end
   end
 end

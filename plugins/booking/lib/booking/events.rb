@@ -125,6 +125,7 @@ module Booking
         created_event = Event
         normalized_params = Event.normalize_params(paramhash)
         type = normalized_params[:type]
+        normalized_params[:ident] = ::Habitat::Database::make_slug(normalized_params[:ident])
         if existing = Habitat.adapter(:booking).events.by_slug(normalized_params[:ident])
           raise "exists: #{existing.slug}"
         end
@@ -134,13 +135,23 @@ module Booking
         end
 
         ev = created_event.new
-        ev.set(paramhash)
+        ev.set(normalized_params)
         ev
+      end
+
+      def self.exist?(slug)
+        Habitat.adapter(:booking).events.by_slug(slug)
       end
 
       def initialize
         @created_at = Time.now
         @published = false
+      end
+
+      def ident_suggestion
+        default_str = "%s--kalenderwoche%s-%s"
+        args = [human_type.downcase, start_date.strftime("%U"), start_date.strftime("%y")]
+        default_str % args
       end
 
       def =~(obj)

@@ -52,11 +52,20 @@ function dateLineLinkclick() {
 }
 
 
+function replaceIdentFromTypeChange() {
+    let identfield = $('#events-edit input[name="ident"]');
+    console.log($(this), $(this).data("humantype"));
+    let newident = identfield.val().replace(/^[\w\s]+--/, $(this).find(':selected').data("humantype") + "--");
+    identfield.attr("value", newident);
+
+}
+
 jQuery.datetimepicker.setLocale('de');
 
 $(document).ready(function() {
     console.log("backend");
-
+   
+    
     $('.datepicker').datetimepicker({
         timepicker: true,
         onChangeDateTime:function(dp,$input){
@@ -79,10 +88,15 @@ $(document).ready(function() {
             ele2copy.insertAfter( $("#events-edit .date-line").filter(":last") ).addClass("toadd");
         });
 
-        $('#events-edit input[name="title"]').change(function() {
-            let ident_field = $('#events-edit input[name="ident"]')
-            ident_field.attr("value", convertToSlug($(this).val()));
+        $('#events-edit select[name="type"]').each(function() {
+            $(this).on('change', replaceIdentFromTypeChange)
         });
+
+
+        // $('#events-edit input[name="title"]').change(function() {
+        //     let ident_field = $('#events-edit input[name="ident"]')
+        //     ident_field.attr("value", convertToSlug($(this).val()));
+        // });
 
         $(".date-line").each(dateLineLinkclick);
     }

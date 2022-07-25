@@ -192,6 +192,10 @@ module Habitat
 
   module WebAppMethods
 
+    def back
+      request.env["HTTP_REFERER"] || "/"
+    end
+
     def logged_in?
       !!params.env['warden'].user
     end

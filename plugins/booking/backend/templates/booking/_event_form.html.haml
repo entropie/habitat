@@ -31,7 +31,8 @@
         .form-group
           .input-group
             %span.input-group-addon Ident
-            %input.form-input{:disabled => event.exist?, :value => event.ident, :name => :ident}
+            - hsh = event.exist? ? {} : {}
+            %input.form-input{:disabled => event.exist?, :value => (event.ident || event.ident_suggestion), :name => :ident}
           %p.form-input-hint
             zb.
             %code
@@ -51,7 +52,7 @@
             %span.input-group-addon Typ
             %select.form-input{name: :type}
               - Booking::Events::EventTypes.frontend_types.each do |et|
-                %option{value: et.type, selected: et.type == event.type}= et.type 
+                %option{value: et.type, selected: et.type == event.type, "data-humantype" => Booking::Events::Event.find_for_type(et.type).new.human_type.to_s.downcase}= et.type 
       .column.col-2
 
 
