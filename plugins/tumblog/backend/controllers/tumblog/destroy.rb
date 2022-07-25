@@ -10,6 +10,7 @@ module Backend::Controllers::Tumblog
       adapter.destroy(post)
       # adapter.store(post)
       ret[:ok] = true
+      redirect_to back
     end
   end
 end

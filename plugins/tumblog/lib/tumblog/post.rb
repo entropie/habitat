@@ -304,6 +304,10 @@ module Tumblog
       @private == 1
     end
 
+    def private!
+      @private = 1
+    end
+
     def titled?
       @title && @title.to_s.strip.size > 1
     end

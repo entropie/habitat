@@ -13,6 +13,7 @@ module Backend::Controllers::Tumblog
       title = params[:title]
       adapter = Habitat.adapter(:tumblog).with_user(session_user)
       post = adapter.create(:content => content, :tags => tags, :title => title)
+      post.private!
       post.handler.process!
       adapter.store(post)
       ret[:ok] = true
