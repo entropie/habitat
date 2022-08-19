@@ -120,7 +120,7 @@ module Snippets
 
     def active_path(path)
       rp = locals[:request_path]
-      p "%s - %s" % [rp, path]
+      #p "%s - %s" % [rp, path]
       if rp.include?("/s/") and path.include?("/s/") and rp.include?(path)
         true
       elsif rp =~ /^#{path}\//
