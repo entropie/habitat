@@ -120,7 +120,7 @@ module Snippets
 
     def active_path(path)
       rp = locals[:request_path]
-      #p "%s - %s" % [rp, path]
+      p "%s - %s" % [rp, path]
       if rp.include?("/s/") and path.include?("/s/") and rp.include?(path)
         true
       elsif rp =~ /^#{path}\//
@@ -136,7 +136,7 @@ module Snippets
       Habitat.quart.default_application.routes
     end
 
-    # FIXME:
+    # # FIXME:
     def Snip(arg)
       ret = Habitat.adapter(:snippets).snippets[arg.to_sym]
       ret = NotExistingSnippet.new(arg) unless ret
@@ -196,7 +196,11 @@ module Snippets
     def render(lcs = {})
       locals = lcs
       if env
-        locals[:request_path] = env.env['REQUEST_PATH']
+        if env.kind_of?(Hash)
+          locals = env.dup
+        elsif env.respond_to?(:env)
+          locals[:request_path] = env.env['REQUEST_PATH']
+        end
       end
       ret = "%s" % Haml::Engine.new(to_s).render(Env.new(locals.merge(lcs)), locals)
       ret
