@@ -390,6 +390,10 @@ module Booking
         @image = NoImage.new
       end
 
+      def has_image?
+        image.class != NoImage
+      end
+
       def image=(obj)
         return obj if obj.kind_of?(Image)
         upload(obj, obj[:tempfile])
