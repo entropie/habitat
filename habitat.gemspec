@@ -72,4 +72,5 @@ Gem::Specification.new do |s|
   # s.add_dependency 'webp-ffi', '~> 0.3.1'
   s.add_dependency 'dotenv', '~> 2.7.6'
   s.add_dependency 'flickraw', '~> 0.9.10'
+  s.add_dependency 'instagram', "~> 1.1.6"
 end
