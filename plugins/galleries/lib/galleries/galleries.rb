@@ -106,7 +106,7 @@ module Galleries
         msg = "image <i>#{ident}</i> not existing in gallery <i>#{gal}</i>."
       else
         acss = hsh.map{ |h,k| "#{h}:#{k}" }.join(";")
-        return "<div href='#{img.url}' class='popupImg' style='background-image: url(#{img.url});#{acss}'></div>"
+        return "<div id='#{img.dom_id}' href='#{img.url}' class='popupImg' style='background-image: url(#{img.url});#{acss}'></div>"
       end
 
       return "<div class='error-msg'>#{msg}</div>"
@@ -248,6 +248,10 @@ module Galleries
 
       def ident=(obj)
         @ident = obj.to_s
+      end
+
+      def dom_id
+        "gallery-%s" % [ident]
       end
 
       def ==(obj)
