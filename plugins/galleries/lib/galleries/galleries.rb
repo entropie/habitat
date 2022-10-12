@@ -106,7 +106,7 @@ module Galleries
         msg = "image <i>#{ident}</i> not existing in gallery <i>#{gal}</i>."
       else
         acss = hsh.map{ |h,k| "#{h}:#{k}" }.join(";")
-        return "<div id='#{img.dom_id}' href='#{img.url}' class='popupImg' style='background-image: url(#{img.url});#{acss}'></div>"
+        return "<div id='#{img.dom_id}' href='#{img.url}' class='popupImg galleryImg' style='background-image: url(#{img.url});#{acss}'></div>"
       end
 
       return "<div class='error-msg'>#{msg}</div>"
