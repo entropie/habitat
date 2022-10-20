@@ -22,11 +22,15 @@ $(document).ready(function() {
     if($(".open-popup-link").length)
         $('.open-popup-link').magnificPopup({
             type:'inline',
+            autoFocusLast: false,
+            fixedContentPos: false
         });
 
     if($(".open-popup-alink").length)
         $('.open-popup-alink').magnificPopup({
             type:'ajax',
+            autoFocusLast: false,
+            fixedContentPos: false
         });
 
     $(".gallery-slider").each(function() {
