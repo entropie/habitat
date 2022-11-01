@@ -421,7 +421,7 @@ module Booking
 
       def html_text
         markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true, footnotes: false)
-        r = markdown.render(content)
+        r = markdown.render(content.strip)
       end
 
       def corresponding_page
