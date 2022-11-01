@@ -62,6 +62,14 @@ module PrettyDate
       Date::ABBR_MONTHNAMES[self.mon]
     end
 
+    def dayname
+      Date::DAYNAMES[self.wday]
+    end
+
+    def sdayname
+      Date::ABBR_DAYNAMES[self.wday]
+    end
+
     def form_date
       format_string = "%Y/%m/%d %H:%M"
       strftime(format_string)
