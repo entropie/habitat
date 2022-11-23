@@ -12,9 +12,9 @@ module Habitat
 
     class EntryNotValid < DataBaseError; end      
 
-    def self.get_random_id
+    def self.get_random_id(chrs = 32)
       ary = [*'a'..'z', *'A'..'Z', *0..9].shuffle
-      enum = ary.permutation(32)
+      enum = ary.permutation(chrs)
       enum.next.join
     end
 
