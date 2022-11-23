@@ -149,8 +149,13 @@ module Booking
       end
 
       def ident_suggestion
-        default_str = "%s--kalenderwoche%s-%s"
-        args = [human_type.downcase, start_date.strftime("%U"), start_date.strftime("%y")]
+        default_str = "%s--%s-kalenderwoche-%s"
+        is = begin 
+               Booking::Events::EventTypes.frontend_types.first.type.to_s.downcase
+             rescue
+               human_type.downcase
+             end
+        args = [is, Habitat::Database.get_random_id(6), start_date.strftime("%U"), start_date.strftime("%y")]
         default_str % args
       end
 
