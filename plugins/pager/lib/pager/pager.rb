@@ -151,7 +151,7 @@ module Pager
         higher = limit ? (next_page + limit) : page_count rescue page_count
         higher = [higher, page_count].min
 
-        direct_links_shown = -1
+        direct_links_shown = 0
         skip_before = false
         skip_after  = false
 
