@@ -92,6 +92,8 @@ module T
   def self.include?(obj)
     s = obj.to_sym
     self[s].exist?
+  rescue
+    false
   end
   
   def self.[](obj)
@@ -104,7 +106,7 @@ module T
       end
     else
       ret = read[tobj]
-      return ret.to_s
+      return ret
     end
     ret
   end
