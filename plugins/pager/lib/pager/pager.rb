@@ -130,10 +130,11 @@ module Pager
     end
 
     # FIXME: after the tenth iteration or so, this became horrible and calls for a fix.
-    def navigation(limit = 4, max_direct_links = 1)
-      direct_links_shown_l = 1
-      direct_links_shown_r = 1
+    def navigation(limit = 3)
 
+      items_shown = 0
+
+      return "" if current_page == 0
       html.ul(:class => :pager) do
         if first_page?
           li(:class => "page-item disabled") {
@@ -154,24 +155,22 @@ module Pager
 
         higher = limit ? (next_page + limit) : page_count rescue page_count
         higher = [higher, page_count].min
-        skip_before = false
-        skip_after  = false
 
-        (1...current_page).each do |n|
-          if skip_before
-            next
-          elsif direct_links_shown_l-1 > max_direct_links
-            skip_before = true
+        (1...current_page-1).each do |n|
+          if items_shown > limit/2
             li(:class => "page-item page-item-ellipsis") { "..." }
-            li(:class => "page-item") { a(:href => link_proc.call(current_page-1)){ "#{current_page-1}" } }
-            next
+            break
+          else
+            items_shown += 1
+            li(:class => "page-item") { a(:href => link_proc.call(n)){ "#{n}" } }
           end
-          direct_links_shown_l += 1     
-          li(:class => "page-item") { a(:href => link_proc.call(n)){ "#{n}" } }
         end
 
         # #{ direct_links_shown_l }/#{ direct_links_shown_r }
+        li(:class => "page-item") { a(:href => link_proc.call(current_page-1)){ "#{current_page-1}" } } unless first_page?
         li(:class => "page-item active disabled") { span "#{current_page}" }
+        li(:class => "page-item") { a(:href => link_proc.call(current_page+1)){ "#{current_page+1}" } } unless last_page?
+
         
         if last_page?
           li(:class => "page-item disabled") {
@@ -180,25 +179,13 @@ module Pager
             span(:class => 'next grey'){ span(:class => iconclz(:fforward)) {""} }}
         elsif next_page
 
-          (next_page..higher).each do |n|
-            if skip_after
-              next
-            elsif (direct_links_shown_r) > max_direct_links and n != last_page-1
-              skip_after = true
-              li(:class => "page-item") {
-                a(:href => link_proc.call(n)){ n }
-              }
-              
-              if next_page != last_page and next_page != last_page-1 and n != last_page
-                li(:class => "page-item page-item-ellipsis") { "..." }
-                li(:class => "page-item") { a(:href => link_proc.call(last_page)){ "#{last_page}" } }
-              end
-            else
-              li(:class => "page-item") {
-                a(:href => link_proc.call(n)){ n }
-              }
+          (next_page+1..higher).each do |n|
+            if items_shown > limit/2
+              li(:class => "page-item page-item-ellipsis") { "..." }
+              break
             end
-            direct_links_shown_r += 1
+            li(:class => "page-item") { a(:href => link_proc.call(n)){ "#{n}" } }
+            items_shown += 1
           end
 
           li(:class => "page-item") { a(:href => link_proc.call(next_page)){ span(:class => "#{iconclz(:forward)} hl next")}}
