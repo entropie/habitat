@@ -6,10 +6,15 @@ module Tumblog::Controllers::Tumblog
       ret = {}
       content = params[:s]
       adapter = Habitat.adapter(:tumblog).with_user(session_user)
+      
       post = adapter.create(:content => content)
 
-      post.private! if post.handler.create_interactive?
-
+      if post.handler.create_interactive?
+        urlwohttp = post.content.dup.gsub(/^https?:\/\//, "").gsub(/\/$/, "")
+        post.update(content: "[%s](%s)" % [urlwohttp, post.content])
+        post.private!
+      end
+      
       post.handler.process!
       adapter.store(post)
 
