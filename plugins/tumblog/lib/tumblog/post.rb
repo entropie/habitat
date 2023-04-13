@@ -156,7 +156,8 @@ module Tumblog
         end
 
         def to_html(logged_in = false)
-          super % post.http_data_dir(post.id + ".mp4")
+          ret = super % post.http_data_dir(post.id + ".mp4")
+          ret + "<div class='source'>#{post.content}</div>" 
         end
       end
 
