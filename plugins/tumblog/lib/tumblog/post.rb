@@ -157,7 +157,8 @@ module Tumblog
 
         def to_html(logged_in = false)
           ret = super % post.http_data_dir(post.id + ".mp4")
-          ret + "<div class='source'>#{post.content}</div>" 
+          link = "<a target='_blank' href='#{post.content}'>#{post.content}</a>"
+          return ret + "<div class='source'>#{link}</div>" 
         end
       end
 
