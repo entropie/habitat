@@ -8,9 +8,8 @@ module Backend::Controllers::Tumblog
       adapter = Habitat.adapter(:tumblog).with_user(session_user)
       post = adapter.by_id(pid)
       adapter.destroy(post)
-      # adapter.store(post)
       ret[:ok] = true
-      redirect_to back
+      redirect_to routes.tumblog_path
     end
   end
 end
