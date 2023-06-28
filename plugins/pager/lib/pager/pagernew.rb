@@ -1,10 +1,18 @@
 module Pager
 
+  MAX = 10
+
+  def self.max
+    (@max || C[:pager] || MAX).to_i
+  end
+
+  def self.paginate(params, list, n = nil)
+    PagerNew.new(params, list, n || max)
+  end
+
   class PagerNew
     attr_reader :params, :list, :link_proc
     attr_reader :pager
-    attr_accessor :max
-
 
     def self.icons=(hsh)
       @icons = hsh
@@ -17,13 +25,6 @@ module Pager
     def icons
       self.class.icons
     end
-
-    MAX = 10
-
-    def max
-      (@max || C[:pager] || MAX).to_i
-    end
-
 
     class PagerArray
 

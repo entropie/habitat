@@ -74,9 +74,9 @@ module Pager
   #   PagerNew.new(params, list, m)
   # end
 
-  def self.paginate(params, list, n = nil)
-    PagerNew.new(params, list, n)
-  end
+  # def self.paginate(params, list, n = nil)
+  #   PagerNew.new(params, list, n || max)
+  # end
   
   class Pager
     include Hanami::Helpers::HtmlHelper
