@@ -24,6 +24,7 @@ module Pager
       (@max || C[:pager] || MAX).to_i
     end
 
+
     class PagerArray
 
       attr_reader :current_page
@@ -35,7 +36,6 @@ module Pager
       def page_count
         pages, rest = @array.size.divmod(@limit).first
         rest == 0 ? pages : pages + 1
-        
       end
       
       def size
@@ -122,7 +122,6 @@ module Pager
       items << PagerNavigationItem.new(value: @page + 1, text: "forward", pager: self)
       items << PagerNavigationItem.new(value: pager.page_count, text: "fforward", pager: self)
 
-
       # iterate over entire list to find multiple succeeding spacer items and flatten them
       cleaned_items = PagerItems.new
       items.each_with_index do |itm, index|
@@ -133,6 +132,7 @@ module Pager
               cleaned_items << itm
             end
           else
+            # when there is only a single spacer element, replace it with the actual page
             cleaned_items << itm.to_page_item
           end
         else
@@ -154,7 +154,6 @@ module Pager
 
     alias :navigation :to_html
     
-
 
     class PagerItem
 
@@ -202,6 +201,7 @@ module Pager
       end
     end
 
+
     class PagerSpacer < PagerItem
       def css_cls
         "page-item page-spacer"
@@ -221,6 +221,7 @@ module Pager
         PagerItem.new(value: value, text: text, pager: pager)
       end
     end
+
 
     class PagerNavigationItem < PagerItem
 
@@ -248,8 +249,8 @@ module Pager
       end
       
     end
-
   end
+
 
   class BackendPager < PagerNew
     def icons
