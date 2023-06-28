@@ -7,7 +7,6 @@ module Pager
       @page = page_count if @page > page_count
     end
 
-    
     def size
       @array.size
     end
@@ -70,8 +69,13 @@ module Pager
 
 
 
-  def self.paginate(params, list, max = nil)
-    Pager.new(params, list, max)
+  # def self.paginate(params, list, limit = nil)
+  #   m = limit || 
+  #   PagerNew.new(params, list, m)
+  # end
+
+  def self.paginate(params, list)
+    PagerNew.new(params, list)
   end
   
   class Pager
@@ -213,7 +217,7 @@ module Pager
     def shift; @pager.shift; end
   end
 
-  class BackendPager < Pager
-  end
+  # class BackendPager < Pager
+  # end
   
 end
