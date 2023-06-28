@@ -149,7 +149,7 @@ module Pager
       items.each do |itm|
         ret << itm.to_html.to_s
       end
-      "<ul class='pager'>%s</a>" % ret
+      "<ul class='pager'>%s</ul>" % ret
     end
 
     alias :navigation :to_html
