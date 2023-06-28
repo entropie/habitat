@@ -74,8 +74,8 @@ module Pager
   #   PagerNew.new(params, list, m)
   # end
 
-  def self.paginate(params, list)
-    PagerNew.new(params, list)
+  def self.paginate(params, list, n = nil)
+    PagerNew.new(params, list, n)
   end
   
   class Pager
