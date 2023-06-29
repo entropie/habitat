@@ -40,7 +40,7 @@ module Pager
 
       def page_count
         pages, rest = @array.size.divmod(@limit).first
-        rest == 0 ? pages : pages + 1
+        (not rest || rest == 0) ? pages : pages + 1
       end
       
       def size
@@ -84,6 +84,10 @@ module Pager
       @pager.current_page
     end
 
+    def pages
+      items_for(current_page)
+    end
+
     def size
       @pager.size
     end
@@ -113,7 +117,6 @@ module Pager
       items << PagerNavigationItem.new(value: [@page - 1, 1].max, text: "backward", pager: self)
 
       center = pager.current_page
-
       (1..pager.page_count).each_with_index do |pgnr|
         if [1, pager.page_count].include?(pgnr) or
           [center - 1, center, center + 1].include?(pgnr)
@@ -147,13 +150,14 @@ module Pager
       cleaned_items
     end
 
-    def to_html
+    def to_html(force = false)
       items = collect
       ret = ""
       
       items.each do |itm|
         ret << itm.to_html.to_s
       end
+      return "" if pager.page_count < 2 and not force 
       "<ul class='pager'>%s</ul>" % ret
     end
 
