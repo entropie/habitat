@@ -200,6 +200,7 @@ module Pager
       def disabled?
         return true if active?
         return true if @value > pager.pager.page_count
+        return true if @value < 1
         return false
       end
 
@@ -241,7 +242,7 @@ module Pager
       end
 
       def css_cls
-        "page-item pager-navigation"
+        "page-item pager-navigation%s" % [(disabled? ? ' disabled' : '')]
       end
 
       def to_html
@@ -250,7 +251,7 @@ module Pager
         icnspn = html.span("class" => @pager.icons[@text.to_sym] || @text)
         html.li("class": css_cls) do
           if disabled?
-            span("ddddata-href" => pg.link_proc.call(val)) { icnspn }          
+            span("data-href" => pg.link_proc.call(val)) { icnspn }          
           else
             a(:href => pg.link_proc.call(val)) { icnspn }
           end
