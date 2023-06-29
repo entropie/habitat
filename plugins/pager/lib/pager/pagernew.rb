@@ -6,6 +6,10 @@ module Pager
     (@max || C[:pager] || MAX).to_i
   end
 
+  def self.max=(i)
+    @max = i
+  end
+
   def self.paginate(params, list, n = nil)
     PagerNew.new(params, list, n || max)
   end
