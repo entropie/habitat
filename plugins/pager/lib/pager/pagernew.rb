@@ -109,14 +109,14 @@ module Pager
     def collect
       items = PagerItems.new
 
-      items << PagerNavigationItem.new(value: 1, text: "fbackward", pager: self)
+      #items << PagerNavigationItem.new(value: 1, text: "fbackward", pager: self)
       items << PagerNavigationItem.new(value: [@page - 1, 1].max, text: "backward", pager: self)
 
       center = pager.current_page
 
       (1..pager.page_count).each_with_index do |pgnr|
         if [1, pager.page_count].include?(pgnr) or
-          [center - 1, center, center + 1, center + 2].include?(pgnr)
+          [center - 1, center, center + 1].include?(pgnr)
 
           items << PagerItem.new(value: pgnr, pager: self)
         else
@@ -125,7 +125,7 @@ module Pager
       end
 
       items << PagerNavigationItem.new(value: @page + 1, text: "forward", pager: self)
-      items << PagerNavigationItem.new(value: pager.page_count, text: "fforward", pager: self)
+      #items << PagerNavigationItem.new(value: pager.page_count, text: "fforward", pager: self)
 
       # iterate over entire list to find multiple succeeding spacer items and flatten them
       cleaned_items = PagerItems.new
