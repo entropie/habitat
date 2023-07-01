@@ -263,6 +263,12 @@ module Pager
 
 
   class BackendPager < PagerNew
+
+    def max
+      ::Pager.max
+    end
+
+
     def icons
       @icons || {
         :forward   => "glyphicon glyphicon-forward",
