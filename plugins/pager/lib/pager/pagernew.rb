@@ -107,7 +107,7 @@ module Pager
     def items_for(pagenr)
       from = ((pagenr - 1) * @limit)
       to   = from + @limit
-      @list[from...to]
+      @list[from...to] || []
     end
 
     def collect
