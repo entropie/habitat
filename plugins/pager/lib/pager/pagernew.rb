@@ -39,8 +39,8 @@ module Pager
       end
 
       def page_count
-        pages, rest = @array.size.divmod(@limit).first
-        (not rest || rest == 0) ? pages : pages + 1
+        pages, rest = @array.size.divmod(@limit)
+        rest == 0 ? pages : pages + 1
       end
       
       def size
