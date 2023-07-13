@@ -6,8 +6,8 @@ module Backend::Controllers::User
 
     def call(params)
       @user = adapter(:user).user
-      @pager = Pager::BackendPager.new(params, @user, 14)
-      @pager.link_proc = -> (n) { routes.posts_path(n) }
+      @pager = Pager::BackendPager.new(params, @user)
+      @pager.link_proc = -> (n) { routes.userpage_path(n) }
     end
   end
 end

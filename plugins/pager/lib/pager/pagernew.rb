@@ -39,8 +39,8 @@ module Pager
       end
 
       def page_count
-        pages, rest = @array.size.divmod(@limit).first
-        (not rest || rest == 0) ? pages : pages + 1
+        pages, rest = @array.size.divmod(@limit)
+        rest == 0 ? pages : pages + 1
       end
       
       def size
@@ -107,7 +107,7 @@ module Pager
     def items_for(pagenr)
       from = ((pagenr - 1) * @limit)
       to   = from + @limit
-      @list[from...to]
+      @list[from...to] || []
     end
 
     def collect
@@ -263,6 +263,12 @@ module Pager
 
 
   class BackendPager < PagerNew
+
+    def max
+      ::Pager.max
+    end
+
+
     def icons
       @icons || {
         :forward   => "glyphicon glyphicon-forward",
