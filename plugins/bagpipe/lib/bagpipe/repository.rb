@@ -9,6 +9,7 @@ module Bagpipe
     def read(arg)
       @parent.read(arg)
     end
+
   end
 
   class Repository
@@ -102,6 +103,10 @@ module Bagpipe
         @path = spath
       end
 
+      def basename
+        ::File.basename(@path)
+      end
+
       def self.select_for(spath)
         ext = ::File.extname(spath)[1..-1].downcase rescue ""
 
@@ -123,8 +128,12 @@ module Bagpipe
         %Q'<%-10s "#{path}" : "#{short_path}">'
       end
 
-      def link
-        %Q'<a href="/%s">#{File.basename(path)}</a>'
+      def link(prfx = "/", icn = "")
+        %Q'<a class="#{csscls}" href="#{prfx}%s">#{icn} #{File.basename(path)}</a>'
+      end
+
+      def parent
+        Entry.select_for(::File.join("..", path))
       end
 
       def playable?
@@ -148,8 +157,8 @@ module Bagpipe
         "pack"
       end
 
-      def link
-        super % ("raw/download/" + path.split("/").map{|part| Rack::Utils.escape(part)}.join("/"))
+      def link(prfx = "")
+        super(prfx) % ("raw/download/" + path.split("/").map{|part| Rack::Utils.escape(part)}.join("/"))
       end
  
       def image(width = 32, height = 32)
@@ -169,16 +178,17 @@ module Bagpipe
       end
 
       def csscls
-        "dir"
+        "dir#{top? ? " toplink" : ""}"
       end
 
-      def link
-        super % path.split("/").map{|part| Rack::Utils.escape(part)}.join("/")
+      def top?
+        short_path == ""
       end
 
-      def image(width = 32, height = 32)
-        %Q'<div class="pimg"><img src="/img/folder-d.png" height="#{height}" width="#{width}" /></div>'
+      def link(prfx = "", icn)
+        super(prfx, icn) % short_path
       end
+
     end
 
     class Song < Entry
@@ -189,10 +199,13 @@ module Bagpipe
         File.extname(path).downcase == ".mp3"
       end
 
-      def http_path
-        url = Bagpipe.url
-        url = "#{url}/" unless url[-1..-1] == "/"
-        "http://#{url}raw/" + path.split("/").map{|part| Rack::Utils.escape(part)}.join("/")
+      def http_path(env)
+        #env = req.locals[:params].env
+        url = "%s://%s/" % [ env["rack.url_scheme"], env["HTTP_HOST"] ]
+
+        suffix = "assets/bagpipe/" + short_path
+        url+suffix
+        
       end
 
       def inspect
@@ -207,8 +220,8 @@ module Bagpipe
         ""
       end
 
-      def link
-        super % ("play/" + path.split("/").map{|part| Rack::Utils.escape(part)}.join("/") + ".pls")
+      def link(prfx = "", icn = "")
+        super(prfx, icn) % ("play/" + short_path)
       end
     end
 
@@ -257,12 +270,11 @@ module Bagpipe
         false
       end
 
-      def link
-        name_or_image
+      def link(prfx = "", icn = "")
+        '<span class="%s">%s %s</span>' % [csscls, icn, basename]
       end
 
       def name
-        link
       end
 
       def read
