@@ -6,7 +6,7 @@ module User
 
   module UserControllerMethods
     def reject_unless_authenticated
-      logging_in = [routes.login_path, routes.logout_path].
+      logging_in = [Backend.routes.login_path, Backend.routes.logout_path].
                      include?(params.env["REQUEST_PATH"])
 
       if  logging_in
