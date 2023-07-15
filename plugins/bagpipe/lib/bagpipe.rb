@@ -18,7 +18,7 @@ end
 
 
 if Habitat.quart and Object.const_defined?(:C)
-  if not (bp_root = C["bagpipe_root"]).nil?
+  if not (bp_root = C[:bagpipe_root]).nil?
     bp_root = ::File.expand_path(bp_root)
     Habitat.add_adapter(:bagpipe, Bagpipe::Database.with_adapter.new( bp_root  ))
   else
