@@ -34,7 +34,7 @@ module Diary
         end
 
         def user_path(*args)
-          raise NoUserContext, "trying to access user directory without valid user context" unless @user
+          raise Habitat::Database::NoUserContext, "trying to access user directory without valid user context" unless @user
           ::File.join("diary", @user.id.to_s, *args)
         rescue Errno::ENOENT
           warn "does not exist: #{path("diary")}"
@@ -89,7 +89,7 @@ module Diary
         end
         
         def sheet_files(user = nil)
-          raise NoUserContext, "cant read sheets without user" if user.nil? and @user.nil?
+          raise Habitat::Database::NoUserContext, "cant read sheets without user" if user.nil? and @user.nil?
           complete_path = realpath(user_path + "/**/**/*" + SHEET_EXTENSION)
           Dir.glob(complete_path)
         end
@@ -103,7 +103,7 @@ module Diary
         end
 
         def sheets(user = nil, &blk)
-          raise NoUserContext, "cant read sheets without user" if user.nil? and @user.nil?
+          raise Habitat::Database::NoUserContext, "cant read sheets without user" if user.nil? and @user.nil?
           read_sheets = []
           sheet_files(user).each do |sfile|
             read_sheets << load_file(sfile)
