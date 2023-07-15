@@ -10,6 +10,14 @@ module Bagpipe
       @parent.read(arg)
     end
 
+    def song?
+      false
+    end
+
+
+    def recursive_each(&blk)
+      parent.recursive_each(&blk)
+    end
   end
 
   class Repository
@@ -35,12 +43,27 @@ module Bagpipe
     def read(arg = "/")
       tfile =  ::File.join(@path, arg)
       tclass = Entry.select_for(tfile)
-      tclass.read
+      if tclass.directory?
+        tclass.read
+      else
+        tclass
+      end
     end
 
     module Browseable
-      def entries
-        @entries = Entries.new(pc)
+
+      def entries(arg = nil)
+        @entries ||= read(arg)
+      end
+
+      def recursive_each(&blk)
+        self.entries.each do |entry|
+          if entry.directory?
+            entry.recursive_each(&blk)
+          elsif entry.playable?
+            yield entry
+          end
+        end
       end
 
       def read(arg = nil)
@@ -74,6 +97,36 @@ module Bagpipe
         entries.replace(dirs.sort + songs.sort + packs.sort + rest.sort)
       end
 
+      class Cnt
+        def initialize(i = 0)
+          @cnt = i
+        end
+        def succ
+          @cnt+=1
+        end
+        def to_i
+          @cnt
+        end
+      end
+
+
+      def to_pls(env, j = Cnt.new, str = "[playlist]\n", init = true)
+        each do |entry|
+          if entry.song?
+            str << "File#{j.succ}=#{entry.http_path(env)}\n"
+            str << "Title#{j.to_i}=#{::File.basename(entry.path)}\n"
+          elsif entry.directory?
+            str << entry.read.parent.to_pls(env, j, '', false)
+          end
+        end
+        
+        if init
+          str << "\nNumberOfEntries=#{j.to_i}\n"
+          str << "Version=2"
+        end
+        str
+      end
+
     end
 
     class Entry
@@ -105,6 +158,14 @@ module Bagpipe
 
       def basename
         ::File.basename(@path)
+      end
+
+      def directory?
+        false
+      end
+
+      def song?
+        false
       end
 
       def self.select_for(spath)
@@ -177,6 +238,10 @@ module Bagpipe
         super % "Directory"
       end
 
+      def each(&blk)
+        entries.each(&blk)
+      end
+
       def csscls
         "dir#{top? ? " toplink" : ""}"
       end
@@ -185,8 +250,12 @@ module Bagpipe
         short_path == ""
       end
 
-      def link(prfx = "", icn)
+      def link(prfx = "", icn = "")
         super(prfx, icn) % short_path
+      end
+
+      def play_link(prfx = "", icn = "")
+        %Q'<a class="play-link #{csscls}" href="#{prfx}%s" target="player">#{icn}</a>' % short_path
       end
 
     end
@@ -197,6 +266,18 @@ module Bagpipe
 
       def inline_playable?
         File.extname(path).downcase == ".mp3"
+      end
+
+      def song?
+        true
+      end
+
+      def each
+        yield self
+      end
+
+      def recursive_each
+        yield self
       end
 
       def http_path(env)
@@ -223,6 +304,19 @@ module Bagpipe
       def link(prfx = "", icn = "")
         super(prfx, icn) % ("play/" + short_path)
       end
+
+      def play_link(prfx = "", icn = "")
+        %Q'<a class="play-link #{csscls}" href="#{prfx}%s" target="player">#{icn}</a>' % short_path
+      end
+
+      def to_pls(env, j = 0, str = "[playlist]\n", init = true)
+        str << "File#{j.succ}=#{http_path(env)}\n"
+        str << "Title#{j.to_i}=#{::File.basename(path)}\n"
+        str << "\nNumberOfEntries=#{j.to_i}\n"
+        str << "Version=2"
+        str
+      end
+
     end
 
     module Base64Image

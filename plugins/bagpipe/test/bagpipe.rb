@@ -23,8 +23,8 @@ class TestRepos < Minitest::Test
     # r = @adapter.read("/")
     # pp r
 
-    r = @adapter.read("/prod")
-    pp r
+    # r = @adapter.read("/prod")
+    # pp r
 
     # r = @adapter.read("Kanye West - My Beautiful Dark Twisted Fantasy - 320kbps")
     # pp r
@@ -33,8 +33,10 @@ class TestRepos < Minitest::Test
     # pp r
 
 
-    # r = @adapter.read("Dysnomia - Dawn of Midi.mp3")
-    # pp r
+    r = @adapter.read("Afrob - Abschied von Gestern")
+    r.parent.recursive_each do |e|
+      p e
+    end
     # r = @adapter.read("/")
     # pp r.read("prod") #.read("/foo")
     # pp r
