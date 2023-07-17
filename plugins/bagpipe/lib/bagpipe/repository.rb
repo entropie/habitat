@@ -285,8 +285,10 @@ module Bagpipe
       end
 
       def http_path(env)
-        #env = req.locals[:params].env
-        url = "%s://%s/" % [ env["rack.url_scheme"], env["HTTP_HOST"] ]
+        scheme = env["rack.url_scheme"]
+        scheme = "https" if Habitat.quart.production?
+
+        url = "%s://%s/" % [ scheme, env["HTTP_HOST"] ]
 
         suffix = "assets/bagpipe/" + short_path
         url+suffix
