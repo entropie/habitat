@@ -148,6 +148,10 @@ module Bagpipe
         subbed[1..-1]
       end
 
+      def basename
+        ::File.basename(path)
+      end
+
       def <=>(o)
         path <=> o.path
       end
