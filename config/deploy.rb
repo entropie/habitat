@@ -50,8 +50,8 @@ set :deploy_to, "/home/habitats/#{fetch(:application)}/"
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
 
-#server "hive", roles: %w{web app db}
-server "nyx", roles: %w{web app db}
+server "hive", roles: %w{web app db}
+#server "nyx", roles: %w{web app db}
 
 set    :branch, 'master'
 
