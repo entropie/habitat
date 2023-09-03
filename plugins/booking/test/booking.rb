@@ -19,10 +19,10 @@ def adapter
 end
 
 TestEvents = [
-  {title: "foobar", attender_slots: 10, protagonists: ["foo"], slug: "test",       dates: { :begin => [Time.new(2021, 5, 1, "15:00")], :end => [Time.new(2021, 5, 1, "17:00")] }, :price=>20},
-  {title: "barfoo", attender_slots: 15, protagonists: ["foo"], slug: "testa",      dates: { :begin => [Time.new(2021, 5, 1, "17:00")], :end => [Time.new(2021, 5, 1, "19:00")] }, :price=>20},
-  {title: "batz", attender_slots: 20, protagonists: ["foo"], slug: "test-two",     dates: { :begin => [Time.new(2021, 6, 1, "15:00")], :end => [Time.new(2021, 6, 2, "17:00")]}, :price=>20 },
-  {title: "batzbumm", attender_slots: 20, protagonists: ["foo"], slug: "test-three", dates: { :begin => [Time.new(2023, 6, 1, "15:00")], :end => [Time.new(2023, 6, 2, "17:00")]}, :price=>20}
+  {title: "foobar", attender_slots: 10, protagonists: ["foo"], ident: "test",       dates: { :begin => [Time.new(2021, 5, 1, "15:00")], :end => [Time.new(2021, 5, 1, "17:00")] }, :price=>20},
+  {title: "barfoo", attender_slots: 15, protagonists: ["foo"], ident: "testa",      dates: { :begin => [Time.new(2021, 5, 1, "17:00")], :end => [Time.new(2021, 5, 1, "19:00")] }, :price=>20},
+  {title: "batz", attender_slots: 20, protagonists: ["foo"], ident: "test-two",     dates: { :begin => [Time.new(2021, 6, 1, "15:00")], :end => [Time.new(2021, 6, 2, "17:00")]}, :price=>20 },
+  {title: "batzbumm", attender_slots: 20, protagonists: ["foo"], :ident=>"test-three", dates: { :begin => [Time.new(2023, 6, 1, "15:00")], :end => [Time.new(2023, 6, 2, "17:00")]}, :price=>20}
 ]
 
 Attender = [
