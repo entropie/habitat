@@ -6,7 +6,7 @@ module Backend::Controllers::Booking
       @event = booking.events_all.find_or_create(params)
 
       booking.archive(@event)
-      redirect_to Backend.routes.eventsArchived_path
+      redirect_to Backend.routes.events_path
     end
   end
 end
