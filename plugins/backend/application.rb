@@ -172,7 +172,7 @@ module Backend
             get  '/events/:slug',        to: "booking#event", as:          :event
             get  '/events/publishtoggle/:slug',to: "booking#eventtogglepublish", as: :eventTPublish
 
-            # get  '/events/archive/:slug',to: "booking#eventarchive", as: :eventArchive
+            get  '/events/archive/:slug',to: "booking#eventarchive", as: :eventArchive
             get  '/workdays/',           to: "booking#workdays", as:       :workdays
 
             # get  '/',                   to: "booking#index", as:           :booking
