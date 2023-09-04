@@ -1,0 +1,12 @@
+.backend-page-header
+  %h1= t("events-page-topic-events-archive")
+
+.main-content-block
+  %ul.main-listing
+    - pager.each do |event|
+      = render template: "booking/_event_preview", locals: {event: event}
+  - if pager.empty?
+    .info= t("common-nothing-here-yet")
+  - else
+    = pager.navigation
+

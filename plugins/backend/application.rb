@@ -160,6 +160,7 @@ module Backend
           namespace :booking do
 
             get  '/events/',             to: "booking#events", as:         :events
+            get  '/events/archived',     to: "booking#eventsarchived", as: :eventsArchived
             get  '/events/create',       to: "booking#eventscreate", as:   :eventCreate
             get  '/events/:page',        to: "booking#events", as:         :eventsPager
 
@@ -171,6 +172,7 @@ module Backend
             get  '/events/:slug',        to: "booking#event", as:          :event
             get  '/events/publishtoggle/:slug',to: "booking#eventtogglepublish", as: :eventTPublish
 
+            # get  '/events/archive/:slug',to: "booking#eventarchive", as: :eventArchive
             get  '/workdays/',           to: "booking#workdays", as:       :workdays
 
             # get  '/',                   to: "booking#index", as:           :booking

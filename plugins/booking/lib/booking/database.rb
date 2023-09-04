@@ -122,6 +122,7 @@ module Booking
 
         
         def destroy(what)
+          raise "trying to destroy not existing `#{what.slug}'" unless what.exist?
           log :info, "booking:REMOVE:#{what.slug}"
           begin
             rm(what.image.fullpath, verbose: true)

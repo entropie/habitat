@@ -3,14 +3,19 @@
     = event.title
     %small= "##{event.slug}"
   .div.post-controls
-    %a{href: Backend.routes.eventTPublish_path(event.slug,"url":  params.env["REQUEST_PATH"]) }
-      - if event.published?
-        %span{:class => "glyphicon glyphicon-eye-close"}
-      - else
-        %span{:class => "glyphicon glyphicon-globe"}
+    - unless event.archived?
+      %a{href: Backend.routes.eventTPublish_path(event.slug,"url":  params.env["REQUEST_PATH"]) }
+        - if event.published?
+          %span{:class => "glyphicon glyphicon-eye-close"}
+        - else
+          %span{:class => "glyphicon glyphicon-globe"}
 
-    %a{href: Backend.routes.eventEdit_path(event.slug)}
-      %span{:class => "glyphicon glyphicon-pencil"}
+      %a{href: Backend.routes.eventEdit_path(event.slug)}
+        %span{:class => "glyphicon glyphicon-pencil"}
+      - if event.published?
+        %a{title: "archive", href: Backend.routes.eventArchive_path(event.slug), :onclick => "return confirm('Are you sure to archive?')"}
+          %span{:class => "glyphicon glyphicon-file"}
+
     %a{href: Backend.routes.eventDestroy_path(event.slug), :onclick => "return confirm('Are you sure?')"}
       %span{:class => "glyphicon glyphicon-remove"}
 
