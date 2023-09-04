@@ -321,9 +321,11 @@ module Booking
 
       def css_class
         gone = @dates.all? { |dr| dr.is_past? }
-        "e-%s %s %s" % [type.to_s,
-                        published? ? "" : "unpublished",
-                        gone ? "event-is-gone" : ""]
+        "e-%s %s %s %s" % [type.to_s,
+                           published? ? "" : "unpublished",
+                           (gone and not archived?) ? "event-is-gone" : "",
+                           archived? ? "archived" : ""
+                          ]
       end
 
       def dom_uniq_id(add = nil)
