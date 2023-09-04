@@ -203,6 +203,13 @@ module Booking
         @published
       end
 
+      def archived?
+        @archived || false
+      end
+
+      def archived=(obj)
+        @archived = obj
+      end
       
       def valid?
         values = EventAttributes.map do |event_attribute|
@@ -245,7 +252,12 @@ module Booking
         retclz
       end
 
+      def filename=(obj)
+        @filename = obj
+      end
+      
       def filename
+        return @filename if @filename
         "%s%s-%s.%s" % [
           File.join("events",
                     start_date.strftime("%y"),
@@ -560,6 +572,38 @@ module Booking
     def directory_files
       Dir.glob(directory_glob).reject{|ef| ef[0..1] == "."}
     end
+  end
+
+  class ArchivedEvents < Events
+
+    def self.relative_path(*args)
+      ::File.join("archive/events", *args)
+    end
+
+    def self.path(*args)
+      adapter_path = Habitat.adapter(:booking).repository_path( relative_path )
+      ::FileUtils.mkdir_p(adapter_path, :verbose => true) unless ::File.directory?(adapter_path)
+      ::File.join(adapter_path, *args)
+    end
+
+    def self.event_filename(what)
+      "%s---%s" % [what.date_identifier, ::File.basename(what.filename)]
+    end
+
+    def directory_glob
+      "%s/*.yaml" % ArchivedEvents.path
+    end
+
+    def read
+      super
+      each { |ev|
+        ev.archived = true
+        ev.filename = ArchivedEvents.relative_path( ArchivedEvents.event_filename(ev) )
+      }
+      self
+    end
+
+
   end
 
 end

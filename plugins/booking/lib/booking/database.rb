@@ -47,6 +47,11 @@ module Booking
           ::Booking::Events.new(self).push(*events_all.select{ |e| e.published? })
         end
 
+        def events_archived
+          aevents = ::Booking::ArchivedEvents.new(self).read.sorted
+          ::Booking::ArchivedEvents.new(self).push(*aevents)
+        end
+
         def by_slug(slug)
           events_all.by_slug(slug)
         end
@@ -104,6 +109,18 @@ module Booking
           write(target_file, what.to_yaml)
         end
 
+        def archive(what)
+          raise NoUserContext, "trying to call #store without valid user context " unless @user
+          raise Habitat::Database::EntryNotValid, "#{what.class}#valid? returns not true" unless what.valid?
+          log :info, "booking:archive:#{what.slug}"
+          target_file = repository_path(what.filename)
+
+          new_filename = ArchivedEvents.event_filename(what)
+          ::FileUtils.mv(target_file, ArchivedEvents.path(new_filename), :verbose => true)
+          nil
+        end
+
+        
         def destroy(what)
           log :info, "booking:REMOVE:#{what.slug}"
           begin

@@ -495,3 +495,33 @@ class TestEventImage < Minitest::Test
     assert_equal newev, newev.image.event
   end
 end
+
+
+
+
+class TestArchive < Minitest::Test
+
+  include Booking
+  def setup
+    _clr
+    FileUtils.mkdir_p(File.join(TMP_PATH, "booking"))
+  end
+
+  def test_archive_post
+    ev = adapter.create(:event, TestEvents[0])
+    i = File.open( File.join(File.dirname(__FILE__), "test.jpg"))
+    newev = adapter.upload(ev, i)
+
+    ev = adapter.events_all[0]
+
+    assert_equal ev.archived?, false
+    adapter.archive(ev)
+    aevents = adapter.events_archived
+    assert_equal aevents.first.archived?, true
+
+
+    pp aevents
+    assert_equal adapter.events_all[0], nil
+  end
+end
+
